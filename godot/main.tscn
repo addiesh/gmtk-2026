@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://cu87orxym37va"]
 
+[ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player.tscn" id="1_ig7tw"]
+
 [node name="Node2D" type="Node2D" unique_id=826324353]
 
 [node name="Label" type="Label" parent="." unique_id=173047297]
 offset_right = 40.0
 offset_bottom = 23.0
 text = "party rockers in teh hou se tonight"
+
+[node name="Player" parent="." unique_id=64017830 instance=ExtResource("1_ig7tw")]
