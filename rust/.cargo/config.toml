@@ -1,0 +1,14 @@
+# [env]
+# GDRUST_GODOT_BIN = { value = "~/Godot_v4.7.1-stable_linux.x86_64", force = false }
+
+[target.wasm32-unknown-emscripten]
+rustflags = [
+    # "-C", "link-args=-pthread", # /!\ Read 'Thread support' below regarding this flag
+    # "-C", "target-feature=+atomics", # /!\ Read 'Thread support' below regarding this flag
+    "-C", "panic=abort",
+    "-C", "link-args=-sSIDE_MODULE=2",
+    "-C", "llvm-args=-enable-emscripten-cxx-exceptions=0",
+    "-Z", "default-visibility=hidden",
+    "-Z", "link-native-libraries=no",
+    # "-Z", "emscripten-wasm-eh=false",
+]

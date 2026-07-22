@@ -1,0 +1,12 @@
+{
+	http_port 8080
+	https_port 8443
+}
+
+localhost {
+	header Cross-Origin-Opener-Policy same-origin
+	header Cross-Origin-Embedder-Policy require-corp
+	header Cross-Origin-Embedder-Policy credentialless
+        root * ./export/web/
+        file_server
+}
