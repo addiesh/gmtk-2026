@@ -1,10 +1,10 @@
 use godot::classes::{
-    Camera2D, CanvasItem, CharacterBody2D, ICharacterBody2D, Input, PhysicsRayQueryParameters2D,
-    Sprite2D,
+    Area2D, Camera2D, CanvasItem, CharacterBody2D, ICharacterBody2D, Input,
+    PhysicsRayQueryParameters2D, Sprite2D,
 };
 use godot::prelude::*;
 
-use crate::pickup::PickupBase;
+use crate::pickup::Pickup;
 use crate::timekeeper::Timekeeper;
 
 #[derive(GodotClass)]
@@ -26,9 +26,11 @@ pub struct Player {
     camera_zoom_speed_release: real,
 
     #[export]
-    held_item: Option<Gd<PickupBase>>,
+    held_item: Option<Gd<Pickup>>,
+
     camera: OnReady<Gd<Camera2D>>,
     sprite: OnReady<Gd<Sprite2D>>,
+    interact_area: OnReady<Gd<Area2D>>,
 
     base: Base<CharacterBody2D>,
 }
@@ -85,7 +87,42 @@ impl Player {
         }
     }
 
-    fn actions(&mut self, delta: f64) {
+    fn item_actions(&mut self, _delta: f64) {
+        let input = Input::singleton();
+        let chi = self.held_item.as_ref().map(|x| x.clone());
+        if let Some(mut held_item) = chi {
+            if input.is_action_just_pressed("attack") {
+                if held_item.bind_mut().interact() {
+                    // TODO: decrease level time by 1 seconds
+                }
+            } else if input.is_action_just_pressed("use_item") {
+                drop(self.held_item.take());
+                held_item.reparent(&self.base().get_parent().unwrap());
+                held_item.bind_mut().throw(self.aim_dir());
+            }
+        } else {
+            if input.is_action_just_pressed("use_item") {
+                let pickup = self
+                    .interact_area
+                    .get_overlapping_bodies()
+                    .iter_shared()
+                    .find_map(|node| node.try_cast::<Pickup>().ok());
+
+                if let Some(mut pickup) = pickup {
+                    pickup.reparent(&self.to_gd());
+                    pickup
+                        .bind_mut()
+                        .base_mut()
+                        .add_collision_exception_with(&self.to_gd());
+                    pickup.bind_mut().equip();
+                    pickup.bind_mut().base_mut().set_position(Vector2::ZERO);
+                    self.held_item = Some(pickup.clone());
+                }
+            }
+        }
+    }
+
+    fn dash_action(&mut self, delta: f64) {
         let input = Input::singleton();
         let velocity = self.base().get_velocity();
         if self.is_dashing.is_none() && input.is_action_just_pressed("dash") {
@@ -186,6 +223,7 @@ impl ICharacterBody2D for Player {
             base,
             camera: OnReady::from_node("Camera2D"),
             sprite: OnReady::from_node("Sprite"),
+            interact_area: OnReady::from_node("InteractArea"),
             camera_distance: 256.0,
             held_item: None,
             aim_target_hit: None,
@@ -244,6 +282,13 @@ impl ICharacterBody2D for Player {
             ));
         }
 
+        let aim_dir = self.aim_dir();
+
+        if let Some(held_item) = &mut self.held_item {
+            held_item.set_rotation(aim_dir.angle());
+            held_item.set_position(aim_dir * 48.0);
+        }
+
         self.base_mut().queue_redraw();
     }
 
@@ -262,7 +307,8 @@ impl ICharacterBody2D for Player {
         if self.is_dashing.is_none() {
             self.calculate_basic_movement(delta);
         }
-        self.actions(delta);
+        self.dash_action(delta);
+        self.item_actions(delta);
         self.base_mut().move_and_slide();
     }
 }

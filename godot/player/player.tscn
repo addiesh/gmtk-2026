@@ -9,6 +9,9 @@
 radius = 56.0
 height = 256.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
+radius = 176.4
+
 [sub_resource type="Gradient" id="Gradient_4flbx"]
 interpolation_mode = 2
 colors = PackedColorArray(0, 0, 0, 0.7529412, 0, 0, 0, 0)
@@ -98,6 +101,12 @@ camera_zoom_speed_release = 8.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1776221318]
 shape = SubResource("CapsuleShape2D_iho50")
+
+[node name="InteractArea" type="Area2D" parent="." unique_id=164258439]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=977837087]
+shape = SubResource("CircleShape2D_2qteb")
+debug_color = Color(0.5711972, 0.55597615, 0, 0.41960785)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1264798577]
 rotation_smoothing_enabled = true

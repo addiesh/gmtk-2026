@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://22ycafb0osvx"]
+
+[ext_resource type="Texture2D" uid="uid://dnhcbabbq2fl0" path="res://placeholder/ph-particle.png" id="1_4m5nm"]
+[ext_resource type="Texture2D" uid="uid://dae3v50g77nqk" path="res://placeholder/ph-hammer.png" id="2_sn2e3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oh2v5"]
+size = Vector2(54, 28)
+
+[sub_resource type="Gradient" id="Gradient_2qteb"]
+offsets = PackedFloat32Array(0, 0.5, 0.9, 1)
+colors = PackedColorArray(1, 0.39215687, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fq87o"]
+size = Vector2(40, 56)
+
+[node name="Pickup" type="Pickup" unique_id=1426482820]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2094173850]
+position = Vector2(0, -51)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=386838419]
+shape = SubResource("RectangleShape2D_oh2v5")
+
+[node name="Particles" type="CPUParticles2D" parent="." unique_id=528986947]
+position = Vector2(0, -32)
+amount = 4
+texture = ExtResource("1_4m5nm")
+emission_shape = 1
+emission_sphere_radius = 16.0
+direction = Vector2(0, 1)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 60.0
+damping_min = 60.0
+damping_max = 60.0
+color_ramp = SubResource("Gradient_2qteb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=860545878]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_fq87o")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2034997257]
+z_index = 2
+z_as_relative = false
+position = Vector2(0, -32)
+texture = ExtResource("2_sn2e3")

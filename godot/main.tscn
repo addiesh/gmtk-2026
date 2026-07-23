@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://cqhkrwa6uqc0e" path="res://levels/level_test.tscn" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://22ycafb0osvx" path="res://pickups/pickup_template.tscn" id="3_h2yge"]
 
 [sub_resource type="Environment" id="Environment_0xm2m"]
 background_mode = 3
@@ -19,3 +20,6 @@ position = Vector2(446, 314)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=28179579]
 environment = SubResource("Environment_0xm2m")
+
+[node name="Node2D" parent="." unique_id=1552471180 instance=ExtResource("3_h2yge")]
+position = Vector2(1198, 1035)
