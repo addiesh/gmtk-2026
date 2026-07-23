@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://cu87orxym37va"]
 
-[ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://cqhkrwa6uqc0e" path="res://levels/level_test.tscn" id="2_0xm2m"]
 
 [node name="Node2D" type="Node2D" unique_id=826324353]
+position = Vector2(960, 540)
 
-[node name="Label" type="Label" parent="." unique_id=173047297]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "party rockers in teh hou se tonight"
+[node name="LevelTest" parent="." unique_id=257648561 instance=ExtResource("2_0xm2m")]
 
 [node name="Player" parent="." unique_id=64017830 instance=ExtResource("1_ig7tw")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1586669191]

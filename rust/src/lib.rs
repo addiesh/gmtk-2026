@@ -1,6 +1,7 @@
 use godot::prelude::*;
 
-mod player;
+pub mod pickup;
+pub mod player;
 
 struct CrabJamExtension;
 

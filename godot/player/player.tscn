@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://buojmmssfjls0"]
+
+[ext_resource type="Texture2D" uid="uid://cvedjejho4siq" path="res://assets/ph-protag.png" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://bytovwbrl8022" path="res://player/player.gd" id="1_g6k8r"]
+[ext_resource type="Texture2D" uid="uid://t4pubjsvqkhs" path="res://assets/ph-protag-bg1.png" id="1_hqtel"]
+[ext_resource type="Script" uid="uid://dj85444mxw4j3" path="res://player/player_sprite.gd" id="2_qjkh3"]
+[ext_resource type="Texture2D" uid="uid://c4omgh83atkn" path="res://assets/ph-protag-bg2.png" id="2_sweqy"]
+[ext_resource type="Texture2D" uid="uid://0c6mwg8yee37" path="res://assets/ph-protag-bg3.png" id="3_2hs0m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
+radius = 48.0
+
+[sub_resource type="Gradient" id="Gradient_4flbx"]
+interpolation_mode = 2
+colors = PackedColorArray(0, 0, 0, 0.7529412, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2qteb"]
+gradient = SubResource("Gradient_4flbx")
+width = 112
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2qteb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hqtel")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_sweqy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_2hs0m")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 7.0
+}]
+
+[node name="Player" type="Player" unique_id=64017830]
+script = ExtResource("1_g6k8r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1776221318]
+shape = SubResource("CircleShape2D_onrkg")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1264798577]
+rotation_smoothing_enabled = true
+rotation_smoothing_speed = 8.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=989744741]
+position = Vector2(0, 32)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=747360682]
+z_index = 1
+texture_filter = 1
+texture = ExtResource("1_4flbx")
+script = ExtResource("2_qjkh3")
+
+[node name="VibeyOutline" type="AnimatedSprite2D" parent="Sprite" unique_id=641573335]
+z_index = -1
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_2qteb")
+frame = 1
+frame_progress = 0.8434368
