@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://prughacxswmw"
-path="res://.godot/imported/chibi.png-ade7298361ac98a54c1d6accc81cec51.ctex"
+uid="uid://cjkgx587082pl"
+path="res://.godot/imported/walk-bl-2.png-2e41c5ff50e53c936774af4442136110.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/chibi.png"
-dest_files=["res://.godot/imported/chibi.png-ade7298361ac98a54c1d6accc81cec51.ctex"]
+source_file="res://player/sprites/base/walk-bl-2.png"
+dest_files=["res://.godot/imported/walk-bl-2.png-2e41c5ff50e53c936774af4442136110.ctex"]
 
 [params]
 

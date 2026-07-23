@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b3pimumnh7s7c"]
+
+[ext_resource type="Shader" uid="uid://c4s6ut1d4bybe" path="res://particles/time_wobble.gdshader" id="1_i0mnx"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r7pn3"]
+noise_type = 2
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rptt4"]
+noise = SubResource("FastNoiseLite_r7pn3")
+seamless = true
+
+[resource]
+shader = ExtResource("1_i0mnx")
+shader_parameter/noise = SubResource("NoiseTexture2D_rptt4")
+shader_parameter/distortion_speed = 0.5
+shader_parameter/real_time = 0.0

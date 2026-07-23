@@ -1,8 +1,8 @@
 use godot::classes::{
-    Area2D, Camera2D, CanvasItem, CharacterBody2D, ICharacterBody2D, Input,
-    PhysicsRayQueryParameters2D, Sprite2D,
+    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Engine,
+    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D, Time,
 };
-use godot::prelude::*;
+use godot::{global, prelude::*};
 
 use crate::pickup::Pickup;
 use crate::timekeeper::Timekeeper;
@@ -12,6 +12,11 @@ use crate::timekeeper::Timekeeper;
 pub struct Player {
     aim_target_hit: Option<(Vector2, Gd<Node>)>,
     is_dashing: Option<Vector2>,
+    is_walking: bool,
+    sprite_facing_right: bool,
+    sprite_facing_front: bool,
+    squash_distance_traveled: real,
+    squash_distance_traveled_last: real,
 
     #[export]
     camera_distance: real,
@@ -29,7 +34,7 @@ pub struct Player {
     held_item: Option<Gd<Pickup>>,
 
     camera: OnReady<Gd<Camera2D>>,
-    sprite: OnReady<Gd<Sprite2D>>,
+    sprite: OnReady<Gd<AnimatedSprite2D>>,
     interact_area: OnReady<Gd<Area2D>>,
 
     base: Base<CharacterBody2D>,
@@ -40,6 +45,9 @@ impl Player {
     const ACCELERATION: real = 3600.0;
     const DECELERATION: real = 3600.0;
     const BASE_SPEED: real = 800.0;
+
+    #[signal]
+    fn squash_and_stretch();
 
     #[func]
     fn has_aim_endpoint(&self) -> bool {
@@ -60,6 +68,24 @@ impl Player {
             .upcast::<CanvasItem>()
             .get_global_mouse_position();
         (mouse_position - self.base().get_global_position()).normalized()
+    }
+
+    fn _manually_spawn_ghost(&self) -> Gd<AnimatedSprite2D> {
+        let transform = self.base().get_global_transform();
+        let texture = self
+            .sprite
+            .get_sprite_frames()
+            .unwrap()
+            .get_frame_texture(&self.sprite.get_animation(), self.sprite.get_frame());
+        let ghost = ClassDb::singleton()
+            .class_call_static(
+                "Ghost",
+                "make_ghost",
+                &[transform.to_variant(), texture.to_variant()],
+            )
+            .to::<Gd<AnimatedSprite2D>>();
+        self.base().get_tree().get_root().unwrap().add_child(&ghost);
+        ghost
     }
 
     fn aim_calculations(&mut self) {
@@ -98,7 +124,10 @@ impl Player {
             } else if input.is_action_just_pressed("use_item") {
                 drop(self.held_item.take());
                 held_item.reparent(&self.base().get_parent().unwrap());
-                held_item.bind_mut().throw(self.aim_dir());
+                let mut bind = held_item.bind_mut();
+                bind.throw(self.aim_dir());
+                let mut bind_base = bind.base_mut();
+                bind_base.set_visible(true);
             }
         } else {
             if input.is_action_just_pressed("use_item") {
@@ -109,13 +138,19 @@ impl Player {
                     .find_map(|node| node.try_cast::<Pickup>().ok());
 
                 if let Some(mut pickup) = pickup {
-                    pickup.reparent(&self.to_gd());
+                    // note: this is silly
                     pickup
                         .bind_mut()
                         .base_mut()
                         .add_collision_exception_with(&self.to_gd());
-                    pickup.bind_mut().equip();
-                    pickup.bind_mut().base_mut().set_position(Vector2::ZERO);
+                    pickup.reparent(&self.to_gd());
+                    {
+                        let mut bind = pickup.bind_mut();
+                        bind.equip();
+                        let mut bind_base = bind.base_mut();
+                        bind_base.set_visible(false);
+                        bind_base.set_position(Vector2::ZERO);
+                    }
                     self.held_item = Some(pickup.clone());
                 }
             }
@@ -137,6 +172,11 @@ impl Player {
 
         if let Some(dash_dir) = self.is_dashing {
             let velocity = self.base().get_velocity();
+
+            let mut ghost = self.sprite.call("_frame_ghost", &[]).to::<Gd<Sprite2D>>();
+            ghost.set_self_modulate(Color::AQUA.with_alpha(0.2));
+            ghost.apply_scale(Vector2::new(0.9, 0.75));
+
             // // true if we're moving the right direction
             // let is_curveball = velocity.dot(dash_dir) >= 0.0 || velocity.length_squared() < 32.0;
 
@@ -178,11 +218,13 @@ impl Player {
             let bounce = dash_dir * -1024.0;
             self.base_mut().set_velocity(bounce);
 
+            self.sprite.call("_frame_ghost", &[]);
+
             godot_print!("hit the wall: {collider:?}, angle = {bounce}");
         }
     }
 
-    fn calculate_basic_movement(&mut self, delta: f64) {
+    fn basic_movement(&mut self, delta: f64) {
         let input = Input::singleton();
 
         let horz = input.get_axis("move_left", "move_right");
@@ -193,26 +235,65 @@ impl Player {
 
         let current_velocity = self.base().get_velocity();
 
-        // FIXME: replace with time-dilated delta
-        let real_delta = delta as f32; // * Timekeeper::timescale();
-
-        let new_vel = if dir_length >= 0.1 {
+        let new_vel;
+        if dir_length >= 0.1 {
             let target_vel = dir * Self::BASE_SPEED / dir_length;
-            if target_vel.x > 0.5 {
-                self.sprite.set_flip_h(false);
-            } else if target_vel.x < -0.5 {
-                self.sprite.set_flip_h(true);
+
+            self.is_walking = true;
+            if dir.x > 0.0 {
+                self.sprite_facing_right = true;
+            } else if dir.x < 0.0 {
+                self.sprite_facing_right = false;
+            }
+
+            if dir.y > 0.0 {
+                self.sprite_facing_front = true;
+            } else if dir.y < 0.0 {
+                self.sprite_facing_front = false;
             }
 
             Timekeeper::time_flags().bind_mut().player_moving = true;
-            current_velocity.move_toward(target_vel, Self::ACCELERATION as f32 * real_delta)
+            new_vel =
+                current_velocity.move_toward(target_vel, Self::ACCELERATION as f32 * delta as f32);
+
+            self.squash_distance_traveled += new_vel.length() * delta as f32;
         } else {
             Timekeeper::time_flags().bind_mut().player_moving = false;
+            self.is_walking = false;
+            self.squash_distance_traveled = 0.0;
+            self.squash_distance_traveled_last = f32::NEG_INFINITY;
 
-            current_velocity.move_toward(Vector2::ZERO, Self::DECELERATION * real_delta)
-        };
+            new_vel =
+                current_velocity.move_toward(Vector2::ZERO, Self::DECELERATION * delta as f32);
+        }
 
         self.base_mut().set_velocity(new_vel);
+    }
+
+    fn animation(&mut self) {
+        let fb = if self.sprite_facing_front { "f" } else { "b" };
+        let rl = if self.sprite_facing_right { "r" } else { "l" };
+        let moving = if self.is_walking { "walk" } else { "idle" };
+        let equip = match &self.held_item {
+            Some(_) => "_hammer",
+            None => "",
+        };
+
+        if self.is_dashing.is_some() {
+            self.sprite.set_animation(&format!("walk_{fb}{rl}{equip}"));
+        } else {
+            let anim_string = format!("{moving}_{fb}{rl}{equip}");
+            self.sprite.set_animation(&anim_string);
+        }
+        if !self.sprite.is_playing() {
+            self.sprite.play();
+        }
+        // if self.is_walking {
+        // if self.squash_distance_traveled >= self.squash_distance_traveled_last + 128.0 {
+        //     self.squash_distance_traveled_last = self.squash_distance_traveled;
+        //     self.signals().squash_and_stretch().emit();
+        // }
+        // }
     }
 }
 
@@ -232,6 +313,11 @@ impl ICharacterBody2D for Player {
             camera_zoom_speed_clench: 16.0,
             camera_zoom_speed_release: 1.0,
             is_dashing: None,
+            is_walking: false,
+            sprite_facing_right: true,
+            sprite_facing_front: true,
+            squash_distance_traveled: 0.0,
+            squash_distance_traveled_last: f32::NEG_INFINITY,
         }
     }
 
@@ -305,10 +391,13 @@ impl ICharacterBody2D for Player {
     fn physics_process(&mut self, delta: f64) {
         self.aim_calculations();
         if self.is_dashing.is_none() {
-            self.calculate_basic_movement(delta);
+            self.basic_movement(delta);
+        } else {
+            self.is_walking = false;
         }
         self.dash_action(delta);
         self.item_actions(delta);
+        self.animation();
         self.base_mut().move_and_slide();
     }
 }

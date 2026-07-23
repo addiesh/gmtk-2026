@@ -42,8 +42,8 @@ pub struct Timekeeper {
 impl IObject for Timekeeper {
     fn init(base: Base<Object>) -> Self {
         Self {
-            target_timescale: 0.25,
-            current_timescale: 0.25,
+            target_timescale: 0.125,
+            current_timescale: 0.125,
             base,
             flags: Gd::from_object(TimekeeperFlags {
                 player_moving: false,
@@ -130,9 +130,9 @@ impl Timekeeper {
 
         if flags.player_dashing {
             self.is_hacked = false;
-            self.current_timescale = 0.125;
+            self.current_timescale = 0.25;
         } else {
-            let mut calculated_target: f64 = if flags.player_moving { 1.0 } else { 0.25 };
+            let mut calculated_target: f64 = if flags.player_moving { 1.0 } else { 0.125 };
 
             {
                 let dash_diff = (0.5 - (time - flags.last_player_dash_time) * 4.0).clamp(0.0, 1.0);
