@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cx01jd3fnkqnt"]
+
+[ext_resource type="Script" uid="uid://cfke3d6oke2gb" path="res://enemies/grunt.gd" id="1_1ydv4"]
+[ext_resource type="Texture2D" uid="uid://cptotcdpnwlpc" path="res://placeholder/ph-enemy.png" id="1_7liby"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2qteb"]
+size = Vector2(60, 80)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
+radius = 512.0
+
+[node name="Grunt" type="CharacterBody2D" unique_id=108963546]
+motion_mode = 1
+script = ExtResource("1_1ydv4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=586379632]
+position = Vector2(-9.536743e-07, 1.5)
+shape = SubResource("RectangleShape2D_2qteb")
+
+[node name="PhEnemy" type="Sprite2D" parent="." unique_id=278901604]
+texture = ExtResource("1_7liby")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=169994761]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1760041253]
+position = Vector2(-9.536743e-07, 1.5)
+shape = SubResource("CircleShape2D_2qteb")

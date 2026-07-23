@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dae3v50g77nqk"
-path="res://.godot/imported/ph-hammer.png-6f7827b09de7b64a1f4e1cc5e578df5c.ctex"
+uid="uid://bhvcyjpqao7nk"
+path="res://.godot/imported/talk-bg.png-00ba9ace6925284e3fffab96c25c8b2b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ph-hammer.png"
-dest_files=["res://.godot/imported/ph-hammer.png-6f7827b09de7b64a1f4e1cc5e578df5c.ctex"]
+source_file="res://placeholder/talk-bg.png"
+dest_files=["res://.godot/imported/talk-bg.png-00ba9ace6925284e3fffab96c25c8b2b.ctex"]
 
 [params]
 

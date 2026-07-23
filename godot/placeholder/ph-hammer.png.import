@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0c6mwg8yee37"
-path="res://.godot/imported/ph-protag-bg3.png-419072023180c45d03d1463a4bbcee0e.ctex"
+uid="uid://dae3v50g77nqk"
+path="res://.godot/imported/ph-hammer.png-7dda603c56012120577cc3abc1e89d41.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ph-protag-bg3.png"
-dest_files=["res://.godot/imported/ph-protag-bg3.png-419072023180c45d03d1463a4bbcee0e.ctex"]
+source_file="res://placeholder/ph-hammer.png"
+dest_files=["res://.godot/imported/ph-hammer.png-7dda603c56012120577cc3abc1e89d41.ctex"]
 
 [params]
 

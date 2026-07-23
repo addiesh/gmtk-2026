@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnhcbabbq2fl0"
-path="res://.godot/imported/ph-particle.png-fba6acef8c88f88f62b4676f0779ec1c.ctex"
+uid="uid://c4omgh83atkn"
+path="res://.godot/imported/ph-protag-bg2.png-c3a62b494016db93d37aa4e7650f6d87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ph-particle.png"
-dest_files=["res://.godot/imported/ph-particle.png-fba6acef8c88f88f62b4676f0779ec1c.ctex"]
+source_file="res://placeholder/ph-protag-bg2.png"
+dest_files=["res://.godot/imported/ph-protag-bg2.png-c3a62b494016db93d37aa4e7650f6d87.ctex"]
 
 [params]
 

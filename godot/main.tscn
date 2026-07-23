@@ -3,11 +3,19 @@
 [ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://cqhkrwa6uqc0e" path="res://levels/level_test.tscn" id="2_0xm2m"]
 
-[node name="Node2D" type="Node2D" unique_id=826324353]
-position = Vector2(960, 540)
+[sub_resource type="Environment" id="Environment_0xm2m"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+
+[node name="Node2D" type="Node" unique_id=2058532903]
 
 [node name="LevelTest" parent="." unique_id=257648561 instance=ExtResource("2_0xm2m")]
 
 [node name="Player" parent="." unique_id=64017830 instance=ExtResource("1_ig7tw")]
+position = Vector2(446, 314)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1586669191]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=28179579]
+environment = SubResource("Environment_0xm2m")

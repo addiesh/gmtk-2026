@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://t4pubjsvqkhs"
-path="res://.godot/imported/ph-protag-bg1.png-c6052d83f9ce4d2972c31e8605c3eba9.ctex"
+path="res://.godot/imported/ph-protag-bg1.png-4b4df8df58f0ec68f1fd18166f9fe404.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ph-protag-bg1.png"
-dest_files=["res://.godot/imported/ph-protag-bg1.png-c6052d83f9ce4d2972c31e8605c3eba9.ctex"]
+source_file="res://placeholder/ph-protag-bg1.png"
+dest_files=["res://.godot/imported/ph-protag-bg1.png-4b4df8df58f0ec68f1fd18166f9fe404.ctex"]
 
 [params]
 

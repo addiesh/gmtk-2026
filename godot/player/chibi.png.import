@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biec8jwf32x0q"
-path="res://.godot/imported/ph-tile.png-ff1a65abbfd33bc94a677b65fa773267.ctex"
+uid="uid://prughacxswmw"
+path="res://.godot/imported/chibi.png-ade7298361ac98a54c1d6accc81cec51.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ph-tile.png"
-dest_files=["res://.godot/imported/ph-tile.png-ff1a65abbfd33bc94a677b65fa773267.ctex"]
+source_file="res://player/chibi.png"
+dest_files=["res://.godot/imported/chibi.png-ade7298361ac98a54c1d6accc81cec51.ctex"]
 
 [params]
 

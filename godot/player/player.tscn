@@ -1,14 +1,13 @@
 [gd_scene format=3 uid="uid://buojmmssfjls0"]
 
-[ext_resource type="Texture2D" uid="uid://cvedjejho4siq" path="res://assets/ph-protag.png" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://bytovwbrl8022" path="res://player/player.gd" id="1_g6k8r"]
-[ext_resource type="Texture2D" uid="uid://t4pubjsvqkhs" path="res://assets/ph-protag-bg1.png" id="1_hqtel"]
+[ext_resource type="Texture2D" uid="uid://prughacxswmw" path="res://player/chibi.png" id="2_boad6"]
 [ext_resource type="Script" uid="uid://dj85444mxw4j3" path="res://player/player_sprite.gd" id="2_qjkh3"]
-[ext_resource type="Texture2D" uid="uid://c4omgh83atkn" path="res://assets/ph-protag-bg2.png" id="2_sweqy"]
-[ext_resource type="Texture2D" uid="uid://0c6mwg8yee37" path="res://assets/ph-protag-bg3.png" id="3_2hs0m"]
+[ext_resource type="Script" uid="uid://ck0dxp8ly7iga" path="res://player/label.gd" id="7_boad6"]
+[ext_resource type="PackedScene" uid="uid://dfqma1g1r83pt" path="res://ui/talk_box.tscn" id="8_rgyib"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
-radius = 48.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iho50"]
+radius = 56.0
+height = 256.0
 
 [sub_resource type="Gradient" id="Gradient_4flbx"]
 interpolation_mode = 2
@@ -22,17 +21,69 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
+[sub_resource type="Gradient" id="Gradient_boad6"]
+interpolation_color_space = 2
+colors = PackedColorArray(0, 0.5019608, 1, 1, 1, 0, 0.5019608, 1)
+
+[sub_resource type="Shader" id="Shader_boad6"]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_x;
+uniform sampler2D noise_y;
+uniform float noise_power;
+
+varying vec4 vertex_color; 
+
+void vertex() {
+	vertex_color = COLOR;
+}
+
+void fragment() {
+	float t = round(TIME * 16.0) / (16.0 * 4.0);
+	float noise_uvx = (texture(noise_x, mod(vec2(UV.x, UV.y + t), 1.0)).r * 2.0) - 0.5;
+	float noise_uvy = (texture(noise_y, mod(vec2(UV.y, UV.x + t), 1.0)).r * 2.0) - 0.5;
+	vec2 noise_uv = vec2(noise_uvx, noise_uvy);
+	noise_uv *= noise_power;
+	COLOR = vec4(1.0, 1.0, 1.0, texture(TEXTURE, UV + noise_uv).a) * vertex_color;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qjkh3"]
+noise_type = 5
+seed = 1
+frequency = 1.0
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qjkh3"]
+width = 32
+height = 32
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_qjkh3")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rgyib"]
+noise_type = 5
+frequency = 1.0
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g6k8r"]
+width = 32
+height = 32
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_rgyib")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g6k8r"]
+shader = SubResource("Shader_boad6")
+shader_parameter/noise_x = SubResource("NoiseTexture2D_qjkh3")
+shader_parameter/noise_y = SubResource("NoiseTexture2D_g6k8r")
+shader_parameter/noise_power = 0.015
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_2qteb"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_hqtel")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_sweqy")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_2hs0m")
+"texture": ExtResource("2_boad6")
 }],
 "loop": 1,
 "name": &"default",
@@ -40,10 +91,13 @@ animations = [{
 }]
 
 [node name="Player" type="Player" unique_id=64017830]
-script = ExtResource("1_g6k8r")
+camera_zoom_min = Vector2(1, 1)
+camera_zoom_max = Vector2(1.2, 1.2)
+camera_zoom_speed_clench = 48.0
+camera_zoom_speed_release = 8.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1776221318]
-shape = SubResource("CircleShape2D_onrkg")
+shape = SubResource("CapsuleShape2D_iho50")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1264798577]
 rotation_smoothing_enabled = true
@@ -56,12 +110,43 @@ texture = SubResource("GradientTexture2D_2qteb")
 [node name="Sprite" type="Sprite2D" parent="." unique_id=747360682]
 z_index = 1
 texture_filter = 1
-texture = ExtResource("1_4flbx")
+texture = ExtResource("2_boad6")
 script = ExtResource("2_qjkh3")
+dilation_gradient = SubResource("Gradient_boad6")
 
 [node name="VibeyOutline" type="AnimatedSprite2D" parent="Sprite" unique_id=641573335]
+modulate = Color(1.8247963, 1.8247963, 1.8247963, 1)
 z_index = -1
 texture_filter = 1
+material = SubResource("ShaderMaterial_g6k8r")
+scale = Vector2(1.25, 1.1)
 sprite_frames = SubResource("SpriteFrames_2qteb")
-frame = 1
 frame_progress = 0.8434368
+
+[node name="Debug" type="CanvasLayer" parent="." unique_id=1278309746]
+
+[node name="Control" type="Control" parent="Debug" unique_id=1913438936]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Debug/Control" unique_id=844990532]
+layout_mode = 1
+offset_right = 499.0
+offset_bottom = 212.0
+theme_override_font_sizes/font_size = 32
+text = "TIMESCALE"
+script = ExtResource("7_boad6")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=724956971]
+
+[node name="TalkBox" parent="HUD" unique_id=949539788 instance=ExtResource("8_rgyib")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_right = 320.0
+grow_horizontal = 2
