@@ -20,5 +20,4 @@ position = Vector2(446, 314)
 environment = SubResource("Environment_0xm2m")
 
 [node name="Node2D" parent="." unique_id=1552471180 instance=ExtResource("3_h2yge")]
-position = Vector2(1198, 1035)
-gravity_scale = 1.0
+position = Vector2(538, 287)

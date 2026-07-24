@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://dqpvgec76ddik" path="res://player/sprites/hammer/hammer-walk-fl-3.png" id="20_q28gw"]
 [ext_resource type="Texture2D" uid="uid://d4hy1r00vnwac" path="res://player/sprites/hammer/hammer-walk-fr-2.png" id="23_ge24q"]
 [ext_resource type="Texture2D" uid="uid://dr5ctkgykrvdd" path="res://player/sprites/hammer/hammer-walk-fr-3.png" id="24_pnw6m"]
+[ext_resource type="PackedScene" uid="uid://3p01jcv6i31d" path="res://player/timer.tscn" id="28_rptt4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iho50"]
 radius = 56.0
@@ -334,9 +335,13 @@ script = ExtResource("7_boad6")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -270.0
-offset_right = 270.0
+offset_left = -368.0
+offset_top = 32.0
+offset_right = 368.0
+offset_bottom = 288.0
 grow_horizontal = 2
+
+[node name="Timer" parent="HUD" unique_id=239512427 instance=ExtResource("28_rptt4")]
 
 [connection signal="squash_and_stretch" from="." to="Sprite" method="_on_player_squash_and_stretch"]
 [connection signal="animation_changed" from="Sprite" to="Sprite" method="_on_animation_changed"]

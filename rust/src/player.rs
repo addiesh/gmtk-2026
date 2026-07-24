@@ -1,8 +1,8 @@
 use godot::classes::{
-    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Engine,
-    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D, Time,
+    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, ICharacterBody2D,
+    Input, PhysicsRayQueryParameters2D, Sprite2D,
 };
-use godot::{global, prelude::*};
+use godot::prelude::*;
 
 use crate::pickup::Pickup;
 use crate::timekeeper::Timekeeper;
@@ -171,7 +171,7 @@ impl Player {
         }
 
         if let Some(dash_dir) = self.is_dashing {
-            let velocity = self.base().get_velocity();
+            // let velocity = self.base().get_velocity();
 
             let mut ghost = self.sprite.call("_frame_ghost", &[]).to::<Gd<Sprite2D>>();
             ghost.set_self_modulate(Color::AQUA.with_alpha(0.2));
@@ -218,7 +218,9 @@ impl Player {
             let bounce = dash_dir * -1024.0;
             self.base_mut().set_velocity(bounce);
 
-            self.sprite.call("_frame_ghost", &[]);
+            let mut ghost = self.sprite.call("_frame_ghost", &[]).to::<Gd<Sprite2D>>();
+            ghost.set_self_modulate(Color::AQUA.with_alpha(0.3));
+            ghost.apply_scale(Vector2::new(1.1, 1.1));
 
             godot_print!("hit the wall: {collider:?}, angle = {bounce}");
         }
@@ -375,16 +377,17 @@ impl ICharacterBody2D for Player {
             held_item.set_position(aim_dir * 48.0);
         }
 
-        self.base_mut().queue_redraw();
+        // self.base_mut().queue_redraw();
     }
 
     fn draw(&mut self) {
-        if let Some((aim_target, _)) = self.aim_target_hit {
-            let aim_target = self.base().to_local(aim_target);
-            self.base_mut()
-                .draw_line_ex(Vector2::ZERO, aim_target, Color::DEEP_PINK)
-                .width(4.0)
-                .done();
+        if let Some((_aim_target, _)) = self.aim_target_hit {
+
+            // let aim_target = self.base().to_local(aim_target);
+            // self.base_mut()
+            //     .draw_line_ex(Vector2::ZERO, aim_target, Color::DEEP_PINK)
+            //     .width(4.0)
+            //     .done();
         }
     }
 

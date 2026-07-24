@@ -1,0 +1,19 @@
+[gd_resource type="Theme" format=3 uid="uid://f714ghs1i1x6"]
+
+[ext_resource type="Texture2D" uid="uid://bm0hch3ofhdup" path="res://ui/ui-panel-sci.png" id="1_ndeyl"]
+[ext_resource type="FontFile" uid="uid://b2yksq33pt40u" path="res://fonts/HelvetiPixel.ttf" id="2_ndeyl"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ksenq"]
+texture = ExtResource("1_ndeyl")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[resource]
+default_base_scale = 2.0
+default_font = ExtResource("2_ndeyl")
+default_font_size = 32
+Control/styles/panel = SubResource("StyleBoxTexture_ksenq")

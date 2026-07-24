@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cpall617y1i2f"
-path="res://.godot/imported/TerminalGrotesque.ttf-58a5f5815e0c777a9b3014f9a4ab007b.fontdata"
+uid="uid://b7yxq6jshs5k3"
+path="res://.godot/imported/terminal-grotesque.ttf-0da02d33d004d550ad43c4a49e104428.fontdata"
 
 [deps]
 
-source_file="res://fonts/TerminalGrotesque.ttf"
-dest_files=["res://.godot/imported/TerminalGrotesque.ttf-58a5f5815e0c777a9b3014f9a4ab007b.fontdata"]
+source_file="res://fonts/terminal-grotesque.ttf"
+dest_files=["res://.godot/imported/terminal-grotesque.ttf-0da02d33d004d550ad43c4a49e104428.fontdata"]
 
 [params]
 
