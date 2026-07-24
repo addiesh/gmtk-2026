@@ -31,7 +31,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iho50"]
 radius = 56.0
-height = 256.0
+height = 208.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
 radius = 176.4
@@ -260,6 +260,18 @@ _limits = [0.5, 1.5, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.1, 0.7), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 4
 
+[sub_resource type="Gradient" id="Gradient_r7pn3"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 0.6666667, 0, 0.7529412, 1, 0.6666667, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_b8hi5"]
+gradient = SubResource("Gradient_r7pn3")
+width = 96
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [sub_resource type="Gradient" id="Gradient_rptt4"]
 interpolation_mode = 2
 colors = PackedColorArray(0, 0, 0, 0.7529412, 0, 0, 0, 0)
@@ -272,16 +284,19 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="Player" type="Player" unique_id=64017830]
+[node name="Player" type="Player" unique_id=64017830 node_paths=PackedStringArray("link_timer")]
 camera_zoom_min = Vector2(1, 1)
 camera_zoom_max = Vector2(1.2, 1.2)
 camera_zoom_speed_clench = 48.0
 camera_zoom_speed_release = 8.0
+link_timer = NodePath("HUD/Timer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1776221318]
 shape = SubResource("CapsuleShape2D_iho50")
 
 [node name="InteractArea" type="Area2D" parent="." unique_id=164258439]
+collision_layer = 7
+collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=977837087]
 shape = SubResource("CircleShape2D_2qteb")
@@ -305,6 +320,12 @@ frame_progress = 0.5856572
 script = ExtResource("2_qjkh3")
 time_gradient = SubResource("Gradient_g6k8r")
 squash_stretch = SubResource("Curve_g6k8r")
+
+[node name="HoldGlow" type="Sprite2D" parent="Sprite" unique_id=98024752]
+visible = false
+z_index = -1
+position = Vector2(40, 40)
+texture = SubResource("GradientTexture2D_b8hi5")
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=805512117]
 z_index = -1
@@ -341,8 +362,16 @@ offset_right = 368.0
 offset_bottom = 288.0
 grow_horizontal = 2
 
-[node name="Timer" parent="HUD" unique_id=239512427 instance=ExtResource("28_rptt4")]
+[node name="Timer" parent="HUD" unique_id=239512427 node_paths=PackedStringArray("player") instance=ExtResource("28_rptt4")]
+offset_left = -384.0
+offset_top = 128.0
+offset_right = -128.0
+offset_bottom = 384.0
+offset_transform_enabled = true
+player = NodePath("../..")
 
 [connection signal="squash_and_stretch" from="." to="Sprite" method="_on_player_squash_and_stretch"]
 [connection signal="animation_changed" from="Sprite" to="Sprite" method="_on_animation_changed"]
+[connection signal="animation_changed" from="Sprite" to="HUD/Timer" method="_on_jitter"]
 [connection signal="frame_changed" from="Sprite" to="Sprite" method="_on_frame_changed"]
+[connection signal="frame_changed" from="Sprite" to="HUD/Timer" method="_on_jitter"]

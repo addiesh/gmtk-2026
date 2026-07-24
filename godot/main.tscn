@@ -6,6 +6,8 @@
 
 [sub_resource type="Environment" id="Environment_0xm2m"]
 background_mode = 3
+glow_enabled = true
+glow_hdr_scale = 4.0
 
 [node name="Node2D" type="Node" unique_id=2058532903]
 
@@ -19,5 +21,5 @@ position = Vector2(446, 314)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=28179579]
 environment = SubResource("Environment_0xm2m")
 
-[node name="Node2D" parent="." unique_id=1552471180 instance=ExtResource("3_h2yge")]
-position = Vector2(538, 287)
+[node name="Pickup" parent="." unique_id=1426482820 instance=ExtResource("3_h2yge")]
+position = Vector2(1265, 973)

@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://c5bihggq573x2"]
+
+[ext_resource type="Texture2D" uid="uid://bxlq77x52ft8o" path="res://placeholder/ph-blast.png" id="1_n3lg3"]
+[ext_resource type="Texture2D" uid="uid://dnhcbabbq2fl0" path="res://placeholder/ph-particle.png" id="2_21wvp"]
+
+[sub_resource type="Curve" id="Curve_n3lg3"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_21wvp"]
+offsets = PackedFloat32Array(0, 0.04255319, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GDScript" id="GDScript_n3lg3"]
+script/source = "extends CPUParticles2D
+"
+
+[node name="Blast" type="CPUParticles2D" unique_id=519570520]
+scale = Vector2(4, 4)
+emitting = false
+amount = 24
+texture = ExtResource("1_n3lg3")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 256.0
+initial_velocity_max = 512.0
+damping_min = 512.0
+damping_max = 1024.0
+scale_amount_curve = SubResource("Curve_n3lg3")
+color_ramp = SubResource("Gradient_21wvp")
+script = SubResource("GDScript_n3lg3")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1026642695]
+texture = ExtResource("2_21wvp")

@@ -1,31 +1,72 @@
 [gd_scene format=3 uid="uid://22ycafb0osvx"]
 
 [ext_resource type="Texture2D" uid="uid://dnhcbabbq2fl0" path="res://placeholder/ph-particle.png" id="1_4m5nm"]
-[ext_resource type="Texture2D" uid="uid://dae3v50g77nqk" path="res://placeholder/ph-hammer.png" id="2_sn2e3"]
+[ext_resource type="Script" uid="uid://cklgk3udywmot" path="res://pickups/hammer.gd" id="1_oh2v5"]
+[ext_resource type="Texture2D" uid="uid://dt3j582rp52ta" path="res://pickups/hammer.png" id="2_fq87o"]
+[ext_resource type="Shader" uid="uid://c4s6ut1d4bybe" path="res://particles/time_wobble.gdshader" id="4_etp03"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fq87o"]
+rough = true
+absorbent = true
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oh2v5"]
-size = Vector2(100, 56)
+size = Vector2(96, 162)
 
 [sub_resource type="Gradient" id="Gradient_2qteb"]
 offsets = PackedFloat32Array(0, 0.5, 0.9, 1)
 colors = PackedColorArray(1, 0.39215687, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fq87o"]
-size = Vector2(98, 123)
+size = Vector2(50, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_etp03"]
+size = Vector2(208, 32)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r7pn3"]
+noise_type = 2
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rptt4"]
+noise = SubResource("FastNoiseLite_r7pn3")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7psqb"]
+shader = ExtResource("4_etp03")
+shader_parameter/noise = SubResource("NoiseTexture2D_rptt4")
+shader_parameter/distortion_speed = 0.5
+shader_parameter/real_time = 0.0
+shader_parameter/offset_by = Vector4(0.1, 0.05, 0.005, 0)
+shader_parameter/scale = Vector2(1.5, 1.5)
+
+[sub_resource type="GDScript" id="GDScript_etp03"]
+script/source = "extends Sprite2D
+
+func _process(delta: float) -> void:
+	(self.material as ShaderMaterial).set_shader_parameter(
+		\"real_time\",
+		Time.get_ticks_msec() / 1000.0
+	);
+	pass
+"
 
 [node name="Pickup" type="Pickup" unique_id=1426482820]
-gravity_scale = 1.0
+collision_layer = 6
+collision_mask = 6
+physics_material_override = SubResource("PhysicsMaterial_fq87o")
+gravity_scale = 0.0
+angular_damp = 4.0
+script = ExtResource("1_oh2v5")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=2094173850]
-position = Vector2(0, -51)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=386838419]
-position = Vector2(3, -19)
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D" unique_id=1692783742]
+position = Vector2(82, 0)
 shape = SubResource("RectangleShape2D_oh2v5")
-debug_color = Color(1, 0, 0.1764706, 0.41960785)
+debug_color = Color(0.7, 0, 0, 0.41960785)
 
 [node name="Particles" type="CPUParticles2D" parent="." unique_id=528986947]
-position = Vector2(0, -32)
+visible = false
+position = Vector2(-7, -64)
 amount = 4
 texture = ExtResource("1_4m5nm")
 emission_shape = 1
@@ -40,12 +81,21 @@ damping_max = 60.0
 color_ramp = SubResource("Gradient_2qteb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=860545878]
-position = Vector2(4, -32.5)
+position = Vector2(82, 0)
 shape = SubResource("RectangleShape2D_fq87o")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2034997257]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1276126053]
+shape = SubResource("RectangleShape2D_etp03")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2034997257]
 z_index = 2
 z_as_relative = false
-position = Vector2(0, -32)
-scale = Vector2(2, 2)
-texture = ExtResource("2_sn2e3")
+texture = ExtResource("2_fq87o")
+
+[node name="Sprite" type="Sprite2D" parent="Sprite" unique_id=1850958131]
+self_modulate = Color(3.2944162, 2.2361488, 0, 0.2509804)
+z_index = -1
+material = SubResource("ShaderMaterial_7psqb")
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_fq87o")
+script = SubResource("GDScript_etp03")

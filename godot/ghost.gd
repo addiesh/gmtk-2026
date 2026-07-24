@@ -12,19 +12,22 @@ extends Sprite2D
 	true
 );
 
-static func make_ghost(global_transform: Transform2D, texture: Texture2D) -> Ghost:
+static func make_ghost(gt: Transform2D, tex: Texture2D) -> Ghost:
 	var ghost = Ghost.new();
 	ghost.fade_curve = load("res://particles/ghost_curve.tres");
 	ghost.fade_time = 0.5;
-	ghost.texture = texture;
-	ghost.material = load("res://particles/ghost_distortion_mat.tres");
-	ghost.global_transform = global_transform;
+	ghost.texture = tex;
+	var sm = ShaderMaterial.new();
+	sm.copy_from_resource(load("res://particles/ghost_distortion_mat.tres"))
+	ghost.material = sm;
+	ghost.global_transform = gt;
 	ghost.global_scale *= 1.5;
 	return ghost;
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	timer.timeout.connect(_timeout);
+	print("ghost id=", self.material .get_rid())
 	pass # Replace with function body.
 
 

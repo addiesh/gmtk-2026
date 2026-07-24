@@ -1,6 +1,6 @@
 use godot::classes::{
-    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, ICharacterBody2D,
-    Input, PhysicsRayQueryParameters2D, Sprite2D,
+    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Control,
+    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D,
 };
 use godot::prelude::*;
 
@@ -31,8 +31,11 @@ pub struct Player {
     camera_zoom_speed_release: real,
 
     #[export]
+    link_timer: Option<Gd<Control>>,
+    #[export]
     held_item: Option<Gd<Pickup>>,
 
+    blast: OnReady<Gd<PackedScene>>,
     camera: OnReady<Gd<Camera2D>>,
     sprite: OnReady<Gd<AnimatedSprite2D>>,
     interact_area: OnReady<Gd<Area2D>>,
@@ -48,6 +51,11 @@ impl Player {
 
     #[signal]
     fn squash_and_stretch();
+
+    #[func]
+    fn is_dashing(&self) -> bool {
+        self.is_dashing.is_some()
+    }
 
     #[func]
     fn has_aim_endpoint(&self) -> bool {
@@ -68,6 +76,18 @@ impl Player {
             .upcast::<CanvasItem>()
             .get_global_mouse_position();
         (mouse_position - self.base().get_global_position()).normalized()
+    }
+
+    fn decrease_timer_by(&mut self, dec_by: f32) {
+        {
+            let mut bm = self.base_mut();
+            let old_mod = bm.get_self_modulate() + Color::WHITE;
+            bm.set_self_modulate(old_mod);
+        }
+        self.link_timer
+            .as_mut()
+            .unwrap()
+            .call("remove_time", &[dec_by.to_variant()]);
     }
 
     fn _manually_spawn_ghost(&self) -> Gd<AnimatedSprite2D> {
@@ -119,6 +139,7 @@ impl Player {
         if let Some(mut held_item) = chi {
             if input.is_action_just_pressed("attack") {
                 if held_item.bind_mut().interact() {
+                    self.decrease_timer_by(2.0);
                     // TODO: decrease level time by 1 seconds
                 }
             } else if input.is_action_just_pressed("use_item") {
@@ -128,6 +149,15 @@ impl Player {
                 bind.throw(self.aim_dir());
                 let mut bind_base = bind.base_mut();
                 bind_base.set_visible(true);
+
+                self.decrease_timer_by(2.0);
+
+                // let mut blast_particle = self.blast.instantiate().unwrap().cast::<Node2D>();
+                // let mut bm = self.base_mut();
+                // bm.add_sibling(&blast_particle);
+                // blast_particle.set_z_index(400);
+                // blast_particle.set_global_position(bm.get_global_position());
+                // blast_particle.request_ready();
             }
         } else {
             if input.is_action_just_pressed("use_item") {
@@ -138,11 +168,10 @@ impl Player {
                     .find_map(|node| node.try_cast::<Pickup>().ok());
 
                 if let Some(mut pickup) = pickup {
-                    // note: this is silly
-                    pickup
-                        .bind_mut()
-                        .base_mut()
-                        .add_collision_exception_with(&self.to_gd());
+                    // pickup
+                    //     .bind_mut()
+                    //     .base_mut()
+                    //     .add_collision_exception_with(&self.to_gd());
                     pickup.reparent(&self.to_gd());
                     {
                         let mut bind = pickup.bind_mut();
@@ -168,6 +197,7 @@ impl Player {
             self.base_mut().set_velocity(
                 /* negate this for curveball (broken) */ dash_dir * 1024.0,
             );
+            self.decrease_timer_by(2.0);
         }
 
         if let Some(dash_dir) = self.is_dashing {
@@ -309,6 +339,7 @@ impl ICharacterBody2D for Player {
             interact_area: OnReady::from_node("InteractArea"),
             camera_distance: 256.0,
             held_item: None,
+            link_timer: None,
             aim_target_hit: None,
             camera_zoom_min: Vector2::ONE * 0.9,
             camera_zoom_max: Vector2::ONE * 1.1,
@@ -320,6 +351,7 @@ impl ICharacterBody2D for Player {
             sprite_facing_front: true,
             squash_distance_traveled: 0.0,
             squash_distance_traveled_last: f32::NEG_INFINITY,
+            blast: OnReady::from_loaded("res://particles/blast.tscn"),
         }
     }
 
