@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://cqhkrwa6uqc0e" path="res://levels/level_test.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://22ycafb0osvx" path="res://pickups/pickup_template.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://bt2llunl1r2bf" path="res://enemies/lucy/lucy.tscn" id="4_1bvp3"]
 
 [sub_resource type="Environment" id="Environment_0xm2m"]
 background_mode = 3
@@ -23,3 +24,6 @@ environment = SubResource("Environment_0xm2m")
 
 [node name="Pickup" parent="." unique_id=1426482820 instance=ExtResource("3_h2yge")]
 position = Vector2(1265, 973)
+
+[node name="Lucy" parent="." unique_id=1578374504 instance=ExtResource("4_1bvp3")]
+position = Vector2(1544, 1054)

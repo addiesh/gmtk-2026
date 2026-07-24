@@ -1,6 +1,6 @@
 use godot::classes::{
-    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Control,
-    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D,
+    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Control, Engine,
+    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D, Time,
 };
 use godot::prelude::*;
 
@@ -17,6 +17,7 @@ pub struct Player {
     sprite_facing_front: bool,
     squash_distance_traveled: real,
     squash_distance_traveled_last: real,
+    real_last_hurt_time: f32,
 
     #[export]
     camera_distance: real,
@@ -51,6 +52,11 @@ impl Player {
 
     #[signal]
     fn squash_and_stretch();
+
+    #[func]
+    fn hurt(&mut self) {
+        self.decrease_timer_by(2.0);
+    }
 
     #[func]
     fn is_dashing(&self) -> bool {
@@ -181,6 +187,7 @@ impl Player {
                         bind_base.set_position(Vector2::ZERO);
                     }
                     self.held_item = Some(pickup.clone());
+                    self.decrease_timer_by(1.0);
                 }
             }
         }
@@ -311,7 +318,9 @@ impl Player {
             None => "",
         };
 
-        if self.is_dashing.is_some() {
+        if self.real_last_hurt_time + 100.0 > (Time::singleton().get_ticks_msec() as f32 / 1000.0) {
+            self.sprite.set_animation(&format!("hurt_{fb}{rl}{equip}"));
+        } else if self.is_dashing.is_some() {
             self.sprite.set_animation(&format!("walk_{fb}{rl}{equip}"));
         } else {
             let anim_string = format!("{moving}_{fb}{rl}{equip}");
@@ -350,8 +359,9 @@ impl ICharacterBody2D for Player {
             sprite_facing_right: true,
             sprite_facing_front: true,
             squash_distance_traveled: 0.0,
-            squash_distance_traveled_last: f32::NEG_INFINITY,
             blast: OnReady::from_loaded("res://particles/blast.tscn"),
+            squash_distance_traveled_last: f32::NEG_INFINITY,
+            real_last_hurt_time: f32::NEG_INFINITY,
         }
     }
 

@@ -9,9 +9,8 @@ pub struct Pickup {
 
 #[godot_api]
 impl Pickup {
-    pub fn equip(&mut self) {
-        self.base_mut().set_freeze_enabled(true);
-    }
+    #[func(virtual)]
+    pub fn equip(&mut self) {}
 
     #[func(virtual)]
     /// Returns true if the action did anything.

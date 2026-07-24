@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://dfqma1g1r83pt"]
 
-[ext_resource type="Script" uid="uid://b0lkdl4tbmeui" path="res://talk_box.gd" id="1_7udxi"]
 [ext_resource type="Texture2D" uid="uid://bhvcyjpqao7nk" path="res://placeholder/talk-bg.png" id="2_n0c8a"]
 [ext_resource type="Texture2D" uid="uid://uatmhc54jcth" path="res://enemies/lucy/talk.png" id="3_n0c8a"]
 
@@ -10,7 +9,6 @@ custom_minimum_size = Vector2(736, 256)
 custom_maximum_size = Vector2(736, 256)
 offset_right = 736.0
 offset_bottom = 256.0
-script = ExtResource("1_7udxi")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=266155427]
 layout_mode = 2

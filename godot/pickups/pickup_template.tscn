@@ -41,7 +41,7 @@ shader_parameter/scale = Vector2(1.5, 1.5)
 [sub_resource type="GDScript" id="GDScript_etp03"]
 script/source = "extends Sprite2D
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	(self.material as ShaderMaterial).set_shader_parameter(
 		\"real_time\",
 		Time.get_ticks_msec() / 1000.0
@@ -58,6 +58,8 @@ angular_damp = 4.0
 script = ExtResource("1_oh2v5")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=2094173850]
+collision_layer = 8
+collision_mask = 8
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D" unique_id=1692783742]
 position = Vector2(82, 0)

@@ -27,7 +27,6 @@ static func make_ghost(gt: Transform2D, tex: Texture2D) -> Ghost:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	timer.timeout.connect(_timeout);
-	print("ghost id=", self.material .get_rid())
 	pass # Replace with function body.
 
 

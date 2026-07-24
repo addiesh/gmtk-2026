@@ -1,13 +1,21 @@
 [gd_scene format=3 uid="uid://buojmmssfjls0"]
 
+[ext_resource type="Texture2D" uid="uid://dv5yn4r7nveu6" path="res://player/sprites/damage/damage-7.png" id="1_ge24q"]
 [ext_resource type="Texture2D" uid="uid://fka7qbauji3i" path="res://player/sprites/hammer/hammer-walk-bl-1.png" id="2_e7oew"]
+[ext_resource type="Texture2D" uid="uid://bpqc4il83wo7o" path="res://player/sprites/damage/damage-3.png" id="2_pnw6m"]
 [ext_resource type="Script" uid="uid://dj85444mxw4j3" path="res://player/player_sprite.gd" id="2_qjkh3"]
+[ext_resource type="Texture2D" uid="uid://dkk0aovqy3wev" path="res://player/sprites/damage/damage-8.png" id="3_1so5t"]
+[ext_resource type="Texture2D" uid="uid://dx7dgq8rv6cq" path="res://player/sprites/damage/damage-4.png" id="4_55jnj"]
 [ext_resource type="Texture2D" uid="uid://dluu54run5k1g" path="res://player/sprites/hammer/hammer-walk-br-1.png" id="4_c35mf"]
 [ext_resource type="Texture2D" uid="uid://bn60dfyknl4m4" path="res://player/sprites/base/walk-bl-1.png" id="5_65viv"]
+[ext_resource type="Texture2D" uid="uid://cox8sgg05hfj2" path="res://player/sprites/damage/damage-5.png" id="5_dx5ib"]
+[ext_resource type="Texture2D" uid="uid://cpdt7it65jc4h" path="res://player/sprites/damage/damage-1.png" id="6_a2xo5"]
 [ext_resource type="Texture2D" uid="uid://ckdsu0r4p4xel" path="res://player/sprites/hammer/hammer-walk-fl-1.png" id="6_rptt4"]
 [ext_resource type="Texture2D" uid="uid://cjkgx587082pl" path="res://player/sprites/base/walk-bl-2.png" id="6_x7c3f"]
+[ext_resource type="Texture2D" uid="uid://s70lcdu4pk61" path="res://player/sprites/damage/damage-6.png" id="7_art4l"]
 [ext_resource type="Texture2D" uid="uid://hkw0rwld3784" path="res://player/sprites/base/walk-bl-3.png" id="7_bjvpn"]
 [ext_resource type="Script" uid="uid://ck0dxp8ly7iga" path="res://player/label.gd" id="7_boad6"]
+[ext_resource type="Texture2D" uid="uid://cpyouducr6hpa" path="res://player/sprites/damage/damage-2.png" id="8_fjxoa"]
 [ext_resource type="Texture2D" uid="uid://dec8g34kug22j" path="res://player/sprites/hammer/hammer-walk-fr-1.png" id="8_r7pn3"]
 [ext_resource type="PackedScene" uid="uid://dfqma1g1r83pt" path="res://ui/talk_box.tscn" id="8_rgyib"]
 [ext_resource type="Texture2D" uid="uid://c7wk0aerjcv7j" path="res://player/sprites/base/walk-br-1.png" id="8_s7qer"]
@@ -28,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://d4hy1r00vnwac" path="res://player/sprites/hammer/hammer-walk-fr-2.png" id="23_ge24q"]
 [ext_resource type="Texture2D" uid="uid://dr5ctkgykrvdd" path="res://player/sprites/hammer/hammer-walk-fr-3.png" id="24_pnw6m"]
 [ext_resource type="PackedScene" uid="uid://3p01jcv6i31d" path="res://player/timer.tscn" id="28_rptt4"]
+[ext_resource type="Curve" uid="uid://cq2idu3e61xgj" path="res://squash_stretch.tres" id="34_pnw6m"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iho50"]
 radius = 56.0
@@ -50,6 +59,70 @@ fill_to = Vector2(1, 0.5)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_qt25b"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ge24q")
+}],
+"loop": 1,
+"name": &"hurt_bl",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_pnw6m")
+}],
+"loop": 1,
+"name": &"hurt_bl_hammer",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_1so5t")
+}],
+"loop": 1,
+"name": &"hurt_br",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_55jnj")
+}],
+"loop": 1,
+"name": &"hurt_br_hammer",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_dx5ib")
+}],
+"loop": 1,
+"name": &"hurt_fl",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_a2xo5")
+}],
+"loop": 1,
+"name": &"hurt_fl_hammer",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_art4l")
+}],
+"loop": 1,
+"name": &"hurt_fr",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_fjxoa")
+}],
+"loop": 1,
+"name": &"hurt_fr_hammer",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("5_65viv")
@@ -255,11 +328,6 @@ animations = [{
 interpolation_mode = 2
 colors = PackedColorArray(0, 0.7529412, 1, 1, 1, 1, 0, 1)
 
-[sub_resource type="Curve" id="Curve_g6k8r"]
-_limits = [0.5, 1.5, 0.0, 1.0]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.1, 0.7), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 4
-
 [sub_resource type="Gradient" id="Gradient_r7pn3"]
 interpolation_mode = 2
 colors = PackedColorArray(1, 0.6666667, 0, 0.7529412, 1, 0.6666667, 0, 0)
@@ -314,12 +382,11 @@ texture = SubResource("GradientTexture2D_2qteb")
 z_index = 1
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_qt25b")
-animation = &"walk_fr_hammer"
+animation = &"idle_fr"
 autoplay = "idle_fr"
-frame_progress = 0.5856572
 script = ExtResource("2_qjkh3")
 time_gradient = SubResource("Gradient_g6k8r")
-squash_stretch = SubResource("Curve_g6k8r")
+squash_stretch = ExtResource("34_pnw6m")
 
 [node name="HoldGlow" type="Sprite2D" parent="Sprite" unique_id=98024752]
 visible = false
