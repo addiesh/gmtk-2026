@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://b0vb54rf14b05"]
+
+[ext_resource type="Texture2D" uid="uid://bqy122yvpnwc0" path="res://ui/splash.png" id="1_t7e0r"]
+[ext_resource type="Texture2D" uid="uid://32r2vly08sao" path="res://ui/title-card.png" id="2_rmr83"]
+
+[node name="MainMenu" type="Control" unique_id=250035314]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Splash" type="TextureRect" parent="." unique_id=718856873]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_t7e0r")
+
+[node name="PhTitle" type="TextureRect" parent="." unique_id=529002878]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -340.0
+offset_top = 64.0
+offset_right = 300.00183
+offset_bottom = 256.0
+grow_horizontal = 2
+texture = ExtResource("2_rmr83")
+
+[node name="Button" type="Button" parent="." unique_id=178529935]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 756.0
+offset_right = 1100.0
+offset_bottom = 884.0
+
+[node name="CenterContainer" type="CenterContainer" parent="Button" unique_id=1638511230]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Button/CenterContainer" unique_id=1602218044]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Begin your Crusade..."

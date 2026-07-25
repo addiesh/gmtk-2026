@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://bt2llunl1r2bf"]
 
 [ext_resource type="Texture2D" uid="uid://b1mvjrunm4fq" path="res://enemies/lucy/basic.png" id="1_0m6h5"]
-[ext_resource type="Script" uid="uid://bhnkwqvsd6f03" path="res://enemies/lucy/lucy.gd" id="1_7uw0j"]
+[ext_resource type="Script" uid="uid://d0d0wfbpi3scs" path="res://enemies/lucy/lucy.gd" id="1_7uw0j"]
 [ext_resource type="Texture2D" uid="uid://ufj5e213oqkq" path="res://enemies/lucy/back.png" id="1_xl5yi"]
+[ext_resource type="Texture2D" uid="uid://dd2rjaa6stkwk" path="res://enemies/lucy/hurt-b.png" id="4_w5pen"]
+[ext_resource type="Texture2D" uid="uid://cdmug3xa5lr0b" path="res://enemies/lucy/hurt-f.png" id="5_fwmbl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qt25b"]
 radius = 80.0
@@ -29,12 +31,43 @@ animations = [{
 "loop": 1,
 "name": &"default",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_w5pen")
+}],
+"loop": 1,
+"name": &"hurt-b",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_fwmbl")
+}],
+"loop": 1,
+"name": &"hurt-f",
+"speed": 5.0
 }]
 
-[node name="Lucy" type="CharacterBody2D" unique_id=1578374504]
+[sub_resource type="Gradient" id="Gradient_w5pen"]
+interpolation_mode = 2
+colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fwmbl"]
+gradient = SubResource("Gradient_w5pen")
+width = 256
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="Lucy" type="CharacterBody2D" unique_id=1578374504 node_paths=PackedStringArray("sprite")]
+motion_mode = 1
 script = ExtResource("1_7uw0j")
+sprite = NodePath("Sprite")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1624216858]
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 8
 
@@ -46,8 +79,15 @@ debug_color = Color(0.63, 0.7, 0, 0.41960785)
 shape = SubResource("CapsuleShape2D_7uw0j")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=153874216]
+z_index = 1
+position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_2qteb")
-animation = &"back"
+animation = &"hurt-f"
 autoplay = "default"
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_hit"]
+[node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1999880903]
+z_index = -1
+position = Vector2(0, 140)
+texture = SubResource("GradientTexture2D_fwmbl")
+
+[connection signal="area_shape_entered" from="Area2D" to="." method="_on_hit"]

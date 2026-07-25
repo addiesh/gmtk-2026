@@ -31,6 +31,8 @@
 [ext_resource type="Texture2D" uid="uid://c4aqevtf0dqd3" path="res://player/sprites/base/walk-fr-2.png" id="15_b8hi5"]
 [ext_resource type="Texture2D" uid="uid://cj2tple31uhw" path="res://player/sprites/base/walk-fr-3.png" id="16_2uvqg"]
 [ext_resource type="Texture2D" uid="uid://piqhsn5x4y1d" path="res://player/sprites/hammer/hammer-walk-br-3.png" id="16_5ejfk"]
+[ext_resource type="Texture2D" uid="uid://d0d7ko8qmmy1j" path="res://player/sprites/swoon/swoon-l.png" id="17_55jnj"]
+[ext_resource type="Texture2D" uid="uid://cr2xa82f5s2jr" path="res://player/sprites/swoon/swoon-r.png" id="18_dx5ib"]
 [ext_resource type="Texture2D" uid="uid://dtl08vt5dx61y" path="res://player/sprites/hammer/hammer-walk-fl-2.png" id="19_jd2rm"]
 [ext_resource type="Texture2D" uid="uid://dqpvgec76ddik" path="res://player/sprites/hammer/hammer-walk-fl-3.png" id="20_q28gw"]
 [ext_resource type="Texture2D" uid="uid://d4hy1r00vnwac" path="res://player/sprites/hammer/hammer-walk-fr-2.png" id="23_ge24q"]
@@ -40,7 +42,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iho50"]
 radius = 56.0
-height = 208.0
+height = 160.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
 radius = 176.4
@@ -185,6 +187,22 @@ animations = [{
 }],
 "loop": 0,
 "name": &"idle_fr_hammer",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_55jnj")
+}],
+"loop": 1,
+"name": &"swoon_fl",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_dx5ib")
+}],
+"loop": 1,
+"name": &"swoon_fr",
 "speed": 5.0
 }, {
 "frames": [{
@@ -340,12 +358,12 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[sub_resource type="Gradient" id="Gradient_rptt4"]
+[sub_resource type="Gradient" id="Gradient_55jnj"]
 interpolation_mode = 2
-colors = PackedColorArray(0, 0, 0, 0.7529412, 0, 0, 0, 0)
+colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_r7pn3"]
-gradient = SubResource("Gradient_rptt4")
+gradient = SubResource("Gradient_55jnj")
 width = 192
 height = 96
 fill = 1
@@ -353,8 +371,8 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
 [node name="Player" type="Player" unique_id=64017830 node_paths=PackedStringArray("link_timer")]
-camera_zoom_min = Vector2(1, 1)
-camera_zoom_max = Vector2(1.2, 1.2)
+camera_zoom_min = Vector2(0.75, 0.75)
+camera_zoom_max = Vector2(1, 1)
 camera_zoom_speed_clench = 48.0
 camera_zoom_speed_release = 8.0
 link_timer = NodePath("HUD/Timer")
@@ -364,7 +382,7 @@ shape = SubResource("CapsuleShape2D_iho50")
 
 [node name="InteractArea" type="Area2D" parent="." unique_id=164258439]
 collision_layer = 7
-collision_mask = 7
+collision_mask = 23
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=977837087]
 shape = SubResource("CircleShape2D_2qteb")
@@ -411,8 +429,8 @@ grow_vertical = 2
 
 [node name="Label" type="Label" parent="Debug/Control" unique_id=844990532]
 layout_mode = 1
-offset_right = 499.0
-offset_bottom = 212.0
+offset_right = 512.0
+offset_bottom = 192.0
 theme_override_font_sizes/font_size = 32
 text = "TIMESCALE"
 script = ExtResource("7_boad6")

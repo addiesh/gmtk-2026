@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cr2xa82f5s2jr"
-path="res://.godot/imported/hurt-r.png-9eb9f79e47a9ca8b3fb9441f6a4fb7db.ctex"
+uid="uid://c2p3xaluc03hj"
+path="res://.godot/imported/chandler.png-2edf5a2562125ae08bf0badc4a58bb48.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/sprites/hurt/hurt-r.png"
-dest_files=["res://.godot/imported/hurt-r.png-9eb9f79e47a9ca8b3fb9441f6a4fb7db.ctex"]
+source_file="res://world/chandler.png"
+dest_files=["res://.godot/imported/chandler.png-2edf5a2562125ae08bf0badc4a58bb48.ctex"]
 
 [params]
 

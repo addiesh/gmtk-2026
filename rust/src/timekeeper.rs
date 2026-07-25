@@ -1,4 +1,4 @@
-use godot::classes::{Engine, Window};
+use godot::classes::{Engine, Input, Time, Window};
 use godot::global::move_toward;
 use godot::prelude::*;
 
@@ -60,6 +60,11 @@ impl IObject for Timekeeper {
 
 #[godot_api]
 impl Timekeeper {
+    #[func]
+    pub fn get_engine_time() -> f64 {
+        Time::singleton().get_ticks_msec() as f64 / 1000.0
+    }
+
     #[func]
     /// Game time (in seconds) as affected by time dilation.
     pub fn get_time() -> f64 {
@@ -140,7 +145,13 @@ impl Timekeeper {
                 // godot_print!("dd = {dash_diff}");
             }
 
-            self.target_timescale = calculated_target.min(1.0);
+            let manually_speeding = Input::singleton().is_action_pressed("time_release");
+
+            self.target_timescale = if manually_speeding {
+                1.0
+            } else {
+                calculated_target.min(1.0)
+            };
             // if self.is_hacked {
             // } else {
             //     self.target_timescale = calculated_target;
@@ -151,7 +162,9 @@ impl Timekeeper {
             self.current_timescale = move_toward(
                 self.current_timescale,
                 self.target_timescale,
-                if self.is_hacked {
+                if manually_speeding {
+                    real_proc_delta * 16.0
+                } else if self.is_hacked {
                     real_proc_delta * 2.0
                 } else {
                     real_proc_delta * 4.0

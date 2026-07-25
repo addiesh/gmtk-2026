@@ -6,6 +6,8 @@ var is_held = false;
 func _equip() -> void:
 	self.freeze = true;
 	self.is_held = true;
+	self.linear_velocity = Vector2.ZERO;
+	self.angular_velocity = 0.0;
 
 func _throw(direction: Vector2) -> void:
 	is_held = false;

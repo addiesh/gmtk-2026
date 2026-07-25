@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0d7ko8qmmy1j"
-path="res://.godot/imported/hurt-l.png-343fffbf904778af61b8c3c8b465df43.ctex"
+uid="uid://csmv3qb6hjtio"
+path="res://.godot/imported/3.png-ad79d3a59e018fe9fcebc8f403b11f30.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/sprites/hurt/hurt-l.png"
-dest_files=["res://.godot/imported/hurt-l.png-343fffbf904778af61b8c3c8b465df43.ctex"]
+source_file="res://enemies/twotimer/3.png"
+dest_files=["res://.godot/imported/3.png-ad79d3a59e018fe9fcebc8f403b11f30.ctex"]
 
 [params]
 

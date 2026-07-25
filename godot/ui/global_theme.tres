@@ -1,19 +1,11 @@
 [gd_resource type="Theme" format=3 uid="uid://dpxkv45x27hij"]
 
 [ext_resource type="FontFile" uid="uid://cul08mbbcrxo2" path="res://fonts/TimesNewPixel.ttf" id="1_qbql7"]
-[ext_resource type="Texture2D" uid="uid://bosqxa1fdq2cj" path="res://ui/ui-panel.png" id="1_wsveg"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qbql7"]
-texture = ExtResource("1_wsveg")
-texture_margin_left = 32.0
-texture_margin_top = 32.0
-texture_margin_right = 32.0
-texture_margin_bottom = 32.0
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
+[ext_resource type="StyleBox" uid="uid://qjjbr240taff" path="res://ui/classy-stylebox.tres" id="1_wsveg"]
 
 [resource]
 default_base_scale = 2.0
 default_font = ExtResource("1_qbql7")
 default_font_size = 32
-Control/styles/panel = SubResource("StyleBoxTexture_qbql7")
+Button/styles/normal = null
+Control/styles/panel = ExtResource("1_wsveg")

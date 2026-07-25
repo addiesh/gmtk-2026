@@ -365,6 +365,19 @@ impl ICharacterBody2D for Player {
         }
     }
 
+    fn physics_process(&mut self, delta: f64) {
+        self.aim_calculations();
+        if self.is_dashing.is_none() {
+            self.basic_movement(delta);
+        } else {
+            self.is_walking = false;
+        }
+        self.dash_action(delta);
+        self.item_actions(delta);
+        self.animation();
+        self.base_mut().move_and_slide();
+    }
+
     fn process(&mut self, _delta: f64) {
         let Some(vp) = self.base().get_viewport() else {
             return;
@@ -392,7 +405,7 @@ impl ICharacterBody2D for Player {
         }
 
         // camera zoom code
-        if false {
+        if true {
             let zoom = self.camera.get_zoom();
 
             let target = self.camera_zoom_min.lerp(
@@ -408,7 +421,7 @@ impl ICharacterBody2D for Player {
 
             self.camera.set_zoom(zoom.move_toward(
                 target,
-                real_delta as f32 * zoom_speed * zoom.distance_squared_to(target),
+                real_delta as f32 * zoom_speed * zoom.distance_squared_to(target).max(0.01),
             ));
         }
 
@@ -431,18 +444,5 @@ impl ICharacterBody2D for Player {
             //     .width(4.0)
             //     .done();
         }
-    }
-
-    fn physics_process(&mut self, delta: f64) {
-        self.aim_calculations();
-        if self.is_dashing.is_none() {
-            self.basic_movement(delta);
-        } else {
-            self.is_walking = false;
-        }
-        self.dash_action(delta);
-        self.item_actions(delta);
-        self.animation();
-        self.base_mut().move_and_slide();
     }
 }

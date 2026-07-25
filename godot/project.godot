@@ -13,6 +13,7 @@ config_version=5
 config/name="CrabJam"
 run/main_scene="uid://cu87orxym37va"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/image="uid://5jkk3y7ssykp"
 config/icon="res://icon.svg"
 
 [display]
@@ -72,6 +73,11 @@ restart_level={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":114,"location":0,"echo":false,"script":null)
 ]
 }
+time_release={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 
 [layer_names]
 
@@ -79,6 +85,7 @@ restart_level={
 2d_physics/layer_2="world"
 2d_physics/layer_3="interaction"
 2d_physics/layer_4="pain"
+2d_physics/layer_5="Sight"
 
 [physics]
 
@@ -91,6 +98,6 @@ rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 viewport/hdr_2d=true
-environment/defaults/default_clear_color=Color(0.17114925, 0.023818133, 0.08166335, 1)
+environment/defaults/default_clear_color=Color(0.2, 0, 0.12666665, 1)
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
