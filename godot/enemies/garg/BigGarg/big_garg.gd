@@ -28,4 +28,5 @@ func _process(_delta: float) -> void:
 #if player not seen in x seconds, quit.
 
 func _on_sight_area_entered(area: Area2D) -> void:
+	
 	pass # Replace with function body.

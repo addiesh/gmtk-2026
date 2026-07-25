@@ -39,6 +39,10 @@
 [ext_resource type="Texture2D" uid="uid://dr5ctkgykrvdd" path="res://player/sprites/hammer/hammer-walk-fr-3.png" id="24_pnw6m"]
 [ext_resource type="PackedScene" uid="uid://3p01jcv6i31d" path="res://player/timer.tscn" id="28_rptt4"]
 [ext_resource type="Curve" uid="uid://cq2idu3e61xgj" path="res://squash_stretch.tres" id="34_pnw6m"]
+[ext_resource type="Script" uid="uid://bbypw5fdwqvnk" path="res://ui/talk_box_player.gd" id="39_dx5ib"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_scw6o"]
+radius = 141.43903
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iho50"]
 radius = 56.0
@@ -377,6 +381,13 @@ camera_zoom_speed_clench = 48.0
 camera_zoom_speed_release = 8.0
 link_timer = NodePath("HUD/Timer")
 
+[node name="Dialogue" type="Area2D" parent="." unique_id=469841579]
+collision_layer = 32
+collision_mask = 32
+
+[node name="DialogueTriggerer" type="CollisionShape2D" parent="Dialogue" unique_id=597896458]
+shape = SubResource("CircleShape2D_scw6o")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1776221318]
 shape = SubResource("CapsuleShape2D_iho50")
 
@@ -446,6 +457,7 @@ offset_top = 32.0
 offset_right = 368.0
 offset_bottom = 288.0
 grow_horizontal = 2
+script = ExtResource("39_dx5ib")
 
 [node name="Timer" parent="HUD" unique_id=239512427 node_paths=PackedStringArray("player") instance=ExtResource("28_rptt4")]
 offset_left = -384.0
@@ -456,6 +468,8 @@ offset_transform_enabled = true
 player = NodePath("../..")
 
 [connection signal="squash_and_stretch" from="." to="Sprite" method="_on_player_squash_and_stretch"]
+[connection signal="area_entered" from="Dialogue" to="HUD/TalkBox" method="_on_dialogue_area_entered"]
+[connection signal="area_exited" from="Dialogue" to="HUD/TalkBox" method="_on_dialogue_area_exited"]
 [connection signal="animation_changed" from="Sprite" to="Sprite" method="_on_animation_changed"]
 [connection signal="animation_changed" from="Sprite" to="HUD/Timer" method="_on_jitter"]
 [connection signal="frame_changed" from="Sprite" to="Sprite" method="_on_frame_changed"]

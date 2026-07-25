@@ -86,6 +86,7 @@ time_release={
 2d_physics/layer_3="interaction"
 2d_physics/layer_4="pain"
 2d_physics/layer_5="Sight"
+2d_physics/layer_6="Dialogue"
 
 [physics]
 
