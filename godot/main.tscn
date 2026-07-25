@@ -1,13 +1,34 @@
 [gd_scene format=3 uid="uid://cu87orxym37va"]
 
-[ext_resource type="PackedScene" uid="uid://b0vb54rf14b05" path="res://ui/main_menu.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://drekmfcqmiviv" path="res://levels/level_loader.gd" id="1_0xm2m"]
+[ext_resource type="Shader" uid="uid://cmsjdwwrbjf4d" path="res://ui/main_menu.gdshader" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://biydh3b31hv1q" path="res://ui/main_menu.gd" id="2_lquwl"]
+[ext_resource type="Texture2D" uid="uid://bqy122yvpnwc0" path="res://ui/splash.png" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://32r2vly08sao" path="res://ui/title-card.png" id="4_7mycd"]
 
-[sub_resource type="GDScript" id="GDScript_0xm2m"]
-script/source = "extends Control
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8uxxo"]
+noise_type = 2
+fractal_octaves = 2
+fractal_gain = -0.8
+cellular_distance_function = 1
 
-func _on_button_pressed() -> void:
-	self.visible = false;
-"
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wk0pr"]
+noise = SubResource("FastNoiseLite_8uxxo")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rmr83"]
+noise_type = 2
+frequency = 0.1
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_wk0pr"]
+noise = SubResource("FastNoiseLite_rmr83")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dkrt"]
+shader = ExtResource("2_1bvp3")
+shader_parameter/noise1 = SubResource("NoiseTexture2D_wk0pr")
+shader_parameter/noise2 = SubResource("NoiseTexture3D_wk0pr")
+shader_parameter/accent = Color(0.3, 0, 0.19999996, 1)
 
 [sub_resource type="Environment" id="Environment_0xm2m"]
 background_mode = 3
@@ -16,16 +37,97 @@ glow_hdr_scale = 4.0
 
 [node name="Main" type="Node" unique_id=2058532903]
 
-[node name="LoadedScene" type="Node" parent="." unique_id=572418856]
+[node name="LevelLoader" type="Node" parent="." unique_id=572418856]
+script = ExtResource("1_0xm2m")
 
-[node name="MainMenu" parent="." unique_id=250035314 instance=ExtResource("1_ig7tw")]
-offset_top = 4.0
-offset_bottom = 4.0
-script = SubResource("GDScript_0xm2m")
+[node name="MainMenu" type="Control" parent="." unique_id=650590415]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_lquwl")
+
+[node name="Wrapper" type="Control" parent="MainMenu" unique_id=250035314]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="ColorRect" parent="MainMenu/Wrapper" unique_id=230122466]
+material = SubResource("ShaderMaterial_0dkrt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4, 0, 0.26666662, 0.39215687)
+
+[node name="Splash" type="TextureRect" parent="MainMenu/Wrapper" unique_id=718856873]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lquwl")
+stretch_mode = 6
+
+[node name="Button" type="Button" parent="MainMenu/Wrapper/Splash" unique_id=178529935]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = 220.0
+offset_right = 140.0
+offset_bottom = 348.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MainMenu/Wrapper/Splash/Button" unique_id=1638511230]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MainMenu/Wrapper/Splash/Button/CenterContainer" unique_id=1602218044]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Begin your Crusade..."
+
+[node name="PhTitle" type="TextureRect" parent="MainMenu/Wrapper" unique_id=529002878]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -340.0
+offset_top = 64.0
+offset_right = 300.00183
+offset_bottom = 256.0
+grow_horizontal = 2
+texture = ExtResource("4_7mycd")
+
+[node name="ColorRect" type="ColorRect" parent="MainMenu" unique_id=973473888]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=28179579]
 environment = SubResource("Environment_0xm2m")
 
-[connection signal="pressed" from="MainMenu/Button" to="MainMenu" method="_on_button_pressed"]
-
-[editable path="MainMenu"]
+[connection signal="pressed" from="MainMenu/Wrapper/Splash/Button" to="MainMenu" method="_on_button_pressed"]
