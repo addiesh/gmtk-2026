@@ -14,7 +14,6 @@ config/name="CrabJam"
 run/main_scene="uid://cu87orxym37va"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/image="uid://5jkk3y7ssykp"
-config/icon="res://icon.svg"
 
 [display]
 
