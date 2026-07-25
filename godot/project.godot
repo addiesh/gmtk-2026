@@ -83,10 +83,11 @@ time_release={
 2d_physics/layer_1="player"
 2d_physics/layer_2="world"
 2d_physics/layer_3="interaction"
-2d_physics/layer_4="pain"
+2d_physics/layer_4="enemy_hurt"
 2d_physics/layer_5="Sight"
 2d_physics/layer_6="Dialogue"
-2d_physics/layer_7="PlayerDialogueArea"
+2d_physics/layer_10="PlayerDialogueArea"
+2d_physics/layer_7="player_hurt"
 
 [physics]
 
@@ -94,10 +95,12 @@ time_release={
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
+textures/canvas_textures/default_texture_filter=3
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=true
+textures/default_filters/anisotropic_filtering_level=4
 viewport/hdr_2d=true
 environment/defaults/default_clear_color=Color(0.2, 0, 0.12666665, 1)
 2d/snap/snap_2d_transforms_to_pixel=true

@@ -21,7 +21,8 @@ static func make_ghost(gt: Transform2D, tex: Texture2D) -> Ghost:
 	sm.copy_from_resource(load("res://particles/ghost_distortion_mat.tres"))
 	ghost.material = sm;
 	ghost.global_transform = gt;
-	ghost.global_scale *= 1.5;
+	ghost.global_scale.x *= 1.5;
+	ghost.global_scale.y *= 1.5;
 	return ghost;
 
 # Called when the node enters the scene tree for the first time.

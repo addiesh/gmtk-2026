@@ -1,7 +1,8 @@
 use godot::classes::{
-    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Control, Engine,
-    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D, Time,
+    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Control, Curve,
+    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D,
 };
+use godot::global::clampf;
 use godot::prelude::*;
 
 use crate::pickup::Pickup;
@@ -17,7 +18,8 @@ pub struct Player {
     sprite_facing_front: bool,
     squash_distance_traveled: real,
     squash_distance_traveled_last: real,
-    real_last_hurt_time: f32,
+    last_engine_hurt_time: f64,
+    last_engine_throw_time: f64,
 
     #[export]
     camera_distance: real,
@@ -40,6 +42,7 @@ pub struct Player {
     camera: OnReady<Gd<Camera2D>>,
     sprite: OnReady<Gd<AnimatedSprite2D>>,
     interact_area: OnReady<Gd<Area2D>>,
+    squash: OnReady<Gd<Curve>>,
 
     base: Base<CharacterBody2D>,
 }
@@ -49,13 +52,17 @@ impl Player {
     const ACCELERATION: real = 3600.0;
     const DECELERATION: real = 3600.0;
     const BASE_SPEED: real = 800.0;
+    const INVULN_TIME: f64 = 0.25;
 
     #[signal]
     fn squash_and_stretch();
 
     #[func]
     fn hurt(&mut self) {
-        self.decrease_timer_by(2.0);
+        if self.is_dashing.is_none() {
+            self.decrease_timer_by(2.0);
+            self.last_engine_hurt_time = Timekeeper::get_engine_time();
+        }
     }
 
     #[func]
@@ -76,12 +83,20 @@ impl Player {
             .unwrap_or_default()
     }
 
+    fn remaining_time(&mut self) -> f32 {
+        self.link_timer
+            .as_mut()
+            .unwrap()
+            .call("_remaining_time", &[])
+            .to::<f32>()
+    }
+
     fn aim_dir(&self) -> Vector2 {
         let mouse_position = self
             .to_gd()
             .upcast::<CanvasItem>()
             .get_global_mouse_position();
-        (mouse_position - self.base().get_global_position()).normalized()
+        (mouse_position - self.base().get_global_position()).normalized_or_zero()
     }
 
     fn decrease_timer_by(&mut self, dec_by: f32) {
@@ -118,8 +133,7 @@ impl Player {
         let Some(mut dss) = self
             .base()
             .get_world_2d()
-            .map(|world| world.get_direct_space_state())
-            .flatten()
+            .and_then(|world| world.get_direct_space_state())
         else {
             godot_warn!("player has no world/space state!");
             return;
@@ -141,21 +155,31 @@ impl Player {
 
     fn item_actions(&mut self, _delta: f64) {
         let input = Input::singleton();
-        let chi = self.held_item.as_ref().map(|x| x.clone());
+        let chi = self.held_item.clone();
         if let Some(mut held_item) = chi {
             if input.is_action_just_pressed("attack") {
-                if held_item.bind_mut().interact() {
+                if held_item.call("_interact", &[]).booleanize() {
                     self.decrease_timer_by(2.0);
                     // TODO: decrease level time by 1 seconds
                 }
             } else if input.is_action_just_pressed("use_item") {
                 drop(self.held_item.take());
                 held_item.reparent(&self.base().get_parent().unwrap());
-                let mut bind = held_item.bind_mut();
-                bind.throw(self.aim_dir());
-                let mut bind_base = bind.base_mut();
-                bind_base.set_visible(true);
+                let aim_dir = self.aim_dir();
+                held_item.call("_throw", &[aim_dir.to_variant()]);
+                held_item.bind_mut().base_mut().set_visible(true);
+                self.last_engine_throw_time = Timekeeper::get_engine_time();
+                if aim_dir.x >= 0.0 {
+                    self.sprite_facing_right = true;
+                } else {
+                    self.sprite_facing_right = false;
+                }
 
+                if aim_dir.y >= 0.0 {
+                    self.sprite_facing_front = true;
+                } else {
+                    self.sprite_facing_front = false;
+                }
                 self.decrease_timer_by(2.0);
 
                 // let mut blast_particle = self.blast.instantiate().unwrap().cast::<Node2D>();
@@ -167,24 +191,21 @@ impl Player {
             }
         } else {
             if input.is_action_just_pressed("use_item") {
+                println!("fix: {}", line!());
                 let pickup = self
                     .interact_area
                     .get_overlapping_bodies()
                     .iter_shared()
                     .find_map(|node| node.try_cast::<Pickup>().ok());
+                println!("fix: {}", line!());
 
                 if let Some(mut pickup) = pickup {
-                    // pickup
-                    //     .bind_mut()
-                    //     .base_mut()
-                    //     .add_collision_exception_with(&self.to_gd());
-                    pickup.reparent(&self.to_gd());
+                    self.last_engine_throw_time = f64::NEG_INFINITY;
                     {
-                        let mut bind = pickup.bind_mut();
-                        bind.equip();
-                        let mut bind_base = bind.base_mut();
-                        bind_base.set_visible(false);
-                        bind_base.set_position(Vector2::ZERO);
+                        pickup.bind_mut().base_mut().reparent(&self.to_gd());
+                        pickup.call("_equip", &[]);
+                        pickup.bind_mut().base_mut().set_visible(false);
+                        pickup.bind_mut().base_mut().set_position(Vector2::ZERO);
                     }
                     self.held_item = Some(pickup.clone());
                     self.decrease_timer_by(1.0);
@@ -197,7 +218,7 @@ impl Player {
         let input = Input::singleton();
         let velocity = self.base().get_velocity();
         if self.is_dashing.is_none() && input.is_action_just_pressed("dash") {
-            // TODO: decrease level time by 2 seconds
+            self.last_engine_hurt_time = f64::NEG_INFINITY;
             let dash_dir = self.aim_dir();
             self.is_dashing = Some(dash_dir);
             Timekeeper::time_flags().bind_mut().player_dashing = true;
@@ -279,21 +300,22 @@ impl Player {
             let target_vel = dir * Self::BASE_SPEED / dir_length;
 
             self.is_walking = true;
-            if dir.x > 0.0 {
-                self.sprite_facing_right = true;
-            } else if dir.x < 0.0 {
-                self.sprite_facing_right = false;
-            }
+            if Timekeeper::get_engine_time() > self.last_engine_throw_time + 0.2 {
+                if dir.x > 0.0 {
+                    self.sprite_facing_right = true;
+                } else if dir.x < 0.0 {
+                    self.sprite_facing_right = false;
+                }
 
-            if dir.y > 0.0 {
-                self.sprite_facing_front = true;
-            } else if dir.y < 0.0 {
-                self.sprite_facing_front = false;
+                if dir.y > 0.0 {
+                    self.sprite_facing_front = true;
+                } else if dir.y < 0.0 {
+                    self.sprite_facing_front = false;
+                }
             }
 
             Timekeeper::time_flags().bind_mut().player_moving = true;
-            new_vel =
-                current_velocity.move_toward(target_vel, Self::ACCELERATION as f32 * delta as f32);
+            new_vel = current_velocity.move_toward(target_vel, Self::ACCELERATION * delta as f32);
 
             self.squash_distance_traveled += new_vel.length() * delta as f32;
         } else {
@@ -309,6 +331,7 @@ impl Player {
         self.base_mut().set_velocity(new_vel);
     }
 
+    // animate
     fn animation(&mut self) {
         let fb = if self.sprite_facing_front { "f" } else { "b" };
         let rl = if self.sprite_facing_right { "r" } else { "l" };
@@ -318,14 +341,29 @@ impl Player {
             None => "",
         };
 
-        if self.real_last_hurt_time + 100.0 > (Time::singleton().get_ticks_msec() as f32 / 1000.0) {
+        if self.remaining_time() == 0.0 {
+            self.sprite.set_animation(&format!("swoon_f{rl}"));
+        } else if self.last_engine_hurt_time + 1.0 > Timekeeper::get_engine_time() {
             self.sprite.set_animation(&format!("hurt_{fb}{rl}{equip}"));
+        } else if self.last_engine_throw_time + 0.2 > Timekeeper::get_engine_time() {
+            self.sprite.set_animation(&format!("throw_{fb}{rl}"));
         } else if self.is_dashing.is_some() {
             self.sprite.set_animation(&format!("walk_{fb}{rl}{equip}"));
         } else {
             let anim_string = format!("{moving}_{fb}{rl}{equip}");
             self.sprite.set_animation(&anim_string);
         }
+
+        let current_engine_time = Timekeeper::get_engine_time();
+        let sample = clampf(
+            (current_engine_time - self.last_engine_hurt_time) / Self::INVULN_TIME,
+            0.0,
+            1.0,
+        );
+        // let sampled = self.squash.sample_baked(sample as f32);
+        self.sprite
+            .set_self_modulate((Color::RED * 2.0).lerp(Color::WHITE, sample));
+
         if !self.sprite.is_playing() {
             self.sprite.play();
         }
@@ -336,49 +374,8 @@ impl Player {
         // }
         // }
     }
-}
 
-#[godot_api]
-impl ICharacterBody2D for Player {
-    fn init(base: Base<CharacterBody2D>) -> Self {
-        Self {
-            base,
-            camera: OnReady::from_node("Camera2D"),
-            sprite: OnReady::from_node("Sprite"),
-            interact_area: OnReady::from_node("InteractArea"),
-            camera_distance: 256.0,
-            held_item: None,
-            link_timer: None,
-            aim_target_hit: None,
-            camera_zoom_min: Vector2::ONE * 0.9,
-            camera_zoom_max: Vector2::ONE * 1.1,
-            camera_zoom_speed_clench: 16.0,
-            camera_zoom_speed_release: 1.0,
-            is_dashing: None,
-            is_walking: false,
-            sprite_facing_right: true,
-            sprite_facing_front: true,
-            squash_distance_traveled: 0.0,
-            blast: OnReady::from_loaded("res://particles/blast.tscn"),
-            squash_distance_traveled_last: f32::NEG_INFINITY,
-            real_last_hurt_time: f32::NEG_INFINITY,
-        }
-    }
-
-    fn physics_process(&mut self, delta: f64) {
-        self.aim_calculations();
-        if self.is_dashing.is_none() {
-            self.basic_movement(delta);
-        } else {
-            self.is_walking = false;
-        }
-        self.dash_action(delta);
-        self.item_actions(delta);
-        self.animation();
-        self.base_mut().move_and_slide();
-    }
-
-    fn process(&mut self, _delta: f64) {
+    fn default_process(&mut self, _delta: f64) {
         let Some(vp) = self.base().get_viewport() else {
             return;
         };
@@ -433,6 +430,55 @@ impl ICharacterBody2D for Player {
         }
 
         // self.base_mut().queue_redraw();
+    }
+}
+
+#[godot_api]
+impl ICharacterBody2D for Player {
+    fn init(base: Base<CharacterBody2D>) -> Self {
+        Self {
+            base,
+            camera: OnReady::from_node("Camera2D"),
+            sprite: OnReady::from_node("Sprite"),
+            interact_area: OnReady::from_node("InteractArea"),
+            camera_distance: 256.0,
+            held_item: None,
+            link_timer: None,
+            aim_target_hit: None,
+            camera_zoom_min: Vector2::ONE * 0.9,
+            camera_zoom_max: Vector2::ONE * 1.1,
+            camera_zoom_speed_clench: 16.0,
+            camera_zoom_speed_release: 1.0,
+            is_dashing: None,
+            is_walking: false,
+            sprite_facing_right: true,
+            sprite_facing_front: true,
+            squash_distance_traveled: 0.0,
+            blast: OnReady::from_loaded("res://particles/blast.tscn"),
+            squash_distance_traveled_last: f32::NEG_INFINITY,
+            last_engine_hurt_time: f64::NEG_INFINITY,
+            last_engine_throw_time: f64::NEG_INFINITY,
+            squash: OnReady::from_loaded("res://hurt_squash.tres"),
+        }
+    }
+
+    fn physics_process(&mut self, delta: f64) {
+        if self.remaining_time() > 0.0 {
+            self.aim_calculations();
+            if self.is_dashing.is_none() {
+                self.basic_movement(delta);
+            } else {
+                self.is_walking = false;
+            }
+            self.dash_action(delta);
+            self.item_actions(delta);
+        }
+        self.animation();
+        self.base_mut().move_and_slide();
+    }
+
+    fn process(&mut self, delta: f64) {
+        self.default_process(delta);
     }
 
     fn draw(&mut self) {
