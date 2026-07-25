@@ -2,8 +2,12 @@
 
 [ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_c712q"]
 [ext_resource type="Texture2D" uid="uid://cfky8h08bd1yg" path="res://enemies/garg/base-2.png" id="1_tbt4p"]
+[ext_resource type="Texture2D" uid="uid://dkutyxts282gs" path="res://enemies/garg/attack.png" id="2_6cgwj"]
 [ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_c712q"]
 [ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="3_6cgwj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
+radius = 160.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c712q"]
 radius = 124.0
@@ -13,11 +17,16 @@ height = 248.0
 radius = 75.0
 height = 206.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
-radius = 230.0
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_uw37d"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_6cgwj")
+}],
+"loop": 1,
+"name": &"attack",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_tbt4p")
@@ -63,6 +72,14 @@ motion_mode = 1
 script = ExtResource("1_c712q")
 sprite = NodePath("Sprite")
 
+[node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
+collision_layer = 64
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1611317335]
+shape = SubResource("CircleShape2D_2qteb")
+debug_color = Color(0.9782248, 0, 0.4016432, 0.41960785)
+
 [node name="Area2D" type="Area2D" parent="." unique_id=2132429884]
 collision_layer = 8
 collision_mask = 8
@@ -74,18 +91,10 @@ debug_color = Color(0.63, 0.7, 0, 0.41960785)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1380770669]
 shape = SubResource("CapsuleShape2D_6cgwj")
 
-[node name="Sight" type="Area2D" parent="." unique_id=485315728]
-collision_layer = 16
-collision_mask = 17
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sight" unique_id=1611317335]
-shape = SubResource("CircleShape2D_2qteb")
-
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1382980860]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uw37d")
-animation = &"walk"
+animation = &"attack"
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1987069992]
 z_index = -1
@@ -94,5 +103,5 @@ texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]
 
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_hit"]
-[connection signal="area_entered" from="Sight" to="." method="_on_sight_area_entered"]

@@ -8,6 +8,12 @@ func _process(_delta: float) -> void:
 			sprite.flip_h = false
 		if self.velocity.x < -0.1:
 			sprite.flip_h = true;
+	elif _is_on_melee_cooldown():
+		sprite.animation = "attack";
+		if self.velocity.x > 0.1:
+			sprite.flip_h = false;
+		elif self.velocity.x < -0.1:
+			sprite.flip_h = true;
 	elif self.velocity.length_squared() < 8.0:
 		sprite.animation = "default";
 	elif self.velocity.x > 0.1:
@@ -18,15 +24,32 @@ func _process(_delta: float) -> void:
 		sprite.flip_h = false;
 	pass
 	
+	var current_time = Timekeeper.get_engine_time();
+	var sample_hurt = clampf(
+		(current_time - last_hit_time) / INVULN_TIME,
+		0.0,
+		1.0
+	);
+	var sample_generic = clampf(
+		(current_time - last_squash_time) / MELEE_COOLDOWN_TIME,
+		0.0,
+		1.0
+	);
+	var sampled = squash.sample_baked(min(sample_hurt, sample_generic));
+	sprite.scale.y = sampled;
+	sprite.self_modulate = (Color.RED * 2.0).lerp(Color.WHITE, sample_hurt);
+
+	
 	if !sprite.is_playing():
 		sprite.play();
 	
-
-#monitor surroundings with area 2D
-#if player enters collision shape, raycast to see if player is seen first.
-#if player seen first in ray, follow. Copy player coords and lerp towards
-#if player not seen in x seconds, quit.
-
-func _on_sight_area_entered(area: Area2D) -> void:
-	
-	pass # Replace with function body.
+func _on_hitbox_body_entered(body: Node2D) -> void:
+	if body is Player:
+		self.velocity = -velocity.normalized() * 2048.0;
+		body.velocity = -velocity.normalized() * 1024.0;
+		self.last_squash_time = Timekeeper.get_engine_time();
+		if !body.is_dashing():
+			body
+			body.hurt();
+			self.melee_cooldown_time = Timekeeper.get_time();
+	pass

@@ -1,16 +1,15 @@
 extends Pickup
 
 @onready var sprite: Sprite2D = $Sprite;
-var is_held = false;
 
 func _equip() -> void:
-	self.freeze = true;
 	self.is_held = true;
+	self.freeze = true;
 	self.linear_velocity = Vector2.ZERO;
 	self.angular_velocity = 0.0;
 
 func _throw(direction: Vector2) -> void:
-	is_held = false;
+	self.is_held = false;
 	self.freeze = false;
 	self.linear_velocity = direction * 2048.0;
 	var angv;
@@ -24,6 +23,14 @@ func _throw(direction: Vector2) -> void:
 	self.angular_velocity = angv;
 
 func _process(_delta: float) -> void:
+	if is_held:
+		var ang = wrap(self.rotation_degrees, 0, 360);
+		if ang > 90 && ang < 270:
+			sprite.flip_v = true;
+		else:
+			sprite.flip_v = false;
+			
+	
 	if self.linear_velocity.length_squared() > 4.0 || is_held:
 		var ghost = Ghost.make_ghost(self.global_transform, self.sprite.texture);
 		ghost.self_modulate = Color(3.294, 2.236, 0.0, 0.05);

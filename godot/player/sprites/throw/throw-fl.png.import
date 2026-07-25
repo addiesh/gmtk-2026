@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nxiry3e7of2h"
-path="res://.godot/imported/tileset.png-d227a5720fcefd34984ad6de3734e86f.ctex"
+uid="uid://b4fpg5vl2kn0r"
+path="res://.godot/imported/throw-fl.png-c22d872a6d90b83e09f6677eee3c4258.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/tileset.png"
-dest_files=["res://.godot/imported/tileset.png-d227a5720fcefd34984ad6de3734e86f.ctex"]
+source_file="res://player/sprites/throw/throw-fl.png"
+dest_files=["res://.godot/imported/throw-fl.png-c22d872a6d90b83e09f6677eee3c4258.ctex"]
 
 [params]
 
@@ -23,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

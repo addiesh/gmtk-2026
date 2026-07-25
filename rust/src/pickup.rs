@@ -4,30 +4,21 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(base=RigidBody2D)]
 pub struct Pickup {
+    #[var]
+    pub is_held: bool,
     base: Base<RigidBody2D>,
 }
 
 #[godot_api]
-impl Pickup {
-    #[func(virtual)]
-    pub fn equip(&mut self) {}
-
-    #[func(virtual)]
-    /// Returns true if the action did anything.
-    pub fn interact(&mut self) -> bool {
-        false
-    }
-
-    #[func(virtual)]
-    pub fn throw(&mut self, _direction: Vector2) {
-        godot_error!("TODO: implement throw function");
-    }
-}
+impl Pickup {}
 
 #[godot_api]
 impl IRigidBody2D for Pickup {
     fn init(base: Base<RigidBody2D>) -> Self {
-        // let mut based = base.to_init_gd();
-        Self { base }
+        // let mut based = base.tox_init_gd();
+        Self {
+            base,
+            is_held: false,
+        }
     }
 }

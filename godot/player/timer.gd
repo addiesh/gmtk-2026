@@ -22,11 +22,19 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func _remaining_time() -> float:
-	return TIME_DURATION - (Timekeeper.get_time() - clock_start_time) - time_spent;
+	return max(
+		TIME_DURATION - (
+			Timekeeper.get_time() - clock_start_time
+		) - time_spent,
+		0.0
+	);
 
 func remove_time(dec_by: float):
 	time_spent += dec_by;
-	self_modulate = self_modulate * 4.0;
+	self_modulate = (self_modulate * 4.0).clamp(
+		Color.WHITE,
+		Color.WHITE * 8.0,
+	);
 
 func _on_jitter() -> void:
 	var veldir = player.velocity.normalized();
@@ -36,17 +44,21 @@ func _on_jitter() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("restart_level") && !is_ticking:
-		_start_clock();
-		pass
-	
-	if player.is_dashing(): 
+	time_text.text = "%2.1f" % _remaining_time();
+
+
+	if player.is_dashing():
 		_on_jitter();
 		pass;
 	var delta = Timekeeper.real_process_delta();
 	self.offset_transform_position *= 1.0 - delta * 4.0;
 	self_modulate = self_modulate.lerp(Color.WHITE, delta * 4.0);
-	
-	time_text.text = "%2.1f" % _remaining_time()
-	
+
+
+	if _remaining_time() == 0:
+		Timekeeper.time_flags().is_time_frozen = true;
+		return;
+	else:
+		Timekeeper.time_flags().is_time_frozen = false;
+
 	pass

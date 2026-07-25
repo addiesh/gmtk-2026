@@ -5,6 +5,9 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(no_init, base=RefCounted)]
 pub struct TimekeeperFlags {
+    #[var]
+    /// Is time frozen? Only use this for gameover.
+    pub is_time_frozen: bool,
     /// Is the player moving right now?
     #[var]
     pub player_moving: bool,
@@ -51,6 +54,7 @@ impl IObject for Timekeeper {
                 last_player_action_time: -1000.0,
                 last_player_dash_time: -1000.0,
                 last_player_hurt_time: -1000.0,
+                is_time_frozen: false,
             }),
             is_hacked: false,
             dilated_time: 0.0,
@@ -147,7 +151,10 @@ impl Timekeeper {
 
             let manually_speeding = Input::singleton().is_action_pressed("time_release");
 
-            self.target_timescale = if manually_speeding {
+            self.target_timescale = if flags.is_time_frozen {
+                godot_print!("time frozen");
+                0.0001
+            } else if manually_speeding {
                 1.0
             } else {
                 calculated_target.min(1.0)
@@ -176,7 +183,7 @@ impl Timekeeper {
             self.is_hacked = false;
         }
 
-        Engine::singleton().set_time_scale(self.current_timescale as f64);
+        Engine::singleton().set_time_scale(self.current_timescale);
         // godot_print!("delta = {real_proc_delta}, ts = {}", self.current_timescale);
         self.dilated_time += self.current_timescale * real_proc_delta;
     }

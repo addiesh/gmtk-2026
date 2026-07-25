@@ -1,11 +1,21 @@
+class_name LevelLoader
 extends Node
 
+var scene_to_load: PackedScene = null;
+var reload_taper_fade: SceneTreeTimer;
+var is_reloading_scene = false;
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+func _scene_reload() -> void:
+	if is_reloading_scene || scene_to_load == null:
+		return;
+	is_reloading_scene = true;
+	reload_taper_fade = get_tree().create_timer(
+		0.5,
+		true,
+		false,
+		true
+	);
+	for node in self.get_children():
+		node.queue_free();
+	self.add_child(scene_to_load.instantiate());
+	

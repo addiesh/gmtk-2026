@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://cu87orxym37va"]
 
 [ext_resource type="Script" uid="uid://drekmfcqmiviv" path="res://levels/level_loader.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://ck0dxp8ly7iga" path="res://player/label.gd" id="1_272bh"]
 [ext_resource type="Shader" uid="uid://cmsjdwwrbjf4d" path="res://ui/main_menu.gdshader" id="2_1bvp3"]
 [ext_resource type="Script" uid="uid://biydh3b31hv1q" path="res://ui/main_menu.gd" id="2_lquwl"]
 [ext_resource type="Texture2D" uid="uid://bqy122yvpnwc0" path="res://ui/splash.png" id="3_lquwl"]
 [ext_resource type="Texture2D" uid="uid://32r2vly08sao" path="res://ui/title-card.png" id="4_7mycd"]
+[ext_resource type="Script" uid="uid://b6coeygnjrsy0" path="res://ninja_taper_fade.gd" id="6_7mycd"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_8uxxo"]
 noise_type = 2
@@ -35,12 +37,20 @@ background_mode = 3
 glow_enabled = true
 glow_hdr_scale = 4.0
 
+[sub_resource type="GDScript" id="GDScript_mmwog"]
+script/source = "extends WorldEnvironment
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
 [node name="Main" type="Node" unique_id=2058532903]
 
 [node name="LevelLoader" type="Node" parent="." unique_id=572418856]
 script = ExtResource("1_0xm2m")
 
-[node name="MainMenu" type="Control" parent="." unique_id=650590415]
+[node name="MainMenu" type="Control" parent="." unique_id=650590415 node_paths=PackedStringArray("level_loader")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,6 +58,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_lquwl")
+level_loader = NodePath("../LevelLoader")
 
 [node name="Wrapper" type="Control" parent="MainMenu" unique_id=250035314]
 layout_mode = 1
@@ -117,8 +128,11 @@ offset_bottom = 256.0
 grow_horizontal = 2
 texture = ExtResource("4_7mycd")
 
-[node name="ColorRect" type="ColorRect" parent="MainMenu" unique_id=973473888]
-layout_mode = 1
+[node name="NinjaTaperFade" type="CanvasLayer" parent="." unique_id=1257111521]
+layer = 2
+script = ExtResource("6_7mycd")
+
+[node name="ColorRect" type="ColorRect" parent="NinjaTaperFade" unique_id=973473888]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -129,5 +143,15 @@ color = Color(0, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=28179579]
 environment = SubResource("Environment_0xm2m")
+script = SubResource("GDScript_mmwog")
+
+[node name="Debug" type="CanvasLayer" parent="." unique_id=2104171735]
+
+[node name="Label" type="Label" parent="Debug" unique_id=1414866066]
+offset_right = 146.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 32
+text = "TIMESCALE"
+script = ExtResource("1_272bh")
 
 [connection signal="pressed" from="MainMenu/Wrapper/Splash/Button" to="MainMenu" method="_on_button_pressed"]

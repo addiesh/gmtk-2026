@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://cjkgx587082pl" path="res://player/sprites/base/walk-bl-2.png" id="6_x7c3f"]
 [ext_resource type="Texture2D" uid="uid://s70lcdu4pk61" path="res://player/sprites/damage/damage-6.png" id="7_art4l"]
 [ext_resource type="Texture2D" uid="uid://hkw0rwld3784" path="res://player/sprites/base/walk-bl-3.png" id="7_bjvpn"]
-[ext_resource type="Script" uid="uid://ck0dxp8ly7iga" path="res://player/label.gd" id="7_boad6"]
 [ext_resource type="Texture2D" uid="uid://cpyouducr6hpa" path="res://player/sprites/damage/damage-2.png" id="8_fjxoa"]
 [ext_resource type="Texture2D" uid="uid://dec8g34kug22j" path="res://player/sprites/hammer/hammer-walk-fr-1.png" id="8_r7pn3"]
 [ext_resource type="PackedScene" uid="uid://dfqma1g1r83pt" path="res://ui/talk_box.tscn" id="8_rgyib"]
@@ -33,8 +32,12 @@
 [ext_resource type="Texture2D" uid="uid://piqhsn5x4y1d" path="res://player/sprites/hammer/hammer-walk-br-3.png" id="16_5ejfk"]
 [ext_resource type="Texture2D" uid="uid://d0d7ko8qmmy1j" path="res://player/sprites/swoon/swoon-l.png" id="17_55jnj"]
 [ext_resource type="Texture2D" uid="uid://cr2xa82f5s2jr" path="res://player/sprites/swoon/swoon-r.png" id="18_dx5ib"]
+[ext_resource type="Texture2D" uid="uid://xkf6d4wrptfi" path="res://player/sprites/throw/throw-bl.png" id="19_gswnw"]
 [ext_resource type="Texture2D" uid="uid://dtl08vt5dx61y" path="res://player/sprites/hammer/hammer-walk-fl-2.png" id="19_jd2rm"]
 [ext_resource type="Texture2D" uid="uid://dqpvgec76ddik" path="res://player/sprites/hammer/hammer-walk-fl-3.png" id="20_q28gw"]
+[ext_resource type="Texture2D" uid="uid://c32q8fqcvmisk" path="res://player/sprites/throw/throw-br.png" id="20_xcnuv"]
+[ext_resource type="Texture2D" uid="uid://b4fpg5vl2kn0r" path="res://player/sprites/throw/throw-fl.png" id="21_j55il"]
+[ext_resource type="Texture2D" uid="uid://knsjtpgxkvde" path="res://player/sprites/throw/throw-fr.png" id="22_hjies"]
 [ext_resource type="Texture2D" uid="uid://d4hy1r00vnwac" path="res://player/sprites/hammer/hammer-walk-fr-2.png" id="23_ge24q"]
 [ext_resource type="Texture2D" uid="uid://dr5ctkgykrvdd" path="res://player/sprites/hammer/hammer-walk-fr-3.png" id="24_pnw6m"]
 [ext_resource type="PackedScene" uid="uid://3p01jcv6i31d" path="res://player/timer.tscn" id="28_rptt4"]
@@ -207,6 +210,38 @@ animations = [{
 }],
 "loop": 1,
 "name": &"swoon_fr",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_gswnw")
+}],
+"loop": 1,
+"name": &"throw_bl",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_xcnuv")
+}],
+"loop": 1,
+"name": &"throw_br",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_j55il")
+}],
+"loop": 1,
+"name": &"throw_fl",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_hjies")
+}],
+"loop": 1,
+"name": &"throw_fr",
 "speed": 5.0
 }, {
 "frames": [{
@@ -411,7 +446,7 @@ texture = SubResource("GradientTexture2D_2qteb")
 z_index = 1
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_qt25b")
-animation = &"idle_fr"
+animation = &"throw_fr"
 autoplay = "idle_fr"
 script = ExtResource("2_qjkh3")
 time_gradient = SubResource("Gradient_g6k8r")
@@ -427,24 +462,6 @@ texture = SubResource("GradientTexture2D_b8hi5")
 z_index = -1
 position = Vector2(0, 112)
 texture = SubResource("GradientTexture2D_r7pn3")
-
-[node name="Debug" type="CanvasLayer" parent="." unique_id=1278309746]
-
-[node name="Control" type="Control" parent="Debug" unique_id=1913438936]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="Debug/Control" unique_id=844990532]
-layout_mode = 1
-offset_right = 512.0
-offset_bottom = 192.0
-theme_override_font_sizes/font_size = 32
-text = "TIMESCALE"
-script = ExtResource("7_boad6")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=724956971]
 
