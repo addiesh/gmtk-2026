@@ -1,35 +1,39 @@
 [gd_scene format=3 uid="uid://dxbm66mc7bm2q"]
 
 [ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_egrpx"]
-[ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_2gv44"]
-[ext_resource type="Texture2D" uid="uid://dkutyxts282gs" path="res://enemies/garg/attack.png" id="3_e3j6x"]
-[ext_resource type="Texture2D" uid="uid://cfky8h08bd1yg" path="res://enemies/garg/base-2.png" id="4_lw2jx"]
-[ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="5_bhh70"]
+[ext_resource type="Texture2D" uid="uid://1svx1a4ny2xv" path="res://enemies/garg/LilGarg/lilgargattack.png" id="2_mungj"]
+[ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_6u04i"]
+[ext_resource type="Texture2D" uid="uid://dn4ftmub1foge" path="res://enemies/garg/LilGarg/lilgarg3.png" id="3_becsd"]
+[ext_resource type="Texture2D" uid="uid://c33elsi76tnwb" path="res://enemies/garg/LilGarg/lilgarg2.png" id="4_6u04i"]
+[ext_resource type="Texture2D" uid="uid://bsokv1pcyecm8" path="res://enemies/garg/LilGarg/lilgarg.png" id="5_43gpn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
-radius = 160.0
+radius = 109.457756
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c712q"]
-radius = 124.0
-height = 248.0
+radius = 92.0
+height = 184.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6cgwj"]
-radius = 75.0
-height = 206.0
+radius = 67.0
+height = 134.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_uw37d"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_sf4uc"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_2gv44")
+"texture": ExtResource("3_becsd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6u04i")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"DIE",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_e3j6x")
+"texture": ExtResource("2_mungj")
 }],
 "loop": 1,
 "name": &"attack",
@@ -37,15 +41,18 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_lw2jx")
+"texture": ExtResource("5_43gpn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_6u04i")
 }],
 "loop": 1,
 "name": &"default",
-"speed": 5.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_2gv44")
+"texture": ExtResource("3_becsd")
 }],
 "loop": 1,
 "name": &"hurt",
@@ -53,18 +60,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("5_bhh70")
+"texture": ExtResource("4_6u04i")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_lw2jx")
+"texture": ExtResource("5_43gpn")
 }],
 "loop": 1,
 "name": &"walk",
-"speed": 5.0
+"speed": 3.0
 }]
 
 [sub_resource type="Gradient" id="Gradient_rptt4"]
 interpolation_mode = 2
+offsets = PackedFloat32Array(0.3762712, 1)
 colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_c712q"]
@@ -78,8 +86,10 @@ fill_to = Vector2(1, 0.5)
 [node name="LilGarg" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
 script = ExtResource("1_egrpx")
-sightRange = 800
-enemyHealth = 6
+sightRange = 860
+acceleration = 1200.0
+speed = 800.0
+enemyHealth = 2
 sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
@@ -103,12 +113,13 @@ shape = SubResource("CapsuleShape2D_6cgwj")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1382980860]
 z_index = 1
-sprite_frames = SubResource("SpriteFrames_uw37d")
+sprite_frames = SubResource("SpriteFrames_sf4uc")
 animation = &"DIE"
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1987069992]
 z_index = -1
 position = Vector2(0, 112)
+scale = Vector2(0.578125, 0.578125)
 texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]

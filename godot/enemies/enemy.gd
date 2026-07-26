@@ -3,10 +3,11 @@ extends CharacterBody2D
 
 const INVULN_TIME: float = 0.25;
 const MELEE_COOLDOWN_TIME: float = 0.75;
-const KNOCKBACK_STRENGTH: float = 1024.0;
+@export var KNOCKBACK_STRENGTH: int = 1024;
 
 @export var acceleration: float = 1000.0;
 @export var speed: float = 600.0;
+#SET IN CODE FOR SPAWNED ENEMIES
 @export var ai_target_track: Player;
 
 @export var enemyHealth: int;

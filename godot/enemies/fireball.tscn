@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://rh0hyjxpstkq"]
+
+[ext_resource type="Script" uid="uid://dgkdi43aup1cy" path="res://enemies/basicprojectile.gd" id="1_j8tgu"]
+[ext_resource type="Texture2D" uid="uid://dls5tygmq468x" path="res://enemies/Fireball/fireball1.png" id="1_xulmx"]
+[ext_resource type="Texture2D" uid="uid://jeup6hq15f4" path="res://enemies/Fireball/fireball2.png" id="2_j8tgu"]
+[ext_resource type="Texture2D" uid="uid://cyorvahdm3gk8" path="res://enemies/Fireball/impactfireball.png" id="4_hbguw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ct15j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_xulmx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_j8tgu")
+}],
+"loop": 1,
+"name": &"Default",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_hbguw")
+}],
+"loop": 1,
+"name": &"impact",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_scw6o"]
+radius = 19.313208
+
+[node name="Fireball" type="RigidBody2D" unique_id=59940380]
+collision_layer = 0
+collision_mask = 75
+script = ExtResource("1_j8tgu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=118563433]
+position = Vector2(0, 2)
+sprite_frames = SubResource("SpriteFrames_ct15j")
+animation = &"impact"
+
+[node name="FireballCollide" type="CollisionShape2D" parent="." unique_id=453695808]
+shape = SubResource("CircleShape2D_scw6o")
+
+[node name="DieTimer" type="Timer" parent="." unique_id=1059713324]
+
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="timeout" from="DieTimer" to="." method="_on_die_timer_timeout"]

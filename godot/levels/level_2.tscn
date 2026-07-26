@@ -40,6 +40,7 @@ tile_map_data = PackedByteArray("AAAFAAUAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAMAAAAAAAA
 tile_set = ExtResource("1_dfjjl")
 
 [node name="Player" parent="." unique_id=64017830 instance=ExtResource("2_at1ld")]
+footstep_travel = 64.0
 position = Vector2(446, 314)
 
 [node name="Pickup" parent="." unique_id=1426482820 instance=ExtResource("3_sd18g")]

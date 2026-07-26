@@ -5,11 +5,14 @@ extends Enemy
 
 @onready var playerInitPos = ai_target_track.global_position
 
-var space_state
-var query
-var result
+#exlusively to disable before death
+@onready var collision1 = $Hitbox/CollisionShape2D
+@onready var collision2 = $Area2D/CollisionShape2D
+
+var dueToDie: bool
 
 func _ready():
+	#multiple hammers? loop ts
 	playerRay.add_exception(get_tree().get_first_node_in_group("HAMMER"))
 
 
@@ -87,4 +90,17 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_die() -> void:
-	self.queue_free()
+	print("ndieieijasdkgfjs")
+	dueToDie = true
+	self.call_deferred("processSETFORENEMIES")
+	sprite.animation = "DIE"
+	sprite.play()
+	await get_tree().create_timer(1).timeout
+	self.call_deferred("queue_free")
+
+func processSETFORENEMIES():
+	speed = 0
+	velocity = Vector2(0,0)
+	collision1.disabled = true
+	collision2.disabled = true
+	
