@@ -47,6 +47,7 @@
 [ext_resource type="AudioStream" uid="uid://bppdnk5n5xxb4" path="res://sound/footstep_2.wav" id="44_gswnw"]
 [ext_resource type="AudioStream" uid="uid://boutxe7wcxqvt" path="res://sound/die.wav" id="44_hjies"]
 [ext_resource type="AudioStream" uid="uid://cm1xsk32swgtb" path="res://sound/footstep_1.wav" id="44_xcnuv"]
+[ext_resource type="AudioStream" uid="uid://cfv8yu761cyc" path="res://sound/player-hurt.wav" id="45_8pxes"]
 [ext_resource type="AudioStream" uid="uid://bs3dlrfttoggr" path="res://sound/dash.wav" id="46_j55il"]
 
 [sub_resource type="GDScript" id="GDScript_272bh"]
@@ -509,6 +510,10 @@ func _process(_delta: float) -> void:
 		has_died = true;
 		die.play();
 	
+
+func _on_player_on_hurt() -> void:
+	$PlayerHurt.play();
+	pass
 "
 
 [node name="Player" type="Player" unique_id=64017830 node_paths=PackedStringArray("link_timer")]
@@ -645,6 +650,11 @@ vertical_alignment = 1
 script = SubResource("GDScript_2qteb")
 timerer = NodePath("../HUD/Timer")
 
+[node name="PlayerHurt" type="AudioStreamPlayer" parent="Sounder" unique_id=610879760]
+stream = ExtResource("45_8pxes")
+volume_db = -4.0
+max_polyphony = 2
+
 [node name="Die" type="AudioStreamPlayer" parent="Sounder" unique_id=1035108790]
 stream = ExtResource("44_hjies")
 volume_db = -8.0
@@ -666,6 +676,7 @@ volume_db = -8.0
 
 [connection signal="footstep" from="." to="Sounder" method="_on_player_footstep"]
 [connection signal="on_dash" from="." to="Sounder" method="_on_player_on_dash"]
+[connection signal="on_hurt" from="." to="Sounder" method="_on_player_on_hurt"]
 [connection signal="squash_and_stretch" from="." to="Sprite" method="_on_player_squash_and_stretch"]
 [connection signal="area_entered" from="Dialogue" to="HUD/TalkBox" method="_on_dialogue_area_entered"]
 [connection signal="area_exited" from="Dialogue" to="HUD/TalkBox" method="_on_dialogue_area_exited"]

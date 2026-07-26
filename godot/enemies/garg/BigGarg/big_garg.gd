@@ -15,6 +15,8 @@ func _ready():
 	#multiple hammers? loop ts
 	playerRay.add_exception(get_tree().get_first_node_in_group("HAMMER"))
 
+func _on_hurt() -> void:
+	$DasConcrete.play();
 
 func _process(_delta: float) -> void:
 	super(_delta);
@@ -67,7 +69,6 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		body.velocity = -velocity.normalized() * 1024.0;
 		self.last_squash_time = Timekeeper.get_engine_time();
 		if !body.is_dashing():
-			body
 			body.hurt();
 			self.melee_cooldown_time = Timekeeper.get_time();
 	pass
