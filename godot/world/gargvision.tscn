@@ -26,5 +26,5 @@ ai_target_track = NodePath("../Player")
 position = Vector2(-1556, 787)
 ai_target_track = NodePath("../Player")
 
-[node name="Pickup" parent="." unique_id=1426482820 groups=["HAMMER"] instance=ExtResource("4_b4uk7")]
+[node name="Pickup" parent="." unique_id=1426482820 instance=ExtResource("4_b4uk7")]
 position = Vector2(387, -621)

@@ -1,39 +1,39 @@
-[gd_scene format=3 uid="uid://c6dqd73mnovj2"]
+[gd_scene format=3 uid="uid://ba0duq2pdjak4"]
 
-[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_c712q"]
-[ext_resource type="Texture2D" uid="uid://cfky8h08bd1yg" path="res://enemies/garg/base-2.png" id="1_tbt4p"]
-[ext_resource type="Texture2D" uid="uid://dkutyxts282gs" path="res://enemies/garg/attack.png" id="2_6cgwj"]
-[ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_c712q"]
-[ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="3_6cgwj"]
-[ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_ixf10"]
+[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_wrf5t"]
+[ext_resource type="Texture2D" uid="uid://csmv3qb6hjtio" path="res://enemies/twotimer/3.png" id="2_527pg"]
+[ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_735rq"]
+[ext_resource type="Texture2D" uid="uid://brrnyvhy1tvl0" path="res://enemies/twotimer/2.png" id="4_ya31w"]
+[ext_resource type="Texture2D" uid="uid://b4nk56nb5shgg" path="res://enemies/twotimer/4.png" id="5_82lof"]
+[ext_resource type="Texture2D" uid="uid://bm5a0ldm2mraa" path="res://enemies/twotimer/1.png" id="6_ohkvn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
-radius = 160.0
+radius = 151.00331
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c712q"]
-radius = 124.0
-height = 248.0
+radius = 127.0
+height = 254.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6cgwj"]
-radius = 75.0
-height = 206.0
+radius = 109.0
+height = 218.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_uw37d"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c712q")
+"texture": ExtResource("2_527pg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_ixf10")
+"texture": ExtResource("3_735rq")
 }],
 "loop": 0,
 "name": &"DIE",
-"speed": 5.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_6cgwj")
+"texture": ExtResource("2_527pg")
 }],
 "loop": 1,
 "name": &"attack",
@@ -41,7 +41,15 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_tbt4p")
+"texture": ExtResource("4_ya31w")
+}],
+"loop": 1,
+"name": &"charge",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_82lof")
 }],
 "loop": 1,
 "name": &"default",
@@ -49,7 +57,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c712q")
+"texture": ExtResource("2_527pg")
 }],
 "loop": 1,
 "name": &"hurt",
@@ -57,18 +65,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_6cgwj")
+"texture": ExtResource("6_ohkvn")
 }, {
 "duration": 1.0,
-"texture": ExtResource("1_tbt4p")
+"texture": ExtResource("5_82lof")
 }],
 "loop": 1,
 "name": &"walk",
-"speed": 5.0
+"speed": 2.0
 }]
 
 [sub_resource type="Gradient" id="Gradient_rptt4"]
 interpolation_mode = 2
+offsets = PackedFloat32Array(0.30169493, 0.6983051)
 colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_c712q"]
@@ -79,12 +88,14 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="BigGarg" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
+[node name="Double" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
-script = ExtResource("1_c712q")
-sightRange = 800
-KNOCKBACK_STRENGTH = 700
-enemyHealth = 6
+script = ExtResource("1_wrf5t")
+sightRange = 1000
+KNOCKBACK_STRENGTH = 200
+acceleration = 500.0
+speed = 100.0
+enemyHealth = 10
 sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
@@ -110,12 +121,10 @@ shape = SubResource("CapsuleShape2D_6cgwj")
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uw37d")
 animation = &"DIE"
-frame = 1
-frame_progress = 0.40177318
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1987069992]
 z_index = -1
-position = Vector2(0, 112)
+position = Vector2(0, 128)
 texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]
@@ -124,4 +133,3 @@ collision_mask = 3
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_hit"]
-[connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]

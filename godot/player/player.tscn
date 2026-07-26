@@ -595,6 +595,7 @@ offset_top = 64.0
 offset_right = -64.0
 offset_bottom = 320.0
 offset_transform_enabled = true
+time_duration = 30.0
 player = NodePath("../..")
 
 [node name="GameOverScreen" type="PanelContainer" parent="HUD" unique_id=698047160 node_paths=PackedStringArray("crabtime")]

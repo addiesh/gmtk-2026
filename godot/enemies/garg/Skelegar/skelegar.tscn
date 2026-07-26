@@ -1,39 +1,38 @@
-[gd_scene format=3 uid="uid://c6dqd73mnovj2"]
+[gd_scene format=3 uid="uid://bnh5d0dortupe"]
 
-[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_c712q"]
-[ext_resource type="Texture2D" uid="uid://cfky8h08bd1yg" path="res://enemies/garg/base-2.png" id="1_tbt4p"]
-[ext_resource type="Texture2D" uid="uid://dkutyxts282gs" path="res://enemies/garg/attack.png" id="2_6cgwj"]
-[ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_c712q"]
-[ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="3_6cgwj"]
-[ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_ixf10"]
+[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_6s8dv"]
+[ext_resource type="Texture2D" uid="uid://bu34tk5gepxa" path="res://enemies/garg/Skelegar/skelegar.png" id="2_gybuw"]
+[ext_resource type="Texture2D" uid="uid://bvwqef1ksv7fg" path="res://enemies/garg/Skelegar/attack1.png" id="3_2bq27"]
+[ext_resource type="Texture2D" uid="uid://c6je8c0ptwtm0" path="res://enemies/garg/Skelegar/walkin3.png" id="4_t1wmt"]
+[ext_resource type="Texture2D" uid="uid://b6qr67bcc0rf2" path="res://enemies/garg/Skelegar/attack3.png" id="5_xcyuo"]
+[ext_resource type="Texture2D" uid="uid://dy6a3fapuk7dw" path="res://enemies/garg/Skelegar/attack4.png" id="6_p8irp"]
+[ext_resource type="Texture2D" uid="uid://cu4gq7m5b4vlv" path="res://enemies/garg/Skelegar/walkin1.png" id="7_c1810"]
+[ext_resource type="Texture2D" uid="uid://bdiy15wnaeocx" path="res://enemies/garg/Skelegar/walkin2.png" id="8_twbvu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
-radius = 160.0
+radius = 130.01538
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c712q"]
-radius = 124.0
-height = 248.0
+radius = 86.0
+height = 202.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6cgwj"]
-radius = 75.0
-height = 206.0
+radius = 64.0
+height = 226.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_uw37d"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c712q")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_ixf10")
+"texture": ExtResource("2_gybuw")
 }],
 "loop": 0,
 "name": &"DIE",
-"speed": 5.0
+"speed": 0.5
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_6cgwj")
+"texture": ExtResource("3_2bq27")
 }],
 "loop": 1,
 "name": &"attack",
@@ -41,7 +40,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_tbt4p")
+"texture": ExtResource("4_t1wmt")
 }],
 "loop": 1,
 "name": &"default",
@@ -49,7 +48,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c712q")
+"texture": ExtResource("5_xcyuo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_p8irp")
 }],
 "loop": 1,
 "name": &"hurt",
@@ -57,10 +59,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_6cgwj")
+"texture": ExtResource("7_c1810")
 }, {
 "duration": 1.0,
-"texture": ExtResource("1_tbt4p")
+"texture": ExtResource("8_twbvu")
 }],
 "loop": 1,
 "name": &"walk",
@@ -69,7 +71,8 @@ animations = [{
 
 [sub_resource type="Gradient" id="Gradient_rptt4"]
 interpolation_mode = 2
-colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0)
+offsets = PackedFloat32Array(0, 0.14576271, 0.62711865, 1)
+colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0.4873184, 0, 0, 0, 0.015687764, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_c712q"]
 gradient = SubResource("Gradient_rptt4")
@@ -79,12 +82,13 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="BigGarg" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
+[node name="Skelegar" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
-script = ExtResource("1_c712q")
-sightRange = 800
-KNOCKBACK_STRENGTH = 700
-enemyHealth = 6
+script = ExtResource("1_6s8dv")
+sightRange = 8000
+KNOCKBACK_STRENGTH = 800
+speed = 400.0
+enemyHealth = 3
 sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
@@ -110,12 +114,12 @@ shape = SubResource("CapsuleShape2D_6cgwj")
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uw37d")
 animation = &"DIE"
-frame = 1
-frame_progress = 0.40177318
+frame_progress = 1.0
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1987069992]
 z_index = -1
-position = Vector2(0, 112)
+position = Vector2(0, 128)
+scale = Vector2(1, 0.59375)
 texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]

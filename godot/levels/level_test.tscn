@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bt2llunl1r2bf" path="res://enemies/lucy/lucy.tscn" id="3_5yd65"]
 [ext_resource type="PackedScene" uid="uid://c6dqd73mnovj2" path="res://enemies/garg/BigGarg/big_garg.tscn" id="4_y0s4v"]
 [ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="5_5yd65"]
+[ext_resource type="PackedScene" uid="uid://dxbm66mc7bm2q" path="res://enemies/garg/LilGarg/lil_garg.tscn" id="6_y0s4v"]
+[ext_resource type="PackedScene" uid="uid://bnh5d0dortupe" path="res://enemies/garg/Skelegar/skelegar.tscn" id="7_tt56a"]
 
 [sub_resource type="Shader" id="Shader_5vw27"]
 code = "shader_type canvas_item;
@@ -79,4 +81,24 @@ ai_target_track = NodePath("../Player")
 
 [node name="BigGarg" parent="." unique_id=2142091699 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("4_y0s4v")]
 position = Vector2(2639, 422)
+ai_target_track = NodePath("../Player")
+
+[node name="LilGarg" parent="." unique_id=733229595 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("6_y0s4v")]
+position = Vector2(3374, 257)
+ai_target_track = NodePath("../Player")
+
+[node name="LilGarg2" parent="." unique_id=686886366 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("6_y0s4v")]
+position = Vector2(2966, 605)
+ai_target_track = NodePath("../Player")
+
+[node name="LilGarg3" parent="." unique_id=1104849767 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("6_y0s4v")]
+position = Vector2(3311, 544)
+ai_target_track = NodePath("../Player")
+
+[node name="Skelegar" parent="." unique_id=527368587 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("7_tt56a")]
+position = Vector2(2129, 420)
+ai_target_track = NodePath("../Player")
+
+[node name="Skelegar2" parent="." unique_id=38954256 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("7_tt56a")]
+position = Vector2(2002, 827)
 ai_target_track = NodePath("../Player")

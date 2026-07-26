@@ -1,17 +1,20 @@
 extends Enemy
 
 @onready var playerRay = $PlayerSeeker
-var sightRange = 1024
+@export var sightRange: int
 
 @onready var playerInitPos = ai_target_track.global_position
 
-var space_state
-var query
-var result
-@onready var FUCKASSHAMMER = get_tree().get_first_node_in_group("HAMMER")
+#exlusively to disable before death
+@onready var collision1 = $Hitbox/CollisionShape2D
+@onready var collision2 = $Area2D/CollisionShape2D
+
+var dueToDie: bool
 
 func _ready():
+	#multiple hammers? loop ts
 	playerRay.add_exception(get_tree().get_first_node_in_group("HAMMER"))
+
 
 func _process(_delta: float) -> void:
 	super(_delta);
@@ -62,13 +65,13 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		body.velocity = -velocity.normalized() * 1024.0;
 		self.last_squash_time = Timekeeper.get_engine_time();
 		if !body.is_dashing():
+			body
 			body.hurt();
 			self.melee_cooldown_time = Timekeeper.get_time();
 	pass
 
 func _physics_process(delta: float) -> void:
-	
-	
+
 	#locking garg's raycast onto the player
 	playerRay.target_position.x = playerInitPos.x - self.global_position.x + (-playerInitPos.x + ai_target_track.global_position.x)
 	playerRay.target_position.y = playerInitPos.y - self.global_position.y + (-playerInitPos.y + ai_target_track.global_position.y)
@@ -84,3 +87,20 @@ func _physics_process(delta: float) -> void:
 		
 	self.move_and_slide();
 	pass
+
+
+func _on_die() -> void:
+	print("ndieieijasdkgfjs")
+	dueToDie = true
+	self.call_deferred("processSETFORENEMIES")
+	sprite.animation = "DIE"
+	sprite.play()
+	await get_tree().create_timer(1).timeout
+	self.call_deferred("queue_free")
+
+func processSETFORENEMIES():
+	speed = 0
+	velocity = Vector2(0,0)
+	collision1.disabled = true
+	collision2.disabled = true
+	

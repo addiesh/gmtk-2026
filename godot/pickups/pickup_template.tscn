@@ -50,8 +50,8 @@ func _process(_delta: float) -> void:
 	pass
 "
 
-[node name="Pickup" type="Pickup" unique_id=1426482820]
-collision_layer = 4
+[node name="Pickup" type="Pickup" unique_id=1426482820 groups=["HAMMER"]]
+collision_layer = 6
 collision_mask = 6
 physics_material_override = SubResource("PhysicsMaterial_fq87o")
 gravity_scale = 0.0
