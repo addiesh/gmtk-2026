@@ -1,3 +1,148 @@
 [gd_scene format=3 uid="uid://b5r5glceq4rbm"]
 
-[node name="Victory" type="Node2D" unique_id=1192309954]
+[ext_resource type="Texture2D" uid="uid://cc2fkbedcobgf" path="res://world/bg.png" id="1_avh6g"]
+[ext_resource type="Texture2D" uid="uid://s8g3fegc3vj0" path="res://ui/victory-screenpng.png" id="1_b6b72"]
+[ext_resource type="Texture2D" uid="uid://bndyq7uy8e3mj" path="res://ui/GMTK Game Jam 2026 Full Logo.png" id="2_esoag"]
+
+[sub_resource type="Shader" id="Shader_w7j2h"]
+code = "shader_type canvas_item;
+uniform vec2 pan;
+uniform sampler2D noise;
+
+varying vec4 matoko;
+
+void vertex() {
+	matoko = COLOR;
+}
+
+void fragment() {
+	vec2 uv = UV + pan + vec2(texture(noise, mod(UV + TIME / 16.0, 1.0)).r / 16.0, 0.0);
+	COLOR = texture(TEXTURE, mod(uv, 1.0)) * matoko;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bucei"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mmwog"]
+noise = SubResource("FastNoiseLite_bucei")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0qxk4"]
+shader = SubResource("Shader_w7j2h")
+shader_parameter/pan = Vector2(0, 0)
+shader_parameter/noise = SubResource("NoiseTexture2D_mmwog")
+
+[sub_resource type="GDScript" id="GDScript_xg568"]
+script/source = "extends TextureRect
+
+@onready var mat: ShaderMaterial = self.material; 
+
+func _process(_delta: float) -> void:
+	var cam = get_viewport().get_camera_2d();
+	if cam == null:
+		return;
+	pass
+	mat.set_shader_parameter(
+		\"pan\",
+		cam.global_position / get_viewport_rect().size / 4.0
+	); 
+	
+"
+
+[node name="Victory" type="Control" unique_id=9274268]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="TextureRect" parent="." unique_id=1314504013]
+self_modulate = Color(1, 1, 1, 0.2509804)
+material = SubResource("ShaderMaterial_0qxk4")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -484.0
+offset_right = 64.0
+offset_bottom = 484.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_avh6g")
+stretch_mode = 1
+script = SubResource("GDScript_xg568")
+
+[node name="VictoryScreenpng" type="TextureRect" parent="." unique_id=1677960263]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_b6b72")
+
+[node name="Label" type="Label" parent="." unique_id=1559912777]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 40.0
+offset_right = 608.0
+offset_bottom = 1023.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/font_size = 64
+text = "As our hero,
+Marguerite,
+defeated
+the Countess, Lucy,
+she looked in fear.
+
+Time travel is nothing
+to take lightly.
+
+For upon trying to
+change fate, she
+simply created,
+
+another.
+
+For this \"timeline\"
+was not hers."
+
+[node name="Label3" type="Label" parent="." unique_id=456823349]
+layout_mode = 0
+offset_left = 1384.0
+offset_top = 64.0
+offset_right = 1928.0
+offset_bottom = 1047.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/font_size = 64
+text = "But this was not 
+a crusade of
+\"righteous fury,\"
+it was an act of
+revenge.
+
+For in another time,
+she lost her love to
+the Countess, and
+was turned to a
+vampire herself.
+
+She would take the
+throne and wait to
+see her beloved
+
+...once more. "
+
+[node name="GmtkGameJam2026FullLogo" type="Sprite2D" parent="." unique_id=290678793]
+position = Vector2(1232, 976.00006)
+rotation = -0.052563976
+scale = Vector2(0.08780341, 0.087803416)
+texture = ExtResource("2_esoag")

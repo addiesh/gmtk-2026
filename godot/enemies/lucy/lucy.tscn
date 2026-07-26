@@ -106,7 +106,7 @@ script/source = "extends AnimatedSprite2D
 @onready var shahsh: ShaderMaterial = wow.material as ShaderMaterial
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	shahsh.set_shader_parameter(\"real_time\", Timekeeper.get_time());
 	wow.texture = self.sprite_frames.get_frame_texture(
 		animation,
