@@ -59,6 +59,7 @@ func _manually_spawn_ghost(t: Transform2D, tex: Texture2D) -> Sprite2D:
 [sub_resource type="Shader" id="Shader_w7j2h"]
 code = "shader_type canvas_item;
 uniform vec2 pan;
+uniform sampler2D noise;
 
 varying vec4 matoko;
 
@@ -67,13 +68,21 @@ void vertex() {
 }
 
 void fragment() {
-	COLOR = texture(TEXTURE, mod(UV + pan, 1.0)) * matoko;
+	vec2 uv = UV + pan + vec2(texture(noise, mod(UV + TIME / 16.0, 1.0)).r / 16.0, 0.0);
+	COLOR = texture(TEXTURE, mod(uv, 1.0)) * matoko;
 }
 "
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8pxes"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mmwog"]
+noise = SubResource("FastNoiseLite_8pxes")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fmu53"]
 shader = SubResource("Shader_w7j2h")
 shader_parameter/pan = Vector2(0, 0)
+shader_parameter/noise = SubResource("NoiseTexture2D_mmwog")
 
 [sub_resource type="GDScript" id="GDScript_mmwog"]
 script/source = "extends TextureRect
@@ -87,7 +96,7 @@ func _process(_delta: float) -> void:
 	pass
 	mat.set_shader_parameter(
 		\"pan\",
-		cam.global_position / get_viewport_rect().size
+		cam.global_position / get_viewport_rect().size / 4.0
 	); 
 	
 "
@@ -515,7 +524,7 @@ script = SubResource("GDScript_272bh")
 layer = -2
 
 [node name="ColorRect" type="TextureRect" parent="CanvasLayer" unique_id=117504982]
-self_modulate = Color(1, 1, 1, 0.5019608)
+self_modulate = Color(1, 1, 1, 0.2509804)
 material = SubResource("ShaderMaterial_fmu53")
 anchors_preset = 15
 anchor_right = 1.0

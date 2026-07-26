@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="2_kx6l7"]
 [ext_resource type="PackedScene" uid="uid://c6dqd73mnovj2" path="res://enemies/garg/BigGarg/big_garg.tscn" id="3_n46q3"]
 [ext_resource type="PackedScene" uid="uid://22ycafb0osvx" path="res://pickups/pickup_template.tscn" id="4_kx6l7"]
-[ext_resource type="PackedScene" uid="uid://ds6tq6jw1h5a4" path="res://ui/DialogueDataNode.tscn" id="5_n46q3"]
+[ext_resource type="PackedScene" uid="uid://bq57q6lulroyo" path="res://ui/DialogueDataNode.tscn" id="5_n46q3"]
 [ext_resource type="Texture2D" uid="uid://uatmhc54jcth" path="res://enemies/lucy/talk.png" id="6_btoec"]
 [ext_resource type="Texture2D" uid="uid://dupm3jbl3bdh0" path="res://player/sprites/talk.png" id="7_gwceb"]
 [ext_resource type="Texture2D" uid="uid://cptotcdpnwlpc" path="res://placeholder/ph-enemy.png" id="8_l53as"]
