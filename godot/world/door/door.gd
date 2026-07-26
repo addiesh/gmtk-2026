@@ -13,7 +13,7 @@ func _on_body_entered(body: Node2D) -> void:
 		$Sprite.play("default");
 	pass
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	($Sprite).speed_scale = 1.0 / Timekeeper.timescale();
 	($Sprite2D.material as ShaderMaterial).set_shader_parameter(
 		"real_time",

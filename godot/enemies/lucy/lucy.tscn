@@ -131,15 +131,15 @@ texture = SubResource("GradientTexture2D_fwmbl")
 
 [node name="Laugh" type="AudioStreamPlayer" parent="." unique_id=1751242944]
 stream = ExtResource("10_n17x5")
-volume_db = -8.0
+volume_db = -10.0
 
 [node name="Lobster" type="AudioStreamPlayer" parent="." unique_id=1786453834]
 stream = ExtResource("11_khe16")
-volume_db = -4.0
+volume_db = -8.0
 
 [node name="Yelp" type="AudioStreamPlayer" parent="." unique_id=1589735332]
 stream = ExtResource("12_gu676")
-volume_db = -7.0
+volume_db = -14.0
 
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_hit"]
 [connection signal="frame_changed" from="Sprite" to="." method="_jiggle"]

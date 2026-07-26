@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cklgk3udywmot" path="res://pickups/hammer.gd" id="1_oh2v5"]
 [ext_resource type="Texture2D" uid="uid://dt3j582rp52ta" path="res://pickups/hammer.png" id="2_fq87o"]
 [ext_resource type="Shader" uid="uid://c4s6ut1d4bybe" path="res://particles/time_wobble.gdshader" id="4_etp03"]
+[ext_resource type="AudioStream" uid="uid://bdns2kcp0fdmo" path="res://sound/throw.wav" id="5_7psqb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fq87o"]
 rough = true
@@ -104,3 +105,8 @@ material = SubResource("ShaderMaterial_7psqb")
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_fq87o")
 script = SubResource("GDScript_etp03")
+
+[node name="Throw" type="AudioStreamPlayer" parent="." unique_id=9678037]
+stream = ExtResource("5_7psqb")
+volume_db = -2.0
+max_polyphony = 4
