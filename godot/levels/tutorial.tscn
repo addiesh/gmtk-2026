@@ -61,7 +61,7 @@ position = Vector2(2581, 1729)
 rotation = 3.1415927
 Dialogue_text = "I'll have to use what I can find. A hammer is perfect.
 
-* [color=#ff5277]press [ RIGHT CLICK ] to pick up, again to throw towards your cursor[/color]"
+* [color=#ff5277]press [ LEFT CLICK ] to pick up, again to throw towards your cursor.[/color]"
 Dialogue_image = ExtResource("5_aaho8")
 
 [node name="DialogueDataNode4" parent="." unique_id=1811069345 instance=ExtResource("4_rbh7r")]

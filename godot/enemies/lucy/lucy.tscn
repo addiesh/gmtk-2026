@@ -9,7 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://dd2rjaa6stkwk" path="res://enemies/lucy/hurt-b.png" id="4_w5pen"]
 [ext_resource type="Texture2D" uid="uid://cdmug3xa5lr0b" path="res://enemies/lucy/hurt-f.png" id="5_fwmbl"]
 [ext_resource type="Texture2D" uid="uid://cgye27dbogju8" path="res://enemies/lucy/attack-3.png" id="5_n17x5"]
+[ext_resource type="Texture2D" uid="uid://dthkeyywdc6ij" path="res://enemies/lucy/die.png" id="8_khe16"]
 [ext_resource type="AudioStream" uid="uid://h4qowfblwn4l" path="res://sound/laugh.wav" id="10_n17x5"]
+[ext_resource type="Shader" uid="uid://c4s6ut1d4bybe" path="res://particles/time_wobble.gdshader" id="11_gu676"]
 [ext_resource type="AudioStream" uid="uid://bb1natu21008q" path="res://sound/lobster.wav" id="11_khe16"]
 [ext_resource type="AudioStream" uid="uid://ynpwntjo5of3" path="res://sound/yelp.wav" id="12_gu676"]
 
@@ -63,6 +65,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("8_khe16")
+}],
+"loop": 1,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("4_w5pen")
 }],
 "loop": 1,
@@ -89,6 +99,23 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="GDScript" id="GDScript_2qteb"]
+script/source = "extends AnimatedSprite2D
+
+@onready var wow: Sprite2D = $Wow
+@onready var shahsh: ShaderMaterial = wow.material as ShaderMaterial
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	shahsh.set_shader_parameter(\"real_time\", Timekeeper.get_time());
+	wow.texture = self.sprite_frames.get_frame_texture(
+		animation,
+		frame
+	);
+	wow.flip_h = self.flip_h;
+	pass
+"
+
 [sub_resource type="Gradient" id="Gradient_w5pen"]
 interpolation_mode = 2
 colors = PackedColorArray(0, 0, 0, 0.5019608, 0, 0, 0, 0)
@@ -100,6 +127,22 @@ height = 96
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_64qad"]
+noise_type = 2
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_31xs3"]
+noise = SubResource("FastNoiseLite_64qad")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_keyq4"]
+shader = ExtResource("11_gu676")
+shader_parameter/noise = SubResource("NoiseTexture2D_31xs3")
+shader_parameter/distortion_speed = 0.5
+shader_parameter/real_time = 0.0
+shader_parameter/offset_by = Vector4(0.1, 0.05, 0.005, 0)
+shader_parameter/scale = Vector2(1.5, 1.5)
 
 [node name="Lucy" type="CharacterBody2D" unique_id=1578374504 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
@@ -120,15 +163,24 @@ debug_color = Color(0.63, 0.7, 0, 0.41960785)
 shape = SubResource("CapsuleShape2D_7uw0j")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=153874216]
-z_index = 1
+z_index = 2
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_2qteb")
+animation = &"attack-f"
 autoplay = "default"
+script = SubResource("GDScript_2qteb")
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1999880903]
 z_index = -1
 position = Vector2(0, 140)
 texture = SubResource("GradientTexture2D_fwmbl")
+
+[node name="Wow" type="Sprite2D" parent="Sprite" unique_id=2058554534]
+self_modulate = Color(18.892157, 0, 0, 0.39215687)
+z_index = -2
+material = SubResource("ShaderMaterial_keyq4")
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_0m6h5")
 
 [node name="Laugh" type="AudioStreamPlayer" parent="." unique_id=1751242944]
 stream = ExtResource("10_n17x5")

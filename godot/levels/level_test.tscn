@@ -79,6 +79,7 @@ rotation = -1.5707964
 [node name="Lucy" parent="." unique_id=1578374504 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("3_5yd65")]
 position = Vector2(581, 783)
 ai_target_track = NodePath("../Player")
+enemyHealth = 10
 
 [node name="BigGarg" parent="." unique_id=2142091699 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("4_y0s4v")]
 position = Vector2(2639, 422)
