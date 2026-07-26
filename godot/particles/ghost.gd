@@ -2,7 +2,7 @@ class_name Ghost
 extends Sprite2D
 
 @export var fade_curve: Curve;
-@export var init_velocity: Vector2;
+@export var ghost_velocity: Vector2 = Vector2.ZERO;
 @export_range(0.0, 2.0) var fade_time: float = 1.0;
 @onready var spawn_time: float = randf_range(0.0, 123456.0);
 
@@ -12,8 +12,11 @@ extends Sprite2D
 	true
 );
 
+func sgv(v2: Vector2) -> void:
+	self.ghost_velocity = v2;
+
 static func make_ghost(gt: Transform2D, tex: Texture2D) -> Ghost:
-	var ghost = Ghost.new();
+	var ghost: Ghost = Ghost.new();
 	ghost.fade_curve = load("res://particles/ghost_curve.tres");
 	ghost.fade_time = 0.5;
 	ghost.texture = tex;
@@ -34,10 +37,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	var fade_offset = clampf((fade_time - timer.time_left) / fade_time, 0.0, 1.0);
 	self.modulate.a = fade_curve.sample_baked(fade_offset);
-	self.global_position += init_velocity * delta;
+	self.global_position += ghost_velocity * delta;
 	(self.material as ShaderMaterial).set_shader_parameter(
 		"real_time",
-		(Time.get_ticks_msec() + spawn_time) / 1000.0
+		Timekeeper.get_engine_time()
 	);
 	pass
 

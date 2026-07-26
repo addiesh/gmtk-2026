@@ -26,6 +26,9 @@ func _is_on_cooldown() -> bool:
 		return true;
 	return false;
 
+func _on_hurt() -> void:
+	pass
+
 func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_index: int) -> void:
 	var current_real_time = Timekeeper.get_engine_time();
 	var current_game_time = Timekeeper.get_time();
@@ -44,10 +47,12 @@ func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_ind
 		if phys.is_held:
 			self.cooldown_time = current_game_time;
 			self.last_hit_time = current_real_time;
+			_on_hurt();
 		elif phys.linear_velocity.length() > 200.0:
 			self.cooldown_time = current_game_time;
 			self.last_hit_time = current_real_time;
 			self.velocity = pvn * KNOCKBACK_STRENGTH;
+			_on_hurt();
 		pass
 	else:
 		self.velocity = (self.global_position - shape.global_position).normalized();

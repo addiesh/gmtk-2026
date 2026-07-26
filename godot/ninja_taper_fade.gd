@@ -2,6 +2,7 @@ class_name NinjaTaperFade
 extends CanvasLayer
 
 signal midpoint;
+signal endpoint;
 
 const FADE_DURATION: float = 1.0;
 
@@ -10,9 +11,10 @@ var fade_in = false;
 @onready var fadeout: SceneTreeTimer = null;
 
 func fade_inout():
-	if fade_in || fadeout != null:
+	if fade_in || fadeout:
 		return;
 	fade_in = false;
+	fadeout = null;
 	fadeout = self.get_tree().create_timer(
 		FADE_DURATION,
 		true,
@@ -21,17 +23,23 @@ func fade_inout():
 	);
 	fadeout.timeout.connect(_on_timeout);
 
+
 func _on_timeout():
 	if !fade_in:
 		fade_in = true;
 		midpoint.emit();
-	fadeout = self.get_tree().create_timer(
-		FADE_DURATION,
-		true,
-		false,
-		true
-	);
-	pass
+		fadeout = self.get_tree().create_timer(
+			FADE_DURATION,
+			true,
+			false,
+			true
+		);
+		fadeout.timeout.connect(_on_timeout);
+	else:
+		endpoint.emit();
+		fadeout = null;
+		fade_in = false;
+
 
 func _process(_delta: float) -> void:
 	if fadeout == null:

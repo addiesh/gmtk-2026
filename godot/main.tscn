@@ -37,20 +37,13 @@ background_mode = 3
 glow_enabled = true
 glow_hdr_scale = 4.0
 
-[sub_resource type="GDScript" id="GDScript_mmwog"]
-script/source = "extends WorldEnvironment
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
-
 [node name="Main" type="Node" unique_id=2058532903]
 
-[node name="LevelLoader" type="Node" parent="." unique_id=572418856]
+[node name="LevelLoader" type="Node" parent="." unique_id=572418856 node_paths=PackedStringArray("taper_fade")]
 script = ExtResource("1_0xm2m")
+taper_fade = NodePath("../NinjaTaperFade")
 
-[node name="MainMenu" type="Control" parent="." unique_id=650590415 node_paths=PackedStringArray("level_loader")]
+[node name="MainMenu" type="Control" parent="." unique_id=650590415 node_paths=PackedStringArray("level_loader", "taper_fade")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -59,6 +52,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_lquwl")
 level_loader = NodePath("../LevelLoader")
+taper_fade = NodePath("../NinjaTaperFade")
 
 [node name="Wrapper" type="Control" parent="MainMenu" unique_id=250035314]
 layout_mode = 1
@@ -143,9 +137,9 @@ color = Color(0, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=28179579]
 environment = SubResource("Environment_0xm2m")
-script = SubResource("GDScript_mmwog")
 
 [node name="Debug" type="CanvasLayer" parent="." unique_id=2104171735]
+visible = false
 
 [node name="Label" type="Label" parent="Debug" unique_id=1414866066]
 offset_right = 146.0

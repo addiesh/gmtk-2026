@@ -1,29 +1,25 @@
 class_name CrabTimerManager
 extends PanelContainer
 
-const TIME_DURATION: float = 60.0;
+@export var time_duration: float = 60.0;
 
 var clock_start_time: float = 0.0;
 var time_spent: float = 0.0;
-var is_ticking: bool = false;
+@export var is_ticking: bool = true;
 
 @export var player: Player;
 @onready var time_text = $CenterContainer/VBoxContainer/TimeRef;
 
 var poggers: Vector2 = Vector2.ZERO
 
-func _start_clock() -> void:
+func _ready() -> void:
 	time_spent = 0.0;
 	clock_start_time = Timekeeper.get_time();
-	is_ticking = true;
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
 
 func _remaining_time() -> float:
+	if !is_ticking: return INF;
 	return max(
-		TIME_DURATION - (
+		time_duration - (
 			Timekeeper.get_time() - clock_start_time
 		) - time_spent,
 		0.0
