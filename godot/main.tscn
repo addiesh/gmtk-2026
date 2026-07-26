@@ -31,9 +31,12 @@ shader = ExtResource("2_1bvp3")
 shader_parameter/noise1 = SubResource("NoiseTexture2D_wk0pr")
 shader_parameter/noise2 = SubResource("NoiseTexture3D_wk0pr")
 shader_parameter/accent = Color(0.3, 0, 0.19999996, 1)
+shader_parameter/amp = Color(1, 1, 1, 1)
+shader_parameter/scale = Vector2(1, 1)
 
 [sub_resource type="Environment" id="Environment_0xm2m"]
-background_mode = 3
+background_mode = 4
+ambient_light_source = 1
 glow_enabled = true
 glow_hdr_scale = 4.0
 

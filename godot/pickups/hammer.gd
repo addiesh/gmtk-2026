@@ -21,6 +21,7 @@ func _throw(direction: Vector2) -> void:
 		angv = -64.0
 		pass
 	self.angular_velocity = angv;
+	$Throw.play()
 
 func _process(_delta: float) -> void:
 	if is_held:
@@ -41,7 +42,7 @@ func _process(_delta: float) -> void:
 		get_tree().root.add_child(ghost);
 		pass
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var hit: KinematicCollision2D = move_and_collide(self.linear_velocity, true);
 	if hit == null:
 		return;

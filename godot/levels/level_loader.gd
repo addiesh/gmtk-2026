@@ -10,7 +10,7 @@ func _ready() -> void:
 	taper_fade.midpoint.connect(_nuke_the_building);
 	taper_fade.endpoint.connect(_on_reload_finished);
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("restart_level"):
 		if !is_reloading_scene:
 			print("i LOVE fun");

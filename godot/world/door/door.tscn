@@ -34,6 +34,7 @@ shader = ExtResource("2_tse0d")
 shader_parameter/noise1 = SubResource("NoiseTexture2D_gx2fa")
 shader_parameter/noise2 = SubResource("NoiseTexture3D_173lu")
 shader_parameter/accent = Color(1, 0.26666665, 0, 1)
+shader_parameter/amp = Color(3.2944162, 3.2944162, 3.2944162, 1)
 shader_parameter/scale = Vector2(0.5, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2qteb"]

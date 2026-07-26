@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://buojmmssfjls0"]
 
 [ext_resource type="Texture2D" uid="uid://dv5yn4r7nveu6" path="res://player/sprites/damage/damage-7.png" id="1_ge24q"]
+[ext_resource type="Texture2D" uid="uid://cc2fkbedcobgf" path="res://world/bg.png" id="1_mmwog"]
 [ext_resource type="Texture2D" uid="uid://fka7qbauji3i" path="res://player/sprites/hammer/hammer-walk-bl-1.png" id="2_e7oew"]
 [ext_resource type="Texture2D" uid="uid://bpqc4il83wo7o" path="res://player/sprites/damage/damage-3.png" id="2_pnw6m"]
 [ext_resource type="Script" uid="uid://dj85444mxw4j3" path="res://player/player_sprite.gd" id="2_qjkh3"]
@@ -53,6 +54,42 @@ script/source = "extends Player
 
 func _manually_spawn_ghost(t: Transform2D, tex: Texture2D) -> Sprite2D:
 	return Ghost.make_ghost(t, tex)
+"
+
+[sub_resource type="Shader" id="Shader_w7j2h"]
+code = "shader_type canvas_item;
+uniform vec2 pan;
+
+varying vec4 matoko;
+
+void vertex() {
+	matoko = COLOR;
+}
+
+void fragment() {
+	COLOR = texture(TEXTURE, mod(UV + pan, 1.0)) * matoko;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fmu53"]
+shader = SubResource("Shader_w7j2h")
+shader_parameter/pan = Vector2(0, 0)
+
+[sub_resource type="GDScript" id="GDScript_mmwog"]
+script/source = "extends TextureRect
+
+@onready var mat: ShaderMaterial = self.material; 
+
+func _process(_delta: float) -> void:
+	var cam = get_viewport().get_camera_2d();
+	if cam == null:
+		return;
+	pass
+	mat.set_shader_parameter(
+		\"pan\",
+		cam.global_position / get_viewport_rect().size
+	); 
+	
 "
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_scw6o"]
@@ -424,7 +461,7 @@ fill_to = Vector2(1, 0.5)
 script/source = "extends PanelContainer
 @export var crabtime: CrabTimerManager;
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if crabtime._remaining_time() <= 0.0:
 		self.visible = true;
 "
@@ -441,7 +478,6 @@ script/source = "extends Node2D
 var freerf = false;
 var has_died = false;
 
-
 func _on_player_footstep() -> void:
 	var pitchbend = randf_range(0.5, 1.5);
 	if freerf:
@@ -457,7 +493,7 @@ func _on_player_footstep() -> void:
 func _on_player_on_dash() -> void:
 	dash.play();
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if has_died:
 		return
 	if timerer._remaining_time() <= 0.0:
@@ -474,6 +510,21 @@ camera_zoom_speed_release = 8.0
 footstep_travel = 96.0
 link_timer = NodePath("HUD/Timer")
 script = SubResource("GDScript_272bh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1450236111]
+layer = -2
+
+[node name="ColorRect" type="TextureRect" parent="CanvasLayer" unique_id=117504982]
+self_modulate = Color(1, 1, 1, 0.5019608)
+material = SubResource("ShaderMaterial_fmu53")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_mmwog")
+stretch_mode = 1
+script = SubResource("GDScript_mmwog")
 
 [node name="Dialogue" type="Area2D" parent="." unique_id=469841579]
 collision_layer = 512
@@ -507,7 +558,7 @@ texture = SubResource("GradientTexture2D_2qteb")
 z_index = 1
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_qt25b")
-animation = &"throw_fr"
+animation = &"idle_fr"
 autoplay = "idle_fr"
 script = ExtResource("2_qjkh3")
 time_gradient = SubResource("Gradient_g6k8r")
@@ -527,6 +578,7 @@ texture = SubResource("GradientTexture2D_r7pn3")
 [node name="HUD" type="CanvasLayer" parent="." unique_id=724956971]
 
 [node name="TalkBox" parent="HUD" unique_id=949539788 instance=ExtResource("8_rgyib")]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -543,6 +595,7 @@ offset_top = 64.0
 offset_right = -64.0
 offset_bottom = 320.0
 offset_transform_enabled = true
+time_duration = 30.0
 player = NodePath("../..")
 
 [node name="GameOverScreen" type="PanelContainer" parent="HUD" unique_id=698047160 node_paths=PackedStringArray("crabtime")]
@@ -590,17 +643,17 @@ pitch_scale = 0.9
 
 [node name="Step1" type="AudioStreamPlayer" parent="Sounder" unique_id=269370857]
 stream = ExtResource("44_xcnuv")
-volume_db = -16.0
+volume_db = -12.0
 max_polyphony = 3
 
 [node name="Step2" type="AudioStreamPlayer" parent="Sounder" unique_id=1805275406]
 stream = ExtResource("44_gswnw")
-volume_db = -16.0
+volume_db = -12.0
 max_polyphony = 3
 
 [node name="Dash" type="AudioStreamPlayer" parent="Sounder" unique_id=2143055239]
 stream = ExtResource("46_j55il")
-volume_db = -6.0
+volume_db = -8.0
 
 [connection signal="footstep" from="." to="Sounder" method="_on_player_footstep"]
 [connection signal="on_dash" from="." to="Sounder" method="_on_player_on_dash"]

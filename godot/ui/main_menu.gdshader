@@ -3,6 +3,7 @@ shader_type canvas_item;
 uniform sampler2D noise1;
 uniform sampler3D noise2;
 uniform vec4 accent : source_color;
+uniform vec4 amp : source_color = vec4(1.0);
 uniform vec2 scale = vec2(1.0, 1.0);
 
 varying vec4 bart;
@@ -24,5 +25,5 @@ void fragment() {
 		texture(noise1, uv1).r * bart
 		- texture(noise2, uv2).r * accent)
 	).rgb;
-	COLOR = vec4(col, 1.0) * texture(TEXTURE, mod(uv, 1.0));
+	COLOR = vec4(col, 1.0) * texture(TEXTURE, mod(uv, 1.0)) * amp;
 }

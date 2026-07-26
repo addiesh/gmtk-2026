@@ -8,6 +8,8 @@ use godot::prelude::*;
 use crate::pickup::Pickup;
 use crate::timekeeper::Timekeeper;
 
+struct RecallFrame {}
+
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
 pub struct Player {
@@ -22,6 +24,7 @@ pub struct Player {
     last_engine_throw_time: f64,
     has_died: bool,
 
+    // ringbuffer: Box<[RecallFrame]>
     #[export]
     camera_distance: real,
 
@@ -279,6 +282,8 @@ impl Player {
             godot_print!("hit the wall: {collider:?}, angle = {bounce}");
         }
     }
+
+    fn rewind_action(&mut self, delta: f64) {}
 
     fn basic_movement(&mut self, delta: f64) {
         let input = Input::singleton();
