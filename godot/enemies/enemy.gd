@@ -1,8 +1,9 @@
 class_name Enemy
 extends CharacterBody2D
 
-const INVULN_TIME: float = 0.25;
-const MELEE_COOLDOWN_TIME: float = 0.75;
+
+@export var INVULN_TIME: float = 0.25;
+@export var MELEE_COOLDOWN_TIME: float = 0.75;
 @export var KNOCKBACK_STRENGTH: int = 1024;
 
 @export var acceleration: float = 1000.0;
@@ -81,7 +82,7 @@ func _physics_process(delta: float) -> void:
 	pass
 
 func hurtTracker():
-	enemyHealth-= 1
+	enemyHealth = max(enemyHealth - 1, 0);
 	print(enemyHealth)
 	if enemyHealth <= 0:
 		die.emit()

@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://ru2ssxa10hid"]
+
+[ext_resource type="Texture2D" uid="uid://dls5tygmq468x" path="res://enemies/Fireball/fireball1.png" id="1_wlc4o"]
+[ext_resource type="Texture2D" uid="uid://jeup6hq15f4" path="res://enemies/Fireball/fireball2.png" id="2_ke8rn"]
+[ext_resource type="Texture2D" uid="uid://cyorvahdm3gk8" path="res://enemies/Fireball/impactfireball.png" id="3_6sn8a"]
+
+[sub_resource type="GDScript" id="GDScript_wlc4o"]
+script/source = "extends Area2D
+
+var viva: Vector2 = Vector2.ZERO;
+
+func _ready() -> void:
+	get_tree().create_timer(
+		10.0,
+		true,
+		false,true
+	).timeout.connect(self.queue_free);
+
+func _process(delta: float) -> void:
+	self.rotation = atan2(
+		viva.y,
+		viva.x
+	);
+
+func _physics_process(delta: float) -> void:
+	self.global_position += viva * delta * 4.0;
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is Player:
+		body.hurt();
+		self.queue_free()
+		
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2qteb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wlc4o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ke8rn")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_6sn8a")
+}],
+"loop": 1,
+"name": &"explode",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_wlc4o"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2qteb"]
+gradient = SubResource("Gradient_wlc4o")
+width = 96
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
+radius = 64.0
+
+[node name="Gballs" type="Area2D" unique_id=1101621094]
+collision_layer = 65
+collision_mask = 65
+script = SubResource("GDScript_wlc4o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=82445557]
+self_modulate = Color(3.2944162, 3.2944162, 3.2944162, 1)
+z_index = 1
+rotation = 3.1415925
+sprite_frames = SubResource("SpriteFrames_2qteb")
+frame_progress = 0.6478438
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatedSprite2D" unique_id=2126171690]
+self_modulate = Color(1, 0, 0.5, 0.7529412)
+z_index = -1
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=861304969]
+shape = SubResource("CircleShape2D_2qteb")
+debug_color = Color(0.87114525, 0.00049362896, 0.84852165, 0.41960785)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
