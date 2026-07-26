@@ -1,8 +1,8 @@
 use godot::classes::{
-    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, ClassDb, Control, Curve,
-    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, Sprite2D,
+    AnimatedSprite2D, Area2D, Camera2D, CanvasItem, CharacterBody2D, Control, Curve,
+    ICharacterBody2D, Input, PhysicsRayQueryParameters2D, ShaderMaterial, Sprite2D, Texture2D,
 };
-use godot::global::clampf;
+use godot::global::{clampf, randf_range};
 use godot::prelude::*;
 
 use crate::pickup::Pickup;
@@ -20,6 +20,7 @@ pub struct Player {
     squash_distance_traveled_last: real,
     last_engine_hurt_time: f64,
     last_engine_throw_time: f64,
+    has_died: bool,
 
     #[export]
     camera_distance: real,
@@ -32,6 +33,9 @@ pub struct Player {
     camera_zoom_speed_clench: real,
     #[export]
     camera_zoom_speed_release: real,
+
+    #[export]
+    footstep_travel: f32,
 
     #[export]
     link_timer: Option<Gd<Control>>,
@@ -57,12 +61,23 @@ impl Player {
     #[signal]
     fn squash_and_stretch();
 
+    #[signal]
+    fn footstep();
+
+    #[signal]
+    fn on_dash();
+
     #[func]
     fn hurt(&mut self) {
         if self.is_dashing.is_none() {
             self.decrease_timer_by(2.0);
             self.last_engine_hurt_time = Timekeeper::get_engine_time();
         }
+    }
+
+    #[func(virtual)]
+    pub fn manually_spawn_ghost(&self, t: Transform2D, tex: Gd<Texture2D>) -> Gd<Sprite2D> {
+        todo!("")
     }
 
     #[func]
@@ -109,24 +124,6 @@ impl Player {
             .as_mut()
             .unwrap()
             .call("remove_time", &[dec_by.to_variant()]);
-    }
-
-    fn _manually_spawn_ghost(&self) -> Gd<AnimatedSprite2D> {
-        let transform = self.base().get_global_transform();
-        let texture = self
-            .sprite
-            .get_sprite_frames()
-            .unwrap()
-            .get_frame_texture(&self.sprite.get_animation(), self.sprite.get_frame());
-        let ghost = ClassDb::singleton()
-            .class_call_static(
-                "Ghost",
-                "make_ghost",
-                &[transform.to_variant(), texture.to_variant()],
-            )
-            .to::<Gd<AnimatedSprite2D>>();
-        self.base().get_tree().get_root().unwrap().add_child(&ghost);
-        ghost
     }
 
     fn aim_calculations(&mut self) {
@@ -191,13 +188,11 @@ impl Player {
             }
         } else {
             if input.is_action_just_pressed("use_item") {
-                println!("fix: {}", line!());
                 let pickup = self
                     .interact_area
                     .get_overlapping_bodies()
                     .iter_shared()
                     .find_map(|node| node.try_cast::<Pickup>().ok());
-                println!("fix: {}", line!());
 
                 if let Some(mut pickup) = pickup {
                     self.last_engine_throw_time = f64::NEG_INFINITY;
@@ -226,6 +221,7 @@ impl Player {
                 /* negate this for curveball (broken) */ dash_dir * 1024.0,
             );
             self.decrease_timer_by(2.0);
+            self.signals().on_dash().emit();
         }
 
         if let Some(dash_dir) = self.is_dashing {
@@ -367,12 +363,14 @@ impl Player {
         if !self.sprite.is_playing() {
             self.sprite.play();
         }
-        // if self.is_walking {
-        // if self.squash_distance_traveled >= self.squash_distance_traveled_last + 128.0 {
-        //     self.squash_distance_traveled_last = self.squash_distance_traveled;
-        //     self.signals().squash_and_stretch().emit();
-        // }
-        // }
+        if self.is_walking {
+            if self.squash_distance_traveled
+                >= self.squash_distance_traveled_last + self.footstep_travel
+            {
+                self.squash_distance_traveled_last = self.squash_distance_traveled;
+                self.signals().footstep().emit();
+            }
+        }
     }
 
     fn default_process(&mut self, _delta: f64) {
@@ -383,7 +381,44 @@ impl Player {
         let mouse_position = ((vp.get_mouse_position() / vp_size) * 2.0 - Vector2::new(0.5, 0.5))
             .limit_length(Some(1.0));
 
+        if self.remaining_time() <= 0.0 {
+            let anim = self.sprite.get_animation();
+            let mut ghost = self.manually_spawn_ghost(
+                self.base().get_global_transform(),
+                self.sprite
+                    .get_sprite_frames()
+                    .unwrap()
+                    .get_frame_texture(&anim, self.sprite.get_frame())
+                    .unwrap(),
+            );
+            let ghost_vel: Vector2 = Vector2::from_angle(randf_range(-360.0, 360.0) as f32)
+                * randf_range(768.0, 1024.0) as f32;
+            // ghost.apply_scale(Vector2::new(0.5, 0.2));
+            ghost.set("ghost_velocity", &ghost_vel.to_variant());
+            self.sprite.set_self_modulate(Color::AQUA);
+            ghost.set_self_modulate(Color::AQUA.with_alpha(0.05));
+            self.base_mut().add_sibling(&ghost);
+            if let Some(mat) = self.sprite.get_material()
+                && let Ok(mut smat) = mat.try_cast::<ShaderMaterial>()
+            {
+                smat.set_shader_parameter(
+                    "real_time",
+                    &(Timekeeper::get_engine_time() as f32).to_variant(),
+                );
+            }
+        }
+
         let real_delta = Timekeeper::real_process_delta();
+
+        if self.remaining_time() <= 0.0 {
+            if !self.has_died {
+                self.has_died = true;
+                let sm = load::<ShaderMaterial>("res://particles/ghost_distortion_mat.tres")
+                    .duplicate_resource();
+                self.sprite.set_material(&sm);
+                self.sprite.set_scale(Vector2::ONE * 1.5);
+            }
+        }
 
         // camera offset code
         {
@@ -449,6 +484,7 @@ impl ICharacterBody2D for Player {
             camera_zoom_max: Vector2::ONE * 1.1,
             camera_zoom_speed_clench: 16.0,
             camera_zoom_speed_release: 1.0,
+            footstep_travel: 64.0,
             is_dashing: None,
             is_walking: false,
             sprite_facing_right: true,
@@ -458,6 +494,7 @@ impl ICharacterBody2D for Player {
             squash_distance_traveled_last: f32::NEG_INFINITY,
             last_engine_hurt_time: f64::NEG_INFINITY,
             last_engine_throw_time: f64::NEG_INFINITY,
+            has_died: false,
             squash: OnReady::from_loaded("res://hurt_squash.tres"),
         }
     }

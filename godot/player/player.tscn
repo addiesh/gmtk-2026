@@ -43,6 +43,17 @@
 [ext_resource type="PackedScene" uid="uid://3p01jcv6i31d" path="res://player/timer.tscn" id="28_rptt4"]
 [ext_resource type="Curve" uid="uid://cq2idu3e61xgj" path="res://squash_stretch.tres" id="34_pnw6m"]
 [ext_resource type="Script" uid="uid://bbypw5fdwqvnk" path="res://ui/talk_box_player.gd" id="39_dx5ib"]
+[ext_resource type="AudioStream" uid="uid://bppdnk5n5xxb4" path="res://sound/footstep_2.wav" id="44_gswnw"]
+[ext_resource type="AudioStream" uid="uid://boutxe7wcxqvt" path="res://sound/die.wav" id="44_hjies"]
+[ext_resource type="AudioStream" uid="uid://cm1xsk32swgtb" path="res://sound/footstep_1.wav" id="44_xcnuv"]
+[ext_resource type="AudioStream" uid="uid://bs3dlrfttoggr" path="res://sound/dash.wav" id="46_j55il"]
+
+[sub_resource type="GDScript" id="GDScript_272bh"]
+script/source = "extends Player
+
+func _manually_spawn_ghost(t: Transform2D, tex: Texture2D) -> Sprite2D:
+	return Ghost.make_ghost(t, tex)
+"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_scw6o"]
 radius = 141.43903
@@ -409,12 +420,60 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
+[sub_resource type="GDScript" id="GDScript_j55il"]
+script/source = "extends PanelContainer
+@export var crabtime: CrabTimerManager;
+
+func _process(delta: float) -> void:
+	if crabtime._remaining_time() <= 0.0:
+		self.visible = true;
+"
+
+[sub_resource type="GDScript" id="GDScript_2qteb"]
+script/source = "extends Node2D
+
+@onready var step1 = $Step1;
+@onready var step2 = $Step2;
+@onready var dash = $Dash;
+@onready var die = $Die;
+@export var timerer: CrabTimerManager;
+
+var freerf = false;
+var has_died = false;
+
+
+func _on_player_footstep() -> void:
+	var pitchbend = randf_range(0.5, 1.5);
+	if freerf:
+		step1.pitch_scale = pitchbend;
+		step1.play();
+	else:
+		step2.pitch_scale = pitchbend;
+		step2.play();
+	pass
+	freerf = !freerf;
+
+
+func _on_player_on_dash() -> void:
+	dash.play();
+
+func _process(delta: float) -> void:
+	if has_died:
+		return
+	if timerer._remaining_time() <= 0.0:
+		has_died = true;
+		die.play();
+	
+"
+
 [node name="Player" type="Player" unique_id=64017830 node_paths=PackedStringArray("link_timer")]
 camera_zoom_min = Vector2(0.75, 0.75)
 camera_zoom_max = Vector2(1, 1)
 camera_zoom_speed_clench = 48.0
 camera_zoom_speed_release = 8.0
+footstep_travel = 96.0
 link_timer = NodePath("HUD/Timer")
+script = SubResource("GDScript_272bh")
 
 [node name="Dialogue" type="Area2D" parent="." unique_id=469841579]
 collision_layer = 512
@@ -486,6 +545,65 @@ offset_bottom = 320.0
 offset_transform_enabled = true
 player = NodePath("../..")
 
+[node name="GameOverScreen" type="PanelContainer" parent="HUD" unique_id=698047160 node_paths=PackedStringArray("crabtime")]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(736, 256)
+custom_maximum_size = Vector2(736, 256)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -368.0
+offset_top = -312.0
+offset_right = 368.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+script = SubResource("GDScript_j55il")
+crabtime = NodePath("../Timer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/GameOverScreen" unique_id=266155427]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HUD/GameOverScreen/HBoxContainer" unique_id=1847286065]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 32
+text = "THE TIMER IS UP
+but the COUNT IS NOT DOWN
+YOU MUST STAY PERSISTENT!
+
+...press [ R ] to restart..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sounder" type="Node2D" parent="." unique_id=1322778492 node_paths=PackedStringArray("timerer")]
+script = SubResource("GDScript_2qteb")
+timerer = NodePath("../HUD/Timer")
+
+[node name="Die" type="AudioStreamPlayer" parent="Sounder" unique_id=1035108790]
+stream = ExtResource("44_hjies")
+volume_db = -8.0
+pitch_scale = 0.9
+
+[node name="Step1" type="AudioStreamPlayer" parent="Sounder" unique_id=269370857]
+stream = ExtResource("44_xcnuv")
+volume_db = -16.0
+max_polyphony = 3
+
+[node name="Step2" type="AudioStreamPlayer" parent="Sounder" unique_id=1805275406]
+stream = ExtResource("44_gswnw")
+volume_db = -16.0
+max_polyphony = 3
+
+[node name="Dash" type="AudioStreamPlayer" parent="Sounder" unique_id=2143055239]
+stream = ExtResource("46_j55il")
+volume_db = -6.0
+
+[connection signal="footstep" from="." to="Sounder" method="_on_player_footstep"]
+[connection signal="on_dash" from="." to="Sounder" method="_on_player_on_dash"]
 [connection signal="squash_and_stretch" from="." to="Sprite" method="_on_player_squash_and_stretch"]
 [connection signal="area_entered" from="Dialogue" to="HUD/TalkBox" method="_on_dialogue_area_entered"]
 [connection signal="area_exited" from="Dialogue" to="HUD/TalkBox" method="_on_dialogue_area_exited"]

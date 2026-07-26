@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://bbony74j81t2y"]
+
+[ext_resource type="Script" uid="uid://dg0vmcd4xmhxe" path="res://world/door/door.gd" id="1_vul7k"]
+[ext_resource type="Shader" uid="uid://cmsjdwwrbjf4d" path="res://ui/main_menu.gdshader" id="2_tse0d"]
+[ext_resource type="Texture2D" uid="uid://cr0ol3figul6r" path="res://world/door/door-1.png" id="3_clc5o"]
+[ext_resource type="Texture2D" uid="uid://blv1jfrnw28ox" path="res://world/door/door-2.png" id="4_gx2fa"]
+[ext_resource type="Texture2D" uid="uid://dtqj7uc6oekl6" path="res://world/door/door-3.png" id="5_b512u"]
+[ext_resource type="Texture2D" uid="uid://cm3a22q4nnmyh" path="res://world/door/door-4.png" id="6_173lu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2qteb"]
+size = Vector2(128, 248)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_clc5o"]
+noise_type = 2
+fractal_octaves = 2
+fractal_gain = -0.8
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gx2fa"]
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_clc5o")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b512u"]
+noise_type = 2
+frequency = 0.1
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_173lu"]
+noise = SubResource("FastNoiseLite_b512u")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sn0rw"]
+shader = ExtResource("2_tse0d")
+shader_parameter/noise1 = SubResource("NoiseTexture2D_gx2fa")
+shader_parameter/noise2 = SubResource("NoiseTexture3D_173lu")
+shader_parameter/accent = Color(1, 0.26666665, 0, 1)
+shader_parameter/scale = Vector2(0.5, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2qteb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_clc5o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gx2fa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_b512u")
+}, {
+"duration": 8.0,
+"texture": ExtResource("6_173lu")
+}, {
+"duration": 0.5,
+"texture": ExtResource("5_b512u")
+}, {
+"duration": 0.5,
+"texture": ExtResource("4_gx2fa")
+}, {
+"duration": 2.0,
+"texture": ExtResource("3_clc5o")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 16.0
+}]
+
+[sub_resource type="Shader" id="Shader_5031e"]
+code = "shader_type canvas_item;
+uniform sampler2D noise;
+uniform float distortion_speed = 0.5;
+uniform float real_time;
+uniform vec4 offset_by = vec4(0.0);
+
+varying vec4 vertex_color;
+
+void vertex() {
+	vertex_color = COLOR;
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	vec2 adjusted_uv = UV * 1.5 - vec2(0.25);
+	vec2 adjusted_uv_2 = UV * 1.25 - vec2(0.125);
+	
+	vec2 time2 = vec2(real_time / 4.0 + 12.0, real_time) * distortion_speed;
+	
+	float uv_noise = (texture(
+		noise,
+		mod(UV + time2, 1.0)
+	).r - 0.5) / 12.0;
+	float uv_noise_flavor = (texture(
+		noise,
+		mod(UV + time2 / 2.0, 1.0)
+	).r - 0.5) / 2.0;
+	vec2 uv = adjusted_uv + vec2(uv_noise, 0.0);
+	vec2 uv_flavor = adjusted_uv_2 + vec2(uv_noise_flavor / 2.0, uv_noise_flavor);
+	vec4 wobble = texture(TEXTURE, clamp(uv, 0.0, 1.0));
+	vec4 flavor = texture(TEXTURE, clamp(uv_flavor, 0.0, 1.0)) / 2.0;
+	COLOR = (wobble + flavor + offset_by) * vertex_color;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r7pn3"]
+noise_type = 2
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rptt4"]
+noise = SubResource("FastNoiseLite_r7pn3")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_clc5o"]
+shader = SubResource("Shader_5031e")
+shader_parameter/noise = SubResource("NoiseTexture2D_rptt4")
+shader_parameter/distortion_speed = 0.5
+shader_parameter/real_time = 0.0
+shader_parameter/offset_by = Vector4(0, 2, 4, 0)
+
+[node name="Door" type="Area2D" unique_id=1638294663]
+z_index = 4
+z_as_relative = false
+script = ExtResource("1_vul7k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130950469]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_2qteb")
+
+[node name="PhProtag2" type="ColorRect" parent="." unique_id=1049626181]
+material = SubResource("ShaderMaterial_sn0rw")
+offset_left = -72.0
+offset_top = -120.0
+offset_right = 72.0
+offset_bottom = 128.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=160410778]
+sprite_frames = SubResource("SpriteFrames_2qteb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2018722327]
+z_index = -1
+material = SubResource("ShaderMaterial_clc5o")
+scale = Vector2(2, 3)
+texture = ExtResource("3_clc5o")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

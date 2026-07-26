@@ -3,8 +3,15 @@
 [ext_resource type="Texture2D" uid="uid://b1mvjrunm4fq" path="res://enemies/lucy/basic.png" id="1_0m6h5"]
 [ext_resource type="Script" uid="uid://d0d0wfbpi3scs" path="res://enemies/lucy/lucy.gd" id="1_7uw0j"]
 [ext_resource type="Texture2D" uid="uid://ufj5e213oqkq" path="res://enemies/lucy/back.png" id="1_xl5yi"]
+[ext_resource type="Texture2D" uid="uid://bwyuimity6nr3" path="res://enemies/lucy/attack-2.png" id="2_wqrt4"]
+[ext_resource type="Texture2D" uid="uid://kuhf2utb5pj6" path="res://enemies/lucy/attack-4.png" id="3_rk2mh"]
+[ext_resource type="Texture2D" uid="uid://d3ww8ysgqrvof" path="res://enemies/lucy/attack-1.png" id="4_d52ac"]
 [ext_resource type="Texture2D" uid="uid://dd2rjaa6stkwk" path="res://enemies/lucy/hurt-b.png" id="4_w5pen"]
 [ext_resource type="Texture2D" uid="uid://cdmug3xa5lr0b" path="res://enemies/lucy/hurt-f.png" id="5_fwmbl"]
+[ext_resource type="Texture2D" uid="uid://cgye27dbogju8" path="res://enemies/lucy/attack-3.png" id="5_n17x5"]
+[ext_resource type="AudioStream" uid="uid://h4qowfblwn4l" path="res://sound/laugh.wav" id="10_n17x5"]
+[ext_resource type="AudioStream" uid="uid://bb1natu21008q" path="res://sound/lobster.wav" id="11_khe16"]
+[ext_resource type="AudioStream" uid="uid://ynpwntjo5of3" path="res://sound/yelp.wav" id="12_gu676"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qt25b"]
 radius = 80.0
@@ -16,6 +23,28 @@ height = 256.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2qteb"]
 animations = [{
+"frames": [{
+"duration": 0.75,
+"texture": ExtResource("2_wqrt4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_rk2mh")
+}],
+"loop": 1,
+"name": &"attack-b",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.75,
+"texture": ExtResource("4_d52ac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_n17x5")
+}],
+"loop": 0,
+"name": &"attack-f",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_xl5yi")
@@ -47,6 +76,17 @@ animations = [{
 "loop": 1,
 "name": &"hurt-f",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0m6h5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_n17x5")
+}],
+"loop": 1,
+"name": &"laugh",
+"speed": 8.0
 }]
 
 [sub_resource type="Gradient" id="Gradient_w5pen"]
@@ -82,7 +122,6 @@ shape = SubResource("CapsuleShape2D_7uw0j")
 z_index = 1
 position = Vector2(0, -22)
 sprite_frames = SubResource("SpriteFrames_2qteb")
-animation = &"hurt-f"
 autoplay = "default"
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1999880903]
@@ -90,4 +129,17 @@ z_index = -1
 position = Vector2(0, 140)
 texture = SubResource("GradientTexture2D_fwmbl")
 
+[node name="Laugh" type="AudioStreamPlayer" parent="." unique_id=1751242944]
+stream = ExtResource("10_n17x5")
+volume_db = -8.0
+
+[node name="Lobster" type="AudioStreamPlayer" parent="." unique_id=1786453834]
+stream = ExtResource("11_khe16")
+volume_db = -4.0
+
+[node name="Yelp" type="AudioStreamPlayer" parent="." unique_id=1589735332]
+stream = ExtResource("12_gu676")
+volume_db = -7.0
+
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_hit"]
+[connection signal="frame_changed" from="Sprite" to="." method="_jiggle"]

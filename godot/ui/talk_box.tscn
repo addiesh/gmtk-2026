@@ -25,5 +25,6 @@ layout_mode = 2
 [node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer" unique_id=1847286065]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
 text = "what is a game developer? a miserable little pile of caffeine."
 vertical_alignment = 1

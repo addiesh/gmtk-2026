@@ -3,9 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://nxiry3e7of2h" path="res://world/tileset.png" id="1_0tsup"]
 [ext_resource type="Texture2D" uid="uid://d0mbku3dw8hqw" path="res://world/tileset2.png" id="1_rj6qb"]
 [ext_resource type="Texture2D" uid="uid://bipjrmhoe8sf2" path="res://world/freer.png" id="3_uvsqm"]
-[ext_resource type="Texture2D" uid="uid://cgvq2lu26ikkm" path="res://world/table.png" id="4_covav"]
-[ext_resource type="Texture2D" uid="uid://c2p3xaluc03hj" path="res://world/chandler.png" id="5_j52fl"]
-[ext_resource type="Texture2D" uid="uid://ru4hmgvwjl54" path="res://world/house-like-carpet.png" id="6_c7mks"]
+[ext_resource type="Texture2D" uid="uid://cgvq2lu26ikkm" path="res://world/decorations/table.png" id="4_covav"]
+[ext_resource type="Texture2D" uid="uid://c2p3xaluc03hj" path="res://world/decorations/chandler.png" id="5_j52fl"]
+[ext_resource type="Texture2D" uid="uid://ru4hmgvwjl54" path="res://world/decorations/house-like-carpet.png" id="6_c7mks"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uvsqm"]
 texture = ExtResource("1_rj6qb")
