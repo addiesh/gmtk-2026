@@ -9,15 +9,19 @@ extends Enemy
 @onready var collision1 = $Hitbox/CollisionShape2D
 @onready var collision2 = $Area2D/CollisionShape2D
 
-var dueToDie: bool
+var isFiring: bool = false
+var dueToDie: bool = false
 
 func _ready():
 	#multiple hammers? loop ts
+	#put a hammer out of bounds so ts doesn't crash
 	playerRay.add_exception(get_tree().get_first_node_in_group("HAMMER"))
 
 
 func _process(_delta: float) -> void:
 	super(_delta);
+	if isFiring:
+		sprite.animation = "attack"
 	if dueToDie:
 		sprite.animation = "DIE";
 	elif _is_on_cooldown():
@@ -102,4 +106,4 @@ func processSETFORENEMIES():
 	speed = 0
 	velocity = Vector2(0,0)
 	collision1.disabled = true
-	collision2.disabled = true
+	collision2.disabled = true	

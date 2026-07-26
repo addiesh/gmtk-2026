@@ -33,7 +33,7 @@ func _is_on_cooldown() -> bool:
 func _on_hurt() -> void:
 	pass
 
-func _on_hit(_area_rid: RID, area: Area2D, area_shape_index: int, _local_shape_index: int) -> void:
+func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_index: int) -> void:
 	var current_real_time = Timekeeper.get_engine_time();
 	var current_game_time = Timekeeper.get_time();
 	if _is_on_cooldown():

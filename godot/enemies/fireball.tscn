@@ -30,9 +30,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_scw6o"]
 radius = 19.313208
 
-[node name="Fireball" type="RigidBody2D" unique_id=59940380]
-collision_layer = 0
-collision_mask = 75
+[node name="Fireball" type="Node2D" unique_id=1424201672]
 script = ExtResource("1_j8tgu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=118563433]
@@ -40,10 +38,13 @@ position = Vector2(0, 2)
 sprite_frames = SubResource("SpriteFrames_ct15j")
 animation = &"impact"
 
-[node name="FireballCollide" type="CollisionShape2D" parent="." unique_id=453695808]
+[node name="FireballArea" type="Area2D" parent="." unique_id=35219451]
+collision_layer = 64
+collision_mask = 66
+
+[node name="FireballCollide" type="CollisionShape2D" parent="FireballArea" unique_id=453695808]
 shape = SubResource("CircleShape2D_scw6o")
 
 [node name="DieTimer" type="Timer" parent="." unique_id=1059713324]
 
-[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
 [connection signal="timeout" from="DieTimer" to="." method="_on_die_timer_timeout"]

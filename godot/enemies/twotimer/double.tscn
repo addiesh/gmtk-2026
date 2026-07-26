@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ba0duq2pdjak4"]
 
-[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_wrf5t"]
+[ext_resource type="Script" uid="uid://cxfix8nj0q2dp" path="res://enemies/twotimer/double.gd" id="1_527pg"]
 [ext_resource type="Texture2D" uid="uid://csmv3qb6hjtio" path="res://enemies/twotimer/3.png" id="2_527pg"]
 [ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_735rq"]
 [ext_resource type="Texture2D" uid="uid://brrnyvhy1tvl0" path="res://enemies/twotimer/2.png" id="4_ya31w"]
@@ -8,11 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://bm5a0ldm2mraa" path="res://enemies/twotimer/1.png" id="6_ohkvn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
-radius = 151.00331
+radius = 137.23338
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c712q"]
-radius = 127.0
-height = 254.0
+radius = 122.0
+height = 244.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6cgwj"]
 radius = 109.0
@@ -33,19 +33,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("4_ya31w")
+}, {
+"duration": 1.0,
 "texture": ExtResource("2_527pg")
 }],
 "loop": 1,
 "name": &"attack",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("4_ya31w")
-}],
-"loop": 1,
-"name": &"charge",
-"speed": 5.0
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -90,12 +85,14 @@ fill_to = Vector2(1, 0.5)
 
 [node name="Double" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
-script = ExtResource("1_wrf5t")
+script = ExtResource("1_527pg")
+ballSpeed = 10
+fireSpeed = 3
 sightRange = 1000
-KNOCKBACK_STRENGTH = 200
-acceleration = 500.0
+KNOCKBACK_STRENGTH = 2000
+acceleration = 400.0
 speed = 100.0
-enemyHealth = 10
+enemyHealth = 12
 sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
@@ -120,7 +117,9 @@ shape = SubResource("CapsuleShape2D_6cgwj")
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1382980860]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uw37d")
-animation = &"DIE"
+animation = &"attack"
+frame = 1
+frame_progress = 0.77303904
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1987069992]
 z_index = -1
@@ -129,6 +128,10 @@ texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]
 collision_mask = 3
+
+[node name="Timer" type="Timer" parent="." unique_id=647579584]
+wait_time = 3.0
+one_shot = true
 
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
