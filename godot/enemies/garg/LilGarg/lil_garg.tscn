@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://c6dqd73mnovj2"]
+[gd_scene format=3 uid="uid://dxbm66mc7bm2q"]
 
-[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_c712q"]
-[ext_resource type="Texture2D" uid="uid://cfky8h08bd1yg" path="res://enemies/garg/base-2.png" id="1_tbt4p"]
-[ext_resource type="Texture2D" uid="uid://dkutyxts282gs" path="res://enemies/garg/attack.png" id="2_6cgwj"]
-[ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_c712q"]
-[ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="3_6cgwj"]
+[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_egrpx"]
+[ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_2gv44"]
+[ext_resource type="Texture2D" uid="uid://dkutyxts282gs" path="res://enemies/garg/attack.png" id="3_e3j6x"]
+[ext_resource type="Texture2D" uid="uid://cfky8h08bd1yg" path="res://enemies/garg/base-2.png" id="4_lw2jx"]
+[ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="5_bhh70"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
 radius = 160.0
@@ -21,7 +21,7 @@ height = 206.0
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c712q")
+"texture": ExtResource("2_2gv44")
 }],
 "loop": 1,
 "name": &"DIE",
@@ -29,7 +29,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_6cgwj")
+"texture": ExtResource("3_e3j6x")
 }],
 "loop": 1,
 "name": &"attack",
@@ -37,7 +37,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_tbt4p")
+"texture": ExtResource("4_lw2jx")
 }],
 "loop": 1,
 "name": &"default",
@@ -45,7 +45,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c712q")
+"texture": ExtResource("2_2gv44")
 }],
 "loop": 1,
 "name": &"hurt",
@@ -53,10 +53,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_6cgwj")
+"texture": ExtResource("5_bhh70")
 }, {
 "duration": 1.0,
-"texture": ExtResource("1_tbt4p")
+"texture": ExtResource("4_lw2jx")
 }],
 "loop": 1,
 "name": &"walk",
@@ -75,9 +75,9 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="BigGarg" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
+[node name="LilGarg" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
-script = ExtResource("1_c712q")
+script = ExtResource("1_egrpx")
 sightRange = 800
 enemyHealth = 6
 sprite = NodePath("Sprite")

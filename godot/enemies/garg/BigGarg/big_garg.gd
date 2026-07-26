@@ -1,18 +1,16 @@
 extends Enemy
 
 @onready var playerRay = $PlayerSeeker
-var sightRange = 1024
+@export var sightRange: int
 
 @onready var playerInitPos = ai_target_track.global_position
 
 var space_state
 var query
 var result
-@onready var FUCKASSHAMMER = get_tree().get_first_node_in_group("HAMMER")
 
 func _ready():
 	playerRay.add_exception(get_tree().get_first_node_in_group("HAMMER"))
-
 
 
 func _process(_delta: float) -> void:
@@ -70,8 +68,7 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
-	
-	
+
 	#locking garg's raycast onto the player
 	playerRay.target_position.x = playerInitPos.x - self.global_position.x + (-playerInitPos.x + ai_target_track.global_position.x)
 	playerRay.target_position.y = playerInitPos.y - self.global_position.y + (-playerInitPos.y + ai_target_track.global_position.y)
@@ -87,3 +84,7 @@ func _physics_process(delta: float) -> void:
 		
 	self.move_and_slide();
 	pass
+
+
+func _on_die() -> void:
+	self.queue_free()
