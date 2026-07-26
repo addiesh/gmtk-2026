@@ -9,12 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://bbony74j81t2y" path="res://world/door/door.tscn" id="7_c633x"]
 [ext_resource type="PackedScene" uid="uid://cc5pg8kfouol3" path="res://levels/level_1.tscn" id="8_gdrka"]
 
-[sub_resource type="Gradient" id="Gradient_aaho8"]
+[sub_resource type="Gradient" id="Gradient_gdrka"]
 interpolation_mode = 2
 colors = PackedColorArray(1, 0.5833334, 0, 0.39215687, 1, 0.8333334, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2qteb"]
-gradient = SubResource("Gradient_aaho8")
+gradient = SubResource("Gradient_gdrka")
 width = 320
 height = 96
 fill = 1

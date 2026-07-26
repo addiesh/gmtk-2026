@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ba0duq2pdjak4"]
 
-[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_735rq"]
+[ext_resource type="Script" uid="uid://cxfix8nj0q2dp" path="res://enemies/twotimer/double.gd" id="1_527pg"]
 [ext_resource type="Texture2D" uid="uid://csmv3qb6hjtio" path="res://enemies/twotimer/3.png" id="2_527pg"]
 [ext_resource type="AudioStream" uid="uid://cdl7bsbk2in07" path="res://sound/das_concrete.wav" id="2_735rq"]
 [ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_735rq"]
@@ -86,11 +86,10 @@ fill_to = Vector2(1, 0.5)
 
 [node name="Double" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
-script = ExtResource("1_735rq")
-sightRange = 8000
+script = ExtResource("1_527pg")
 KNOCKBACK_STRENGTH = 2000
 acceleration = 100.0
-speed = 200.0
+speed = 100.0
 enemyHealth = 6
 sprite = NodePath("Sprite")
 
