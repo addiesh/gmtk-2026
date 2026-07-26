@@ -1,3 +1,4 @@
+class_name BigGarg
 extends Enemy
 
 @onready var playerRay = $PlayerSeeker

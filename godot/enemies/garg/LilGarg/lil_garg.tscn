@@ -95,6 +95,7 @@ sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
 collision_layer = 64
+collision_mask = 3
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1611317335]

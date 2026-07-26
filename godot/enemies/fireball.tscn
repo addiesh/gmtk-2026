@@ -47,4 +47,5 @@ shape = SubResource("CircleShape2D_scw6o")
 
 [node name="DieTimer" type="Timer" parent="." unique_id=1059713324]
 
+[connection signal="area_entered" from="FireballArea" to="." method="_on_fireball_area_area_entered"]
 [connection signal="timeout" from="DieTimer" to="." method="_on_die_timer_timeout"]

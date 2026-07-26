@@ -1,8 +1,9 @@
-extends "res://enemies/garg/BigGarg/big_garg.gd"
 class_name BigDouble
+extends BigGarg
 
 @onready var fireTime = $Timer
-@export var fireBall = load("res://enemies/fireball.tscn")
+@onready var fireBall = load("res://enemies/fireball.tscn")
+@onready var speedPerm = speed
 
 @export var ballSpeed: int
 @export var fireSpeed: int
@@ -16,12 +17,11 @@ func _physics_process(delta: float) -> void:
 
 func fireFireball(direction: Vector2):
 	isFiring = true
-	sprite.animation = ""
 	await get_tree().create_timer(1)
+	speed = speedPerm
 	var instanceBall = fireBall.instantiate()
 	owner.add_child(instanceBall)
 	instanceBall.speed = ballSpeed
-	print(instanceBall.position.x)
 	instanceBall.transform = self.transform
 	instanceBall.flyto = playerRay.target_position
 	isFiring = false

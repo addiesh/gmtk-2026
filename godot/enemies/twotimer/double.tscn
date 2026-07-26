@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://ba0duq2pdjak4"]
 
-[ext_resource type="Script" uid="uid://cxfix8nj0q2dp" path="res://enemies/twotimer/double.gd" id="1_527pg"]
+[ext_resource type="Script" uid="uid://bxd71w0valx45" path="res://enemies/garg/BigGarg/big_garg.gd" id="1_735rq"]
 [ext_resource type="Texture2D" uid="uid://csmv3qb6hjtio" path="res://enemies/twotimer/3.png" id="2_527pg"]
+[ext_resource type="AudioStream" uid="uid://cdl7bsbk2in07" path="res://sound/das_concrete.wav" id="2_735rq"]
 [ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_735rq"]
 [ext_resource type="Texture2D" uid="uid://brrnyvhy1tvl0" path="res://enemies/twotimer/2.png" id="4_ya31w"]
 [ext_resource type="Texture2D" uid="uid://b4nk56nb5shgg" path="res://enemies/twotimer/4.png" id="5_82lof"]
@@ -85,14 +86,12 @@ fill_to = Vector2(1, 0.5)
 
 [node name="Double" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
-script = ExtResource("1_527pg")
-ballSpeed = 10
-fireSpeed = 3
-sightRange = 1000
+script = ExtResource("1_735rq")
+sightRange = 8000
 KNOCKBACK_STRENGTH = 2000
-acceleration = 400.0
-speed = 100.0
-enemyHealth = 12
+acceleration = 100.0
+speed = 200.0
+enemyHealth = 6
 sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
@@ -132,6 +131,10 @@ collision_mask = 3
 [node name="Timer" type="Timer" parent="." unique_id=647579584]
 wait_time = 3.0
 one_shot = true
+
+[node name="DasConcrete" type="AudioStreamPlayer" parent="." unique_id=679031509]
+stream = ExtResource("2_735rq")
+max_polyphony = 4
 
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
