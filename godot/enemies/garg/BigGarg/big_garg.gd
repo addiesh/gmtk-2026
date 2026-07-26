@@ -18,7 +18,9 @@ func _ready():
 
 func _process(_delta: float) -> void:
 	super(_delta);
-	if _is_on_cooldown():
+	if dueToDie:
+		sprite.animation = "DIE";
+	elif _is_on_cooldown():
 		sprite.animation = "hurt";
 		if self.velocity.x > 0.1:
 			sprite.flip_h = false
@@ -90,17 +92,14 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_die() -> void:
-	print("ndieieijasdkgfjs")
 	dueToDie = true
-	self.call_deferred("processSETFORENEMIES")
-	sprite.animation = "DIE"
-	sprite.play()
-	await get_tree().create_timer(1).timeout
+	call_deferred("processSETFORENEMIES")
+	await get_tree().create_timer(.5).timeout;
 	self.call_deferred("queue_free")
 
 func processSETFORENEMIES():
+	print("processDIE")
 	speed = 0
 	velocity = Vector2(0,0)
 	collision1.disabled = true
 	collision2.disabled = true
-	
