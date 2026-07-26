@@ -1,5 +1,20 @@
 extends Enemy
 
+@onready var playerRay = $PlayerSeeker
+var sightRange = 1024
+
+@onready var playerInitPos = ai_target_track.global_position
+
+var space_state
+var query
+var result
+@onready var FUCKASSHAMMER = get_tree().get_first_node_in_group("HAMMER")
+
+func _ready():
+	playerRay.add_exception(get_tree().get_first_node_in_group("HAMMER"))
+
+
+
 func _process(_delta: float) -> void:
 	super(_delta);
 	if _is_on_cooldown():
@@ -52,4 +67,23 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 			body
 			body.hurt();
 			self.melee_cooldown_time = Timekeeper.get_time();
+	pass
+
+func _physics_process(delta: float) -> void:
+	
+	
+	#locking garg's raycast onto the player
+	playerRay.target_position.x = playerInitPos.x - self.global_position.x + (-playerInitPos.x + ai_target_track.global_position.x)
+	playerRay.target_position.y = playerInitPos.y - self.global_position.y + (-playerInitPos.y + ai_target_track.global_position.y)
+
+	
+	if _is_on_cooldown() || _is_on_melee_cooldown() || (playerRay.get_collider() != ai_target_track):
+		velocity = velocity.move_toward(Vector2.ZERO, delta  * KNOCKBACK_STRENGTH * 2.0 / INVULN_TIME);
+		
+	
+	elif ai_target_track != null && ai_target_track.global_position.distance_to(self.global_position) < sightRange && (playerRay.get_collider() == ai_target_track):
+		var target_vel = (ai_target_track.global_position - global_position).normalized() * speed;
+		velocity = velocity.move_toward(target_vel, delta * acceleration);
+		
+	self.move_and_slide();
 	pass

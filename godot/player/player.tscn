@@ -476,7 +476,7 @@ link_timer = NodePath("HUD/Timer")
 script = SubResource("GDScript_272bh")
 
 [node name="Dialogue" type="Area2D" parent="." unique_id=469841579]
-collision_layer = 64
+collision_layer = 512
 collision_mask = 32
 priority = 1
 

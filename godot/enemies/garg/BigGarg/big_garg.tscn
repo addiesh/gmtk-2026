@@ -21,6 +21,14 @@ height = 206.0
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("2_c712q")
+}],
+"loop": 1,
+"name": &"DIE",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("2_6cgwj")
 }],
 "loop": 1,
@@ -70,6 +78,7 @@ fill_to = Vector2(1, 0.5)
 [node name="BigGarg" type="CharacterBody2D" unique_id=2142091699 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
 script = ExtResource("1_c712q")
+enemyHealth = 3
 sprite = NodePath("Sprite")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=485315728]
@@ -94,7 +103,7 @@ shape = SubResource("CapsuleShape2D_6cgwj")
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1382980860]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uw37d")
-animation = &"attack"
+animation = &"DIE"
 
 [node name="ShadowAO" type="Sprite2D" parent="Sprite" unique_id=1987069992]
 z_index = -1
@@ -102,6 +111,7 @@ position = Vector2(0, 112)
 texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]
+collision_mask = 3
 
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_hit"]
