@@ -104,6 +104,7 @@ fill_to = Vector2(1, 0.5)
 [node name="Lucy" type="CharacterBody2D" unique_id=1578374504 node_paths=PackedStringArray("sprite")]
 motion_mode = 1
 script = ExtResource("1_7uw0j")
+enemyHealth = 20
 sprite = NodePath("Sprite")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1624216858]

@@ -65,6 +65,9 @@ impl Player {
     fn squash_and_stretch();
 
     #[signal]
+    fn on_hurt();
+
+    #[signal]
     fn footstep();
 
     #[signal]
@@ -75,6 +78,7 @@ impl Player {
         if self.is_dashing.is_none() {
             self.decrease_timer_by(2.0);
             self.last_engine_hurt_time = Timekeeper::get_engine_time();
+            self.signals().on_hurt().emit();
         }
     }
 

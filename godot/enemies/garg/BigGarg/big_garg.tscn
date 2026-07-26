@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cwjmrmadvwvfk" path="res://enemies/garg/hurt.png" id="2_c712q"]
 [ext_resource type="Texture2D" uid="uid://bwr6gocbpguvs" path="res://enemies/garg/base-1.png" id="3_6cgwj"]
 [ext_resource type="Texture2D" uid="uid://bwcsjvfce0cs6" path="res://enemies/poof.png" id="3_ixf10"]
+[ext_resource type="AudioStream" uid="uid://cdl7bsbk2in07" path="res://sound/das_concrete.wav" id="7_0ryjw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2qteb"]
 radius = 160.0
@@ -24,7 +25,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("2_c712q")
 }, {
-"duration": 1.0,
+"duration": 8.0,
 "texture": ExtResource("3_ixf10")
 }],
 "loop": 0,
@@ -120,6 +121,9 @@ texture = SubResource("GradientTexture2D_c712q")
 
 [node name="PlayerSeeker" type="RayCast2D" parent="." unique_id=1095471184]
 collision_mask = 3
+
+[node name="DasConcrete" type="AudioStreamPlayer" parent="." unique_id=1440671476]
+stream = ExtResource("7_0ryjw")
 
 [connection signal="die" from="." to="." method="_on_die"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

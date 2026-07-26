@@ -1,0 +1,573 @@
+[gd_scene format=4 uid="uid://b6hsq03hn8vtr"]
+
+[ext_resource type="TileSet" uid="uid://c2a0swv31w23r" path="res://world/tileset.tres" id="1_1hfnh"]
+[ext_resource type="PackedScene" uid="uid://buojmmssfjls0" path="res://player/player.tscn" id="2_skp6n"]
+[ext_resource type="PackedScene" uid="uid://22ycafb0osvx" path="res://pickups/pickup_template.tscn" id="3_n7kmf"]
+[ext_resource type="PackedScene" uid="uid://bq57q6lulroyo" path="res://ui/DialogueDataNode.tscn" id="4_c4hw6"]
+[ext_resource type="Texture2D" uid="uid://dupm3jbl3bdh0" path="res://player/sprites/talk.png" id="5_1w4la"]
+[ext_resource type="Texture2D" uid="uid://c2p3xaluc03hj" path="res://world/decorations/chandler.png" id="6_hslst"]
+[ext_resource type="Texture2D" uid="uid://53nhggu0sq02" path="res://ui/her.png" id="9_savxs"]
+[ext_resource type="AudioStream" uid="uid://bb1natu21008q" path="res://sound/lobster.wav" id="9_skp6n"]
+[ext_resource type="Texture2D" uid="uid://dwc0u10oc57by" path="res://ui/also-her.png" id="10_1hfnh"]
+[ext_resource type="Texture2D" uid="uid://cgvq2lu26ikkm" path="res://world/decorations/table.png" id="10_dv0jy"]
+[ext_resource type="PackedScene" uid="uid://bt2llunl1r2bf" path="res://enemies/lucy/lucy.tscn" id="12_n7kmf"]
+
+[sub_resource type="Gradient" id="Gradient_aaho8"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 0.5833334, 0, 0.39215687, 1, 0.8333334, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2qteb"]
+gradient = SubResource("Gradient_aaho8")
+width = 320
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_c633x"]
+interpolation_mode = 2
+colors = PackedColorArray(0, 0, 0, 0.39215687, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gdrka"]
+gradient = SubResource("Gradient_c633x")
+width = 180
+height = 160
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="GDScript" id="GDScript_1hfnh"]
+script/source = "extends Area2D
+
+var enabled = true;
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is Player && enabled:
+		enabled = false;
+		$AnimationPlayer.play(\"now_kiss\");
+		$Lobster.play()
+	
+func _process(delta: float) -> void:
+	$AnimationPlayer.speed_scale = 1.0 / Timekeeper.timescale();
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2qteb"]
+size = Vector2(2046, 128)
+
+[sub_resource type="Animation" id="Animation_skp6n"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Modulator/AlsoHer:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Modulator/Her:position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Modulator/Her:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Modulator:modulate:r")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Modulator:modulate:g")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Modulator:modulate:b")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Modulator:modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_1hfnh"]
+resource_name = "now_kiss"
+length = 2.0000043
+step = 0.041666668
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Modulator/AlsoHer:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(1080, -0.25, 0, 0.25, 0, -3.8356242, -0.41666666, 43.835644, 0, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Modulator/Her:position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-1920, -0.25, 0, 0.25, 0, 0, -0.4166667, -38.985287, 0, 0),
+"times": PackedFloat32Array(0.33333334, 1)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Modulator/Her:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(203.83563, -0.25, -1.6438141, 0.5, 10.958908, 0, -0.2916667, 17.534264, 0, 0),
+"times": PackedFloat32Array(0.041666657, 1)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Modulator:modulate:r")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 2, -0.041666668, 0.16666667, 0, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1.2916666, 1.3333334, 1.875)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Modulator:modulate:g")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 2, -0.041666668, 0.16666667, 0, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1.2916666, 1.3333334, 1.875)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Modulator:modulate:b")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 2, -0.048611127, 0.16666667, 0, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1.2916666, 1.3333334, 1.875)
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Modulator:modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.055555563, 0.16666667, 0, 0),
+"times": PackedFloat32Array(0, 1.2916666, 1.7083334, 2)
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_skp6n"]
+_data = {
+&"RESET": SubResource("Animation_skp6n"),
+&"now_kiss": SubResource("Animation_1hfnh")
+}
+
+[node name="FinalBoss" type="Node2D" unique_id=257648561]
+
+[node name="Player" parent="." unique_id=64017830 instance=ExtResource("2_skp6n")]
+position = Vector2(448, 0)
+
+[node name="Timer" parent="Player/HUD" parent_id_path=PackedInt32Array(64017830, 724956971) index="1" unique_id=239512427]
+time_duration = 60.0
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=70075621]
+tile_map_data = PackedByteArray("AAACAAIAAAAAAAEAAAADAAIAAAAAAAEAAAAEAAIAAAAAAAEAAAACAAMAAAAAAAEAAAADAAMAAAAAAAEAAAAEAAMAAAAAAAEAAAABAAIAAAAAAAIAAAAFAAIAAAAAAAIAAAAAAAIAAAAAAAEAAAAGAAIAAAAAAAEAAAAFAAMAAAAAAAEAAAABAAMAAAAAAAEAAAAAAAMAAAACAAEAAAD//wIAAAACAAEAAAD//wMAAAACAAEAAAAGAAMAAAACAAEAAAAHAAIAAAACAAEAAAAHAAMAAAACAAEAAAAAAAQAAAACAAEAAAAAAAUAAAACAAEAAAAAAAYAAAACAAEAAAAAAAcAAAACAAEAAAAAAAgAAAACAAEAAAAAAAkAAAACAAEAAAAAAAoAAAACAAEAAAAGAAQAAAACAAEAAAAGAAUAAAACAAEAAAAGAAYAAAACAAEAAAAGAAcAAAACAAEAAAAGAAgAAAACAAEAAAAGAAkAAAACAAEAAAAGAAoAAAACAAEAAAAFAAUAAAAAAAIAAAACAAYAAAAAAAIAAAAEAAgAAAAAAAIAAAACAAoAAAAAAAIAAAABAAoAAAAAAAEAAAADAAoAAAAAAAEAAAAEAAoAAAAAAAEAAAAFAAoAAAAAAAEAAAACAAgAAAAAAAEAAAACAAcAAAAAAAEAAAABAAcAAAAAAAEAAAABAAYAAAAAAAEAAAABAAUAAAAAAAEAAAABAAQAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAEAAAADAAQAAAAAAAEAAAAEAAQAAAAAAAEAAAAEAAUAAAAAAAEAAAAEAAYAAAAAAAEAAAADAAYAAAAAAAEAAAADAAcAAAAAAAEAAAADAAgAAAAAAAEAAAADAAkAAAAAAAEAAAACAAkAAAAAAAEAAAABAAkAAAAAAAEAAAABAAgAAAAAAAEAAAAEAAkAAAAAAAEAAAAFAAkAAAAAAAEAAAAFAAgAAAAAAAEAAAAFAAcAAAAAAAEAAAAFAAYAAAAAAAEAAAAEAAcAAAAAAAEAAAAFAAQAAAAAAAEAAAD//woAAAADAAIAAAD+/woAAAADAAIAAAD9/woAAAADAAIAAAD8/woAAAADAAIAAAAHAAoAAAADAAIAAAAIAAoAAAADAAIAAAAJAAoAAAADAAIAAAAKAAoAAAADAAIAAAD7/woAAAACAAEAAAALAAoAAAACAAEAAAD7/wsAAAACAAEAAAD7/wwAAAACAAEAAAD7/w0AAAACAAEAAAD7/w4AAAACAAEAAAD7/w8AAAACAAEAAAD7/xAAAAACAAEAAAD8/wsAAAAAAAEAAAD8/wwAAAAAAAEAAAD8/w0AAAABAAIAAAD8/w4AAAAAAAEAAAD8/w8AAAAAAAEAAAD8/xAAAAAAAAEAAAD9/wsAAAAAAAEAAAD9/wwAAAAAAAEAAAD9/w0AAAABAAIAAAD9/w4AAAAAAAEAAAD9/w8AAAAAAAEAAAD9/xAAAAAAAAEAAAD+/wsAAAAAAAEAAAD+/wwAAAAAAAEAAAD+/w0AAAABAAIAAAD+/w4AAAAAAAEAAAD+/w8AAAAAAAEAAAD+/xAAAAAAAAEAAAD//wsAAAAAAAEAAAD//wwAAAAAAAEAAAD//w0AAAABAAIAAAD//w4AAAAAAAEAAAD//w8AAAAAAAEAAAD//xAAAAAAAAEAAAAAAAsAAAAAAAEAAAAAAAwAAAAAAAEAAAAAAA0AAAABAAIAAAAAAA4AAAAAAAEAAAAAAA8AAAAAAAEAAAAAABAAAAAAAAEAAAABAAsAAAABAAIAAAABAAwAAAABAAIAAAABAA0AAAABAAIAAAABAA4AAAABAAIAAAABAA8AAAABAAIAAAABABAAAAABAAIAAAACAAsAAAAAAAEAAAACAAwAAAAAAAEAAAACAA0AAAAAAAEAAAACAA4AAAAAAAEAAAACAA8AAAAAAAEAAAACABAAAAAAAAEAAAADAAsAAAABAAIAAAADAAwAAAABAAIAAAADAA0AAAABAAIAAAADAA4AAAABAAIAAAADAA8AAAABAAIAAAADABAAAAABAAIAAAAEAAsAAAAAAAEAAAAEAAwAAAAAAAEAAAAEAA0AAAAAAAEAAAAEAA4AAAAAAAEAAAAEAA8AAAAAAAEAAAAEABAAAAAAAAEAAAAFAAsAAAABAAIAAAAFAAwAAAABAAIAAAAFAA0AAAABAAIAAAAFAA4AAAABAAIAAAAFAA8AAAABAAIAAAAFABAAAAABAAIAAAAGAAsAAAAAAAEAAAAGAAwAAAAAAAEAAAAGAA0AAAABAAIAAAAGAA4AAAAAAAEAAAAGAA8AAAAAAAEAAAAGABAAAAAAAAEAAAAHAAsAAAAAAAEAAAAHAAwAAAAAAAEAAAAHAA0AAAABAAIAAAAHAA4AAAAAAAEAAAAHAA8AAAAAAAEAAAAHABAAAAAAAAEAAAAIAAsAAAAAAAEAAAAIAAwAAAAAAAEAAAAIAA0AAAABAAIAAAAIAA4AAAAAAAEAAAAIAA8AAAAAAAEAAAAIABAAAAAAAAEAAAAJAAsAAAAAAAEAAAAJAAwAAAAAAAEAAAAJAA0AAAABAAIAAAAJAA4AAAAAAAEAAAAJAA8AAAAAAAEAAAAJABAAAAAAAAEAAAAKAAsAAAAAAAEAAAAKAAwAAAAAAAEAAAAKAA0AAAABAAIAAAAKAA4AAAAAAAEAAAAKAA8AAAAAAAEAAAAKABAAAAAAAAEAAAALAAsAAAACAAEAAAALAAwAAAACAAEAAAALAA0AAAACAAEAAAALAA4AAAACAAEAAAALAA8AAAACAAEAAAALABAAAAACAAEAAAD7/xEAAAACAAEAAAD7/xIAAAACAAEAAAD7/xMAAAACAAEAAAD7/xQAAAACAAEAAAD7/xUAAAACAAEAAAD8/xEAAAAAAAEAAAD8/xIAAAABAAIAAAD8/xMAAAAAAAEAAAD8/xQAAAAAAAEAAAD8/xUAAAACAAEAAAD9/xEAAAAAAAEAAAD9/xIAAAABAAIAAAD9/xMAAAAAAAEAAAD9/xQAAAAAAAEAAAD9/xUAAAABAAIAAAD+/xEAAAAAAAEAAAD+/xIAAAABAAIAAAD+/xMAAAAAAAEAAAD+/xQAAAAAAAEAAAD+/xUAAAABAAIAAAD//xEAAAAAAAEAAAD//xIAAAABAAIAAAD//xMAAAAAAAEAAAD//xQAAAAAAAEAAAD//xUAAAAAAAEAAAAAABEAAAAAAAEAAAAAABIAAAABAAIAAAAAABMAAAAAAAEAAAAAABQAAAAAAAEAAAAAABUAAAAAAAEAAAABABEAAAABAAIAAAABABIAAAABAAIAAAABABMAAAABAAIAAAABABQAAAABAAIAAAABABUAAAABAAIAAAACABEAAAAAAAEAAAACABIAAAAAAAEAAAACABMAAAAAAAEAAAACABQAAAAAAAEAAAACABUAAAAAAAEAAAADABEAAAABAAIAAAADABIAAAABAAIAAAADABMAAAABAAIAAAADABQAAAABAAIAAAADABUAAAABAAIAAAAEABEAAAAAAAEAAAAEABIAAAAAAAEAAAAEABMAAAAAAAEAAAAEABQAAAAAAAEAAAAEABUAAAAAAAEAAAAFABEAAAABAAIAAAAFABIAAAABAAIAAAAFABMAAAABAAIAAAAFABQAAAABAAIAAAAFABUAAAABAAIAAAAGABEAAAAAAAEAAAAGABIAAAABAAIAAAAGABMAAAAAAAEAAAAGABQAAAAAAAEAAAAGABUAAAAAAAEAAAAHABEAAAAAAAEAAAAHABIAAAABAAIAAAAHABMAAAAAAAEAAAAHABQAAAAAAAEAAAAHABUAAAAAAAEAAAAIABEAAAAAAAEAAAAIABIAAAABAAIAAAAIABMAAAAAAAEAAAAIABQAAAAAAAEAAAAIABUAAAABAAIAAAAJABEAAAAAAAEAAAAJABIAAAABAAIAAAAJABMAAAAAAAEAAAAJABQAAAAAAAEAAAAJABUAAAABAAIAAAAKABEAAAAAAAEAAAAKABIAAAABAAIAAAAKABMAAAAAAAEAAAAKABQAAAAAAAEAAAAKABUAAAACAAEAAAALABEAAAACAAEAAAALABIAAAACAAEAAAALABMAAAACAAEAAAALABQAAAACAAEAAAALABUAAAACAAEAAAD+/xYAAAABAAIAAAD//xYAAAABAAIAAAAAABYAAAAAAAEAAAABABYAAAAAAAEAAAACABYAAAAAAAEAAAADABYAAAAAAAEAAAAEABYAAAAAAAEAAAAFABYAAAAAAAEAAAAGABYAAAAAAAEAAAAHABYAAAABAAIAAAAIABYAAAABAAIAAAD//xcAAAABAAIAAAAAABcAAAAAAAEAAAABABcAAAABAAIAAAACABcAAAAAAAEAAAADABcAAAABAAIAAAAEABcAAAAAAAEAAAAFABcAAAABAAIAAAAGABcAAAAAAAEAAAAHABcAAAABAAIAAAAAABgAAAABAAIAAAABABgAAAABAAIAAAACABgAAAABAAIAAAADABgAAAABAAIAAAAEABgAAAABAAIAAAAFABgAAAABAAIAAAAGABgAAAABAAIAAAD9/xYAAAACAAEAAAD9/xcAAAACAAEAAAD8/xYAAAACAAEAAAD+/xgAAAACAAEAAAD//xgAAAABAAIAAAAHABgAAAABAAIAAAAIABgAAAACAAEAAAAKABYAAAACAAEAAAAJABYAAAACAAEAAAAJABcAAAACAAEAAAAIABcAAAABAAIAAAD+/xcAAAABAAIAAAD9/xgAAAACAAEAAAAJABgAAAACAAEAAAD///7/AAACAAEAAAAAAP3/AAACAAEAAAAAAP7/AAACAAEAAAABAP3/AAACAAEAAAABAP7/AAAAAAEAAAACAP3/AAACAAEAAAACAP7/AAAAAAEAAAADAP3/AAACAAEAAAADAP7/AAAAAAEAAAAEAP3/AAACAAEAAAAEAP7/AAAAAAIAAAAFAP3/AAACAAEAAAAFAP7/AAAAAAEAAAAGAP3/AAACAAEAAAAGAP7/AAACAAEAAAAHAP7/AAACAAEAAAD/////AAACAAEAAAD//wAAAAACAAEAAAD//wEAAAACAAEAAAAHAP//AAACAAEAAAAHAAAAAAACAAEAAAAHAAEAAAACAAEAAAACAAAAAAAAAAEAAAAFAAAAAAAAAAEAAAAFAP//AAAAAAEAAAAEAP//AAAAAAEAAAADAP//AAAAAAEAAAACAP//AAAAAAEAAAABAP//AAAAAAEAAAAAAP//AAAAAAEAAAAAAAAAAAAAAAEAAAAAAAEAAAAAAAEAAAABAAEAAAAAAAEAAAABAAAAAAAAAAEAAAACAAEAAAAAAAEAAAADAAEAAAAAAAEAAAADAAAAAAAAAAEAAAAEAAAAAAAAAAEAAAAEAAEAAAAAAAEAAAAFAAEAAAAAAAEAAAAGAAEAAAAAAAEAAAAGAAAAAAAAAAEAAAAGAP//AAAAAAEAAAD+/xkAAAACAAEAAAD//xkAAAACAAEAAAAAABkAAAADAAIAAAABABkAAAADAAIAAAACABkAAAACAAEAAAADABkAAAADAAIAAAAEABkAAAACAAEAAAAFABkAAAADAAIAAAAGABkAAAADAAIAAAAHABkAAAACAAEAAAAIABkAAAACAAEAAAAJABkAAAACAAEAAAD9/xkAAAACAAEAAAA=")
+tile_set = ExtResource("1_1hfnh")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=688452692]
+tile_set = ExtResource("1_1hfnh")
+
+[node name="Pickup" parent="." unique_id=1426482820 instance=ExtResource("3_n7kmf")]
+position = Vector2(449, 1664)
+
+[node name="Node2D" type="Node2D" parent="." unique_id=650425717]
+position = Vector2(-6208, 520)
+
+[node name="Chandler" type="Sprite2D" parent="Node2D" unique_id=449623020]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(6016, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/Chandler" unique_id=1970948136]
+position = Vector2(0, 160)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D/Chandler" unique_id=596442816]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D/Chandler" unique_id=1633266051]
+position = Vector2(0, 288)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Chandler2" type="Sprite2D" parent="Node2D" unique_id=124850821]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(6976, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/Chandler2" unique_id=1297920435]
+position = Vector2(0, 176)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D/Chandler2" unique_id=84869553]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D/Chandler2" unique_id=345588760]
+position = Vector2(0, 308)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Chandler3" type="Sprite2D" parent="Node2D" unique_id=409828024]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(6336, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/Chandler3" unique_id=1784500386]
+position = Vector2(0, 176)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D/Chandler3" unique_id=69206545]
+position = Vector2(0, 308)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D/Chandler3" unique_id=459559053]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Chandler5" type="Sprite2D" parent="Node2D" unique_id=1826644637]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(7296, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/Chandler5" unique_id=1359873793]
+position = Vector2(0, 160)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D/Chandler5" unique_id=365868028]
+position = Vector2(0, 288)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D/Chandler5" unique_id=570354716]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Node2D2" type="Node2D" parent="." unique_id=1792877092]
+position = Vector2(-6208, 1408)
+
+[node name="Chandler" type="Sprite2D" parent="Node2D2" unique_id=1914507640]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(6016, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D2/Chandler" unique_id=1549298522]
+position = Vector2(0, 160)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D2/Chandler" unique_id=405074841]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D2/Chandler" unique_id=813604291]
+position = Vector2(0, 288)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Chandler2" type="Sprite2D" parent="Node2D2" unique_id=560438319]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(6976, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D2/Chandler2" unique_id=1575907768]
+position = Vector2(0, 160)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D2/Chandler2" unique_id=1810589994]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D2/Chandler2" unique_id=1628898527]
+position = Vector2(0, 288)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Chandler3" type="Sprite2D" parent="Node2D2" unique_id=640314812]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(6336, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D2/Chandler3" unique_id=535097113]
+position = Vector2(0, 160)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D2/Chandler3" unique_id=660695729]
+position = Vector2(0, 288)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D2/Chandler3" unique_id=1879207439]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Chandler5" type="Sprite2D" parent="Node2D2" unique_id=629090032]
+self_modulate = Color(1, 1, 1, 0.39215687)
+z_index = 1
+position = Vector2(7296, 960)
+scale = Vector2(2, 2)
+texture = ExtResource("6_hslst")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D2/Chandler5" unique_id=850710466]
+position = Vector2(0, 160)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node2D2/Chandler5" unique_id=125709149]
+position = Vector2(0, 288)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_2qteb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node2D2/Chandler5" unique_id=769521906]
+z_index = -1
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_gdrka")
+
+[node name="Table" type="Sprite2D" parent="." unique_id=1034124490]
+position = Vector2(-192, 1824)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table3" type="Sprite2D" parent="." unique_id=2081266199]
+position = Vector2(-192, 2080)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table2" type="Sprite2D" parent="." unique_id=1391923651]
+position = Vector2(1088, 1824)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table4" type="Sprite2D" parent="." unique_id=1993913850]
+position = Vector2(1088, 2080)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table5" type="Sprite2D" parent="." unique_id=548173094]
+position = Vector2(128, 2120)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table6" type="Sprite2D" parent="." unique_id=901349337]
+position = Vector2(768, 2120)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table7" type="Sprite2D" parent="." unique_id=193083505]
+position = Vector2(128, 1848)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="Table8" type="Sprite2D" parent="." unique_id=1135977737]
+position = Vector2(768, 1848)
+scale = Vector2(2, 2)
+texture = ExtResource("10_dv0jy")
+
+[node name="DialogueDataNode" parent="." unique_id=363264021 instance=ExtResource("4_c4hw6")]
+position = Vector2(456, 528)
+Dialogue_text = "One more time!"
+Dialogue_image = ExtResource("5_1w4la")
+oneTime = true
+
+[node name="RollTitleCard" type="Area2D" parent="." unique_id=1249733544]
+position = Vector2(449, 3224)
+script = SubResource("GDScript_1hfnh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RollTitleCard" unique_id=644101629]
+position = Vector2(0, -1928)
+shape = SubResource("RectangleShape2D_2qteb")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RollTitleCard" unique_id=2041017827]
+root_node = NodePath("../CanvasLayer")
+libraries/ = SubResource("AnimationLibrary_skp6n")
+
+[node name="Lobster" type="AudioStreamPlayer" parent="RollTitleCard" unique_id=624159946]
+stream = ExtResource("9_skp6n")
+volume_db = -10.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="RollTitleCard" unique_id=219759860]
+layer = 1000
+
+[node name="ColorRect" type="ColorRect" parent="RollTitleCard/CanvasLayer" unique_id=618915837]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Modulator" type="Control" parent="RollTitleCard/CanvasLayer" unique_id=2112207581]
+modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.1, 1.1)
+pivot_offset = Vector2(960, 540)
+
+[node name="AlsoHer" type="TextureRect" parent="RollTitleCard/CanvasLayer/Modulator" unique_id=1985938591]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("10_1hfnh")
+
+[node name="Her" type="TextureRect" parent="RollTitleCard/CanvasLayer/Modulator" unique_id=181601194]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("9_savxs")
+
+[node name="Lucy" parent="." unique_id=1578374504 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("12_n7kmf")]
+position = Vector2(448, 2752)
+ai_target_track = NodePath("../Player")
+enemyHealth = 10
+
+[node name="Label" type="Label" parent="." unique_id=1000051030]
+offset_left = 304.0
+offset_top = 2112.0
+offset_right = 344.0
+offset_bottom = 2140.0
+text = "NOTE: this
+fight is currently.
+
+Broken.
+we're rushing to finish
+it now :)"
+
+[connection signal="body_entered" from="RollTitleCard" to="RollTitleCard" method="_on_body_entered"]
+
+[editable path="Player"]
