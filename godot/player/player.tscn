@@ -417,7 +417,7 @@ camera_zoom_speed_release = 8.0
 link_timer = NodePath("HUD/Timer")
 
 [node name="Dialogue" type="Area2D" parent="." unique_id=469841579]
-collision_layer = 64
+collision_layer = 512
 collision_mask = 32
 priority = 1
 

@@ -18,14 +18,17 @@ tile_set = ExtResource("1_n46q3")
 [node name="Player" parent="." unique_id=64017830 instance=ExtResource("2_kx6l7")]
 position = Vector2(325, 356)
 
-[node name="BigGarg" parent="." unique_id=2142091699 instance=ExtResource("3_n46q3")]
+[node name="BigGarg" parent="." unique_id=2142091699 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("3_n46q3")]
 position = Vector2(-635, -3322)
+ai_target_track = NodePath("../Player")
 
-[node name="BigGarg2" parent="." unique_id=931575553 instance=ExtResource("3_n46q3")]
+[node name="BigGarg2" parent="." unique_id=931575553 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("3_n46q3")]
 position = Vector2(1249, -3330)
+ai_target_track = NodePath("../Player")
 
-[node name="BigGarg3" parent="." unique_id=225171781 instance=ExtResource("3_n46q3")]
+[node name="BigGarg3" parent="." unique_id=225171781 node_paths=PackedStringArray("ai_target_track") instance=ExtResource("3_n46q3")]
 position = Vector2(-1672, -2293)
+ai_target_track = NodePath("../Player")
 
 [node name="Pickup" parent="." unique_id=1426482820 instance=ExtResource("4_kx6l7")]
 position = Vector2(300, -2242)

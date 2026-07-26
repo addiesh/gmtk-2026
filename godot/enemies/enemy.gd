@@ -7,7 +7,10 @@ const KNOCKBACK_STRENGTH: float = 1024.0;
 
 @export var acceleration: float = 1000.0;
 @export var speed: float = 600.0;
-@export var ai_target_track: Node2D;
+@export var ai_target_track: Player;
+
+@export var enemyHealth: int;
+signal die
 
 var last_squash_time = -INF;
 var melee_cooldown_time = -INF;
@@ -40,7 +43,7 @@ func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_ind
 		var pvn = phys.linear_velocity.normalized()
 		phys.linear_velocity = -pvn * 512.0;
 		phys.angular_velocity /= 2.0;
-		
+		hurtTracker()
 		if phys.is_held:
 			self.cooldown_time = current_game_time;
 			self.last_hit_time = current_real_time;
@@ -48,6 +51,7 @@ func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_ind
 			self.cooldown_time = current_game_time;
 			self.last_hit_time = current_real_time;
 			self.velocity = pvn * KNOCKBACK_STRENGTH;
+		
 		pass
 	else:
 		self.velocity = (self.global_position - shape.global_position).normalized();
@@ -70,3 +74,9 @@ func _physics_process(delta: float) -> void:
 		pass
 	self.move_and_slide();
 	pass
+
+func hurtTracker():
+	enemyHealth-= 1
+	print(enemyHealth)
+	if enemyHealth <= 0:
+		die.emit()

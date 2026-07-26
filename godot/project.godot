@@ -23,6 +23,10 @@ window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
+[global_group]
+
+HAMMER="Literally just that fuckass hammer"
+
 [gui]
 
 theme/default_font_antialiasing=0
@@ -86,8 +90,8 @@ time_release={
 2d_physics/layer_4="enemy_hurt"
 2d_physics/layer_5="Sight"
 2d_physics/layer_6="Dialogue"
-2d_physics/layer_10="PlayerDialogueArea"
 2d_physics/layer_7="player_hurt"
+2d_physics/layer_10="PlayerDialogueArea"
 
 [physics]
 
