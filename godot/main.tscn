@@ -122,6 +122,18 @@ offset_bottom = 256.0
 grow_horizontal = 2
 texture = ExtResource("4_7mycd")
 
+[node name="Label" type="Label" parent="MainMenu/Wrapper/PhTitle" unique_id=1971234628]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 182.0
+offset_right = 801.0
+offset_bottom = 353.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "with addie.sh (code)
+with atshrine (art)
+with IndianaLlama (art, code)"
+
 [node name="NinjaTaperFade" type="CanvasLayer" parent="." unique_id=1257111521]
 layer = 2
 script = ExtResource("6_7mycd")

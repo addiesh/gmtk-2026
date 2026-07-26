@@ -8,7 +8,7 @@ func _ready() -> void:
 	self.hide()
 
 
-func _on_dialogue_area_entered(area:Area2D) -> void:
+func _on_dialogue_area_entered(area: Area2D) -> void:
 	dialogueDataRead = area.get_parent()
 	#just take the data from the dialogue data node
 	chudTextDaughter.text = dialogueDataRead.Dialogue_text

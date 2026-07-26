@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ru4hmgvwjl54"
-path="res://.godot/imported/house-like-carpet.png-511cc49ae9d22ba17c198ae634725a85.ctex"
+uid="uid://c2p3xaluc03hj"
+path="res://.godot/imported/chandler.png-09604af65730c4103c9e6301c637fa87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/house-like-carpet.png"
-dest_files=["res://.godot/imported/house-like-carpet.png-511cc49ae9d22ba17c198ae634725a85.ctex"]
+source_file="res://world/decorations/chandler.png"
+dest_files=["res://.godot/imported/chandler.png-09604af65730c4103c9e6301c637fa87.ctex"]
 
 [params]
 

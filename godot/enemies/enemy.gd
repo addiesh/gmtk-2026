@@ -43,9 +43,6 @@ func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_ind
 
 
 	if phys is Pickup:
-		var pvn = phys.linear_velocity.normalized()
-		phys.linear_velocity = -pvn * 512.0;
-		phys.angular_velocity /= 2.0;
 		hurtTracker()
 		if phys.is_held:
 			self.cooldown_time = current_game_time;
@@ -54,6 +51,9 @@ func _on_hit(area_rid: RID, area: Area2D, area_shape_index: int, local_shape_ind
 		elif phys.linear_velocity.length() > 200.0:
 			self.cooldown_time = current_game_time;
 			self.last_hit_time = current_real_time;
+			var pvn = phys.linear_velocity.normalized()
+			phys.linear_velocity = -pvn * 512.0;
+			phys.angular_velocity /= 2.0;
 			self.velocity = pvn * KNOCKBACK_STRENGTH;
 			_on_hurt();
 		pass

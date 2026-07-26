@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2p3xaluc03hj"
-path="res://.godot/imported/chandler.png-2edf5a2562125ae08bf0badc4a58bb48.ctex"
+uid="uid://dtqj7uc6oekl6"
+path="res://.godot/imported/door-3.png-2785f26076271de2517ef5281779eab1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/chandler.png"
-dest_files=["res://.godot/imported/chandler.png-2edf5a2562125ae08bf0badc4a58bb48.ctex"]
+source_file="res://world/door/door-3.png"
+dest_files=["res://.godot/imported/door-3.png-2785f26076271de2517ef5281779eab1.ctex"]
 
 [params]
 
